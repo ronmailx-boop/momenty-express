@@ -58,7 +58,15 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   DECISION: Kling 3.0 Standard via KIE (`kling-3.0/video`, mode `std`, sound false, image_urls [first, last], 4-6 s), 15.1 cr/s (~$0.0755/s).
   Method = face-centred square crops + per-pair strategy (similar photos: aging in place with one big joyful action and a camera push-in/pull-back;
   very different photos: travel move, everything changes at once while his back is to the camera) + subject named for group photos.
-- [ ] Measurement experiment (approved 13.11, scaled to 30 s): 12 photos of one child, months apart, Echoes pace (~2.5 s per photo),
+- [x] Run 7 = measurement experiment (13.11): 12 photos of a baby girl (~2 months -> ~1.5 y); automatic YuNet crops with tapped subject (3 group photos).
+  Baby version of the strategies (babies can't run): A = aging in place 4 s (T2,3,9,10), C = camera moves close until the face fills the frame,
+  everything changes, pulls back 5 s (T1,4,5,6,7,8,11). One attempt each. Moderation blocks: 0/11. Claude's frame check: 11/11 pass (minor: T4 eyes look enlarged, T9 white blur).
+  TIMING: 9 clips 96-170 s; T5 and T8 stuck in KIE "generating" > 20 min (charged up front, 75.5 each). Re-sent at 1,239 s -> back in 97/96 s.
+  All 11 ready at 1,336 s (22.3 min). With an automatic re-send at 5 min it would have been ~300 + ~100 = ~400 s (~7 min) + assembly.
+  Cost: 770.1 for the 11 used clips + 151 for the stuck duplicates = 921.1 credits (~$4.61). Video 36.9 s (A clips x1.3, C clips x1.5).
+  Product rule: re-send any clip still running after ~5 min (or send to fal); promise time = p95 of (slowest clip with re-send) + assembly.
+- [ ] Owner rates run 7.
+- (done above) Measurement experiment (approved 13.11, scaled to 30 s): 12 photos of one child, months apart, Echoes pace (~2.5 s per photo),
   11 transitions, automatic strategy by rules (Claude decides and logs each choice), ONE attempt each (+ automatic reworded retry only on
   moderation blocks), Claude checks frames + owner rates, full 30 s video. Measure first-try pass rate per strategy, block rate, wait p50/p95,
   cost per 30 s. Budget ~755 cr (8 in-place x 60.4 + 3 travel x 90.6); owner tops up $5 (balance ~1,020).
