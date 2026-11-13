@@ -54,5 +54,9 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   when he turns he is already in the white shirt; "no cape at any time". Claude's look: fixed (no cape, no mask after the turn).
   Full video v2 (T1 run 6 + T2 run 4 + T3 run 3) on the test page. KIE balance 19.7 (top-up needed for more runs).
   Prompt lessons: say WHEN each change happens (all at once, while the face/back hides it); forbid invented items by name.
-- [ ] Owner rates run 6. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
+- [x] Owner rated run 6: "We have a winner. Continuing with this method." (13.11.2026)
+  DECISION: Kling 3.0 Standard via KIE (`kling-3.0/video`, mode `std`, sound false, image_urls [first, last], 4-6 s), 15.1 cr/s (~$0.0755/s).
+  Method = face-centred square crops + per-pair strategy (similar photos: aging in place with one big joyful action and a camera push-in/pull-back;
+  very different photos: travel move, everything changes at once while his back is to the camera) + subject named for group photos.
+- [ ] Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
