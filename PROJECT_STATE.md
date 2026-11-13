@@ -21,6 +21,12 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   KIE charges every accepted task up front and refunds only failed ones, so a duplicate that succeeds is always paid twice.
   Implemented in `tools/kie_watch.py`; the same rule must go into the production server.
 
+- **OTHER PEOPLE RULE (owner's finding 13.11.2026, run 8 T4: the mother got an invented ponytail and a changed face):**
+  Every person in a photo, not only the child, must look exactly as in the photo: face, hair and hairstyle, clothes. Say it per person in the
+  prompt (e.g. "her mother keeps her loose hair, no ponytail"). Never pick an action that turns an adult's back to the camera or shows a side
+  of them the photo does not show (spins, turning away): the model invents it. The big action belongs to the child; adults stay roughly in
+  place or leave the frame.
+
 ## Current Focus
 - [x] New repo attached; test upload page published.
 - [x] Owner uploaded 4 photos (toddler at a shop window -> snow with two kids, the RED coat is the subject -> bike -> beach teen).
