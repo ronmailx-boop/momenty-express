@@ -58,5 +58,10 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   DECISION: Kling 3.0 Standard via KIE (`kling-3.0/video`, mode `std`, sound false, image_urls [first, last], 4-6 s), 15.1 cr/s (~$0.0755/s).
   Method = face-centred square crops + per-pair strategy (similar photos: aging in place with one big joyful action and a camera push-in/pull-back;
   very different photos: travel move, everything changes at once while his back is to the camera) + subject named for group photos.
-- [ ] Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
+- [ ] Measurement experiment (approved 13.11, scaled to 30 s): 12 photos of one child, months apart, Echoes pace (~2.5 s per photo),
+  11 transitions, automatic strategy by rules (Claude decides and logs each choice), ONE attempt each (+ automatic reworded retry only on
+  moderation blocks), Claude checks frames + owner rates, full 30 s video. Measure first-try pass rate per strategy, block rate, wait p50/p95,
+  cost per 30 s. Budget ~755 cr (8 in-place x 60.4 + 3 travel x 90.6); owner tops up $5 (balance ~1,020).
+  Test page: "mark the child" tap for group photos (stored as items[].subject {x,y} normalized), folder button accept fix for Galaxy S25 FE.
+- Echoes music: own upload (user bears the rights), built-in library (source unstated), AI custom song (provider unstated; KIE sells Suno — unverified). 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
