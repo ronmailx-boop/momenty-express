@@ -15,8 +15,13 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 
 ## Current Focus
 - [x] New repo attached; test upload page published.
-- [ ] Owner uploads ~4 photos in order and writes "העליתי".
-- [ ] Verify in KIE docs each model's start/end-frame parameters and price: Kling 3.0 (1080p), Kling 4.0, Kling 4.0 Flash, Kling 2.5 Turbo, Veo 3.1 Fast.
-- [ ] Run 3 transitions × 5 models (~950 credits), upload clips to the page, write `results`.
+- [x] Owner uploaded 4 photos (toddler at a shop window -> snow with two kids, the RED coat is the subject -> bike -> beach teen).
+- [x] Verified KIE params. Kling 4.0 Flash has NO last frame (dropped). Kling 4.0 keyframe = 28.5 cr/s at 720p (not 17). Upload host kieai.redpandaai.co (second network secret), results on tempfile.aiquickdraw.com (allowed host).
+- [x] Run 13.11: 13/13 succeeded, 906.6 credits (~$4.53); balance 173.4. Clips + `results` rows on the test page.
+  Wait (KIE, per clip): Veo 3.1 Fast ~78 s, Kling 3.0 Std / 2.5 Turbo ~107-116 s, Kling 3.0 Pro ~200-222 s, Kling 4.0 253 s.
+  Claude's first look (frames): Veo 3.1 Fast = hard cut at the end + 16:9 output (unusable); Kling 2.5 Turbo = chaotic falls/blends;
+  Kling 3.0 Pro = best overall (T3 rides from park to beach); Kling 3.0 Std close to Pro, slight see-through in T2;
+  identity: in T1/T2 the Kling 3.0 models made the BLUE-hat child the subject (owner: red coat) — Kling 4.0 picked the red coat (1 sample).
+  Lesson: with several people the prompt must name who grows (e.g. user taps the person; competitor uses face matching).
 - [ ] Owner rates; summarize per model: clean rate, cost, wait time.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
