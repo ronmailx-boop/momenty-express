@@ -54,6 +54,9 @@ while True:
                 print(f"T{x['from']} re-send failed ({e}); retrying", flush=True)
                 continue
             tid = (r.get("data") or {}).get("taskId")
+            if not tid:  # e.g. 402 insufficient credits: report, don't count it as a copy
+                print(f"T{x['from']} re-send refused: {r.get('code')} {r.get('msg')}", flush=True)
+                continue
             x.setdefault("hedges", []).append({"taskId": tid, "submitted": time.time()})
             why = "failed: " + str(copies[-1].get("error")) if all_failed else f"waiting {round(waited)} s"
             print(f"T{x['from']} re-sent ({why})", flush=True)

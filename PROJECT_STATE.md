@@ -65,7 +65,17 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   All 11 ready at 1,336 s (22.3 min). With an automatic re-send at 5 min it would have been ~300 + ~100 = ~400 s (~7 min) + assembly.
   Cost: 770.1 for the 11 used clips + 151 for the stuck duplicates = 921.1 credits (~$4.61). Video 36.9 s (A clips x1.3, C clips x1.5).
   Product rule: re-send any clip still running after ~5 min (or send to fal); promise time = p95 of (slowest clip with re-send) + assembly.
-- [ ] Owner rates run 7.
+- [x] Owner on run 7: "all fine but very boring": only push-in/pull-back, the baby only smiles. Cause: two templates, all actions were smiles.
+- [x] Run 8 (13.11): same 12 photos, one prompt per photo: an action tied to what is in it (crib toy, tickling brother, yellow plush, headband,
+  crib rail, car window, orange cup), a different hiding move each time (roll face-down, lifted out of frame, head turned, spin blur, toy peekaboo,
+  hands peekaboo, hand over lens, drops below the rail, looks at the window, camera to the floor, cup over face), varied camera and expressions
+  ("does not smile the whole time"). All 5 s, 75.5 cr each. Claude's look: 11/11 usable, far more variety; small: invented trees (T2), smear (T8),
+  round vignette frame (T11). Video 37.9 s (x1.5).
+  TIMING: this time the whole KIE queue was slow: every clip took 585-636 s (9.8-10.6 min) from our submit; all ready at 636 s.
+  The 5-min re-send did NOT help (the 3 accepted copies finished later than the originals; 8 more were refused for lack of credits) and cost 226.5.
+  => re-sending to the same provider only helps a single stuck clip; a slow queue needs a second provider (fal) or an honest longer promise.
+  KIE status checks also returned 502 once: the server must retry. Balance 41.6.
+- [ ] Owner rates run 8.
 - (done above) Measurement experiment (approved 13.11, scaled to 30 s): 12 photos of one child, months apart, Echoes pace (~2.5 s per photo),
   11 transitions, automatic strategy by rules (Claude decides and logs each choice), ONE attempt each (+ automatic reworded retry only on
   moderation blocks), Claude checks frames + owner rates, full 30 s video. Measure first-try pass rate per strategy, block rate, wait p50/p95,
