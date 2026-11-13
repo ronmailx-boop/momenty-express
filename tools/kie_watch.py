@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Poll a kie_compare state file and re-send any clip still unfinished after HEDGE_AFTER seconds (once).
+"""Poll a kie_compare state file and re-send a clip only when it lags far behind the others (see PROJECT_STATE.md, RE-SEND RULE):
+at least half of the clips are done AND this clip waited > max(HEDGE_AFTER, 2 x median wait of the finished ones).
+At most one re-send per clip, at most 20% of the run's clips; a failed (e.g. moderation) clip is re-sent once.
 The first copy to succeed is kept (downloaded as t<from>-<model>.mp4); timings are real waits from our submit.
 
   KIE_SECONDS=5 python3 kie_watch.py STATE.json [HEDGE_AFTER=300]
 """
-import json, os, sys, time, urllib.request
+import json, os, statistics, sys, time, urllib.request
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kie_compare as K
 
@@ -46,7 +48,12 @@ while True:
         open_slots += 1
         waited = time.time() - x["submitted"]
         all_failed = all(c.get("state") == "fail" for c in copies)
-        if ((waited > hedge_after and not x.get("hedges")) or all_failed) and len(x.get("hedges", [])) < 2:
+        finished = [t["final"]["ready_at"] for t in st["tasks"] if t.get("final")]
+        resent = sum(len(t.get("hedges", [])) for t in st["tasks"])
+        lagging = (len(finished) * 2 >= len(st["tasks"])
+                   and waited > max(hedge_after, 2 * statistics.median(finished)))
+        budget_ok = resent < max(1, int(len(st["tasks"]) * 0.2))
+        if ((lagging and not x.get("hedges")) or (all_failed and len(x.get("hedges", [])) < 1)) and budget_ok:
             a, b = st["photos"][x["from"] - 1]["url"], st["photos"][x["from"]]["url"]
             try:
                 r = K.req("POST", "/api/v1/jobs/createTask", K.build(x["model"], prompts[x["from"] - 1], a, b))
