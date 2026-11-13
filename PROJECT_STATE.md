@@ -119,3 +119,6 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 Owner decides: Claude prepares a detailed work plan for phase 1 = automate the pipeline (vision-model photo description -> action & strategy
 per `docs/transition-guidelines.md` -> prompts -> KIE with the re-send rule and fal fallback -> automatic frame check -> assembly), then run it
 on 5-10 photo sets. Before any paid run: top up KIE (balance 41.6). Plan only until the owner approves (CLAUDE.md).
+
+## Competitor research (13.11.2026)
+- [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
