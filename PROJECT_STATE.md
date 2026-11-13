@@ -29,5 +29,13 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   NAME + REFERENCE = worse: see-through blends (T1 Pro and Std), and in T2 Pro the blue-hat child is carried into the park scene.
   Decision candidate: Kling 3.0 Std (720p, 60.4 cr ~ $0.30, ~1.5 min) with a prompt that names the subject; no element references.
   Product: for photos with several people the app must know who the child is (tap to confirm a pre-selected face) and describe him in the prompt.
-- [ ] Owner rates all clips on the test page.
+- [x] Owner rated runs 1-2: only T3 (bike -> beach) Kling 3.0 Pro/Std "good"; the rest "no real growing transition, a slideshow".
+  Cause: Momenty's prompt HIDES the change (turn away / cover the frame), and the 4 photos were years apart, small full-body subjects.
+- [x] Echoes examples (3 videos from the owner): same hiding tricks (hand on lens, tilt to floor, door), BUT ~25 photos/min months apart,
+  face-dominant framing, each photo alive 2-3 s; with similar framing the face visibly ages in place (~0.7 s). Growth comes from the sequence.
+- [x] Run 3 (13.11): new 4 photos of one boy (~2-5 y), squares cropped around the face by hand (Haar detector failed on a mask),
+  new prompt = visible aging in place (face stays, clothes/hair/place change), Kling 3.0 Std, 181.2 credits, 214-274 s per clip; balance ~427.
+  Claude's look: real in-place transformation (costume -> shirt -> Superman -> Real Madrid), one face; short see-through moments in the background.
+  Full 13 s video on the test page (results rows now carry `run`; the page shows only the latest run; from=0 = full video).
+- [ ] Owner rates run 3. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
