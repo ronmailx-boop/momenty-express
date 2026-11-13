@@ -214,8 +214,9 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
     const box = $("results"); box.replaceChildren();
     $("resultsSec").hidden = results.length === 0 && status !== "ready";
     if (!results.length) { box.append(el("p", { class: "muted" }, "התוצאות יופיעו כאן אחרי ש-Claude יריץ את המודלים.")); return; }
+    // runs 3+ use the same aligned photo set, so they are shown side by side
     const latest = Math.max(...results.map(r => r.run || 1));
-    const shown = results.filter(r => (r.run || 1) === latest);
+    const shown = results.filter(r => latest >= 3 ? (r.run || 1) >= 3 : (r.run || 1) === latest);
     const byT = {};
     for (const r of shown) (byT[r.from] = byT[r.from] || []).push(r);
     for (const from of Object.keys(byT).map(Number).sort((a, b) => a - b)) {
