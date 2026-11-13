@@ -29,5 +29,34 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   NAME + REFERENCE = worse: see-through blends (T1 Pro and Std), and in T2 Pro the blue-hat child is carried into the park scene.
   Decision candidate: Kling 3.0 Std (720p, 60.4 cr ~ $0.30, ~1.5 min) with a prompt that names the subject; no element references.
   Product: for photos with several people the app must know who the child is (tap to confirm a pre-selected face) and describe him in the prompt.
-- [ ] Owner rates all clips on the test page.
+- [x] Owner rated runs 1-2: only T3 (bike -> beach) Kling 3.0 Pro/Std "good"; the rest "no real growing transition, a slideshow".
+  Cause: Momenty's prompt HIDES the change (turn away / cover the frame), and the 4 photos were years apart, small full-body subjects.
+- [x] Echoes examples (3 videos from the owner): same hiding tricks (hand on lens, tilt to floor, door), BUT ~25 photos/min months apart,
+  face-dominant framing, each photo alive 2-3 s; with similar framing the face visibly ages in place (~0.7 s). Growth comes from the sequence.
+- [x] Run 3 (13.11): new 4 photos of one boy (~2-5 y), squares cropped around the face by hand (Haar detector failed on a mask),
+  new prompt = visible aging in place (face stays, clothes/hair/place change), Kling 3.0 Std, 181.2 credits, 214-274 s per clip; balance ~427.
+  Claude's look: real in-place transformation (costume -> shirt -> Superman -> Real Madrid), one face; short see-through moments in the background.
+  Full 13 s video on the test page (results rows now carry `run`; the page shows only the latest run; from=0 = full video).
+- [x] Owner rated run 3 full video "good, but not much movement" (cause: the prompt asked for stability; 4 s clips; plain concat).
+- [x] Run 4 (13.11): same aligned photos, prompt = one big joyful action per clip (jump+clap / wave+lean in / arms up), camera pushes in then
+  pulls back while he ages, change happens during the motion; 5 s clips (KIE_SECONDS=5), 75.5 cr each, 226.5 total, 137-148 s; balance 200.9.
+  Mean frame difference 10.6-17.4 vs 2.7-7.0 in run 3. Full video sped up x1.15 (14.3 s). Page shows runs 3+ side by side.
+  Risks seen: heavy motion blur in T1 claps, wide laughing mouth, T3 background switches late.
+- [x] Owner rated runs 3-4: T1 (street Spider-Man -> indoor shirt) failed both; T2 best = run 4 ("excellent, best so far");
+  T3 best = run 3 ("5 stars"). 4/6 passed. Full run 4: "better, but he never leaves his spot" -> cause: aligned start/end frames + prompt.
+  Decision: two strategies chosen per pair — similar photos = aging in place; very different place/outfit = travel move (runs off, camera follows, place changes).
+- [x] Run 5 (T1 travel, 6 s): FIRST attempt blocked by KIE moderation ("sensitive information", not charged) — wording about the child's body.
+  Reworded (no body words) -> success, 90.6 cr, 96 s: runs off down the sidewalk, sidewalk turns into the playroom, runs back in the white shirt.
+  Flaw: invented a red cape. Best-of full video (T1 run 5 + T2 run 4 + T3 run 3, 15 s) on the test page. Balance 110.3.
+  Lesson: moderation false positives on child photos are a failure mode -> pre-tested wording, automatic reworded retry, fallback transition.
+- [x] Owner: run 5 full video "very reasonable, passes"; flaw: after the turn the mask/cape stayed ~1 s in the playroom (place and outfit changed at different moments).
+- [x] Run 6 (T1 travel v2, 6 s, 90.6 cr, 118 s): prompt orders the change — place, outfit and mask change TOGETHER while his back is to the camera;
+  when he turns he is already in the white shirt; "no cape at any time". Claude's look: fixed (no cape, no mask after the turn).
+  Full video v2 (T1 run 6 + T2 run 4 + T3 run 3) on the test page. KIE balance 19.7 (top-up needed for more runs).
+  Prompt lessons: say WHEN each change happens (all at once, while the face/back hides it); forbid invented items by name.
+- [x] Owner rated run 6: "We have a winner. Continuing with this method." (13.11.2026)
+  DECISION: Kling 3.0 Standard via KIE (`kling-3.0/video`, mode `std`, sound false, image_urls [first, last], 4-6 s), 15.1 cr/s (~$0.0755/s).
+  Method = face-centred square crops + per-pair strategy (similar photos: aging in place with one big joyful action and a camera push-in/pull-back;
+  very different photos: travel move, everything changes at once while his back is to the camera) + subject named for group photos.
+- [ ] Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.

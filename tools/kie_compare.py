@@ -54,7 +54,7 @@ def build(model, prompt, a, b):
     """Request body for one model, with photo a as the first frame and photo b as the last frame."""
     if model == "kling3-pro" or model == "kling3-std":
         return {"model": "kling-3.0/video", "input": {
-            "prompt": prompt, "image_urls": [a, b], "sound": False, "duration": "4",
+            "prompt": prompt, "image_urls": [a, b], "sound": False, "duration": os.environ.get("KIE_SECONDS", "4"),
             "mode": "pro" if model == "kling3-pro" else "std", "aspect_ratio": "1:1", "multi_shots": False}}
     if model == "kling25-turbo":
         return {"model": "kling/v2-5-turbo-image-to-video-pro", "input": {

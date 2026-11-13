@@ -90,10 +90,13 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
       <p class="muted">מומלץ 4 תמונות (3 מעברים). כדאי שאחת מהן תהיה עם יותר מאדם אחד.</p>
     </div>
     <ol id="photos" class="photos"></ol>
-    <p id="empty" class="muted">עוד אין תמונות. לחץ "הוסף תמונה" כדי להעלות את הראשונה.</p>
+    <p id="empty" class="muted">עוד אין תמונות. "הוסף מהגלריה" פותח את גלריית התמונות, ו"הוסף מתיקיות" פותח את מנהל הקבצים (למשל תיקיית Download או WhatsApp). אפשר לבחור כמה תמונות בבת אחת; הן נכנסות לפי סדר הבחירה, ואפשר לסדר אחר כך.</p>
     <div class="row">
-      <label class="btn primary" id="addBtn">הוסף תמונה
+      <label class="btn primary" id="addBtn">הוסף מהגלריה
         <input id="file" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+      </label>
+      <label class="btn" id="addFilesBtn">הוסף מתיקיות
+        <input id="fileAny" type="file" multiple>
       </label>
       <button id="readyBtn" type="button">סיימתי להעלות</button>
     </div>
@@ -114,7 +117,7 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  const MODELS_PER_TRANSITION = 5, CREDITS_PER_CLIP = 63, BALANCE_HINT = 1080;
+  const MODELS_PER_TRANSITION = 1, CREDITS_PER_CLIP = 61, BALANCE_HINT = 608;
   const ISSUES = [["double", "ראש כפול"], ["ghost", "שקיפות"], ["extra", "אדם שהומצא"], ["bg", "רקע נמס"], ["hair", "שיער/מגדר השתנה"], ["face", "פנים לא דומות"], ["jump", "קפיצה בסוף"]];
   let db = null, assets = null, items = [], status = "draft", results = [], ratings = {}, busy = 0;
 
@@ -152,9 +155,9 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
     $("empty").hidden = items.length > 0;
     const t = Math.max(0, items.length - 1);
     const est = t * MODELS_PER_TRANSITION * CREDITS_PER_CLIP;
-    $("budget").textContent = t ? `${t} מעברים × ${MODELS_PER_TRANSITION} מודלים ≈ ${est.toLocaleString("he-IL")} קרדיטים (יש בערך ${BALANCE_HINT.toLocaleString("he-IL")}).` : "";
+    $("budget").textContent = t ? `${t} מעברים × ${MODELS_PER_TRANSITION} מודל ≈ ${est.toLocaleString("he-IL")} קרדיטים (יש בערך ${BALANCE_HINT.toLocaleString("he-IL")}).` : "";
     $("budget").style.color = est > BALANCE_HINT ? "var(--bad)" : "";
-    $("addBtn").hidden = locked; $("readyBtn").hidden = locked;
+    $("addBtn").hidden = locked; $("addFilesBtn").hidden = locked; $("readyBtn").hidden = locked;
     $("readyBtn").disabled = items.filter(i => i.id).length < 2 || busy > 0;
     $("readyNote").hidden = !locked;
   }
@@ -180,8 +183,11 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
     });
   }
 
-  $("file").addEventListener("change", async (ev) => {
-    const files = [...ev.target.files]; ev.target.value = "";
+  const isImage = (f) => /^image\//.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name);
+  async function addFiles(ev) {
+    const all = [...ev.target.files]; ev.target.value = "";
+    const files = all.filter(isImage);
+    $("saveErr").textContent = all.length > files.length ? `${all.length - files.length} קבצים דולגו כי הם לא תמונות JPG, PNG או WEBP.` : "";
     for (const f of files) {
       const it = { preview: "", id: null }; items.push(it); busy++; renderPhotos();
       try {
@@ -192,7 +198,9 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
         it.error = e && e.message === "decode" ? "לא הצלחתי לקרוא את הקובץ. נסה תמונה בפורמט JPG." : "ההעלאה נכשלה (" + (e && e.code || "שגיאה") + "). מחק ונסה שוב.";
       } finally { busy--; renderPhotos(); }
     }
-  });
+  }
+  $("file").addEventListener("change", addFiles);
+  $("fileAny").addEventListener("change", addFiles);
   $("readyBtn").addEventListener("click", async () => { status = "ready"; renderPhotos(); await savePhotos(); });
   $("editBtn").addEventListener("click", async () => { status = "draft"; renderPhotos(); await savePhotos(); });
 
@@ -206,11 +214,14 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
     const box = $("results"); box.replaceChildren();
     $("resultsSec").hidden = results.length === 0 && status !== "ready";
     if (!results.length) { box.append(el("p", { class: "muted" }, "התוצאות יופיעו כאן אחרי ש-Claude יריץ את המודלים.")); return; }
+    // runs 3+ use the same aligned photo set, so they are shown side by side
+    const latest = Math.max(...results.map(r => r.run || 1));
+    const shown = results.filter(r => latest >= 3 ? (r.run || 1) >= 3 : (r.run || 1) === latest);
     const byT = {};
-    for (const r of results) (byT[r.from] = byT[r.from] || []).push(r);
+    for (const r of shown) (byT[r.from] = byT[r.from] || []).push(r);
     for (const from of Object.keys(byT).map(Number).sort((a, b) => a - b)) {
-      const a = items[from - 1], b = items[from];
-      const pair = el("div", { class: "pair" },
+      const a = from > 0 ? items[from - 1] : null, b = from > 0 ? items[from] : null;
+      const pair = from === 0 ? null : el("div", { class: "pair" },
         a ? el("img", { src: a.url || a.preview, alt: `תמונה ${from}` }) : null, el("span", {}, "←"),
         b ? el("img", { src: b.url || b.preview, alt: `תמונה ${from + 1}` }) : null);
       const clips = el("div", { class: "clips" });
@@ -234,7 +245,7 @@ textarea { font: inherit; width: 100%; box-sizing: border-box; border: 1px solid
         clips.append(el("article", { class: "clip" }, el("h3", {}, r.label || r.model), el("p", { class: "facts" }, facts), media,
           r.url ? rate : null, r.url ? chips : null, r.url ? note : null));
       }
-      box.append(el("div", { class: "tr" }, el("h3", { style: "margin:0;font-size:1rem" }, `מעבר ${from} ← ${from + 1}`), pair, clips));
+      box.append(el("div", { class: "tr" }, el("h3", { style: "margin:0;font-size:1rem" }, from === 0 ? "הסרטון המלא" : `מעבר ${from} ← ${from + 1}`), pair, clips));
     }
   }
 
