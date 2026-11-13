@@ -13,6 +13,8 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 - Test page (Artifact, private): https://claude.ai/artifact/KopYK45HGjQw4BdNKCEY79 — source `tools/transition-test.html`.
   db: `session/photos` {items:[{id,url,w,h}], status}, `results/*` {from, model, label, url, credits, cost, seconds, res, state, error, order}, `ratings/<resultId>` {rating, issues[], note}. Photos are assets of the artifact (not in the repo).
 
+- **Transition guidelines (read before any run or prompt change): `docs/transition-guidelines.md`** — model, photo prep, strategies,
+  variety, timing of the change, people, forbidden wording, assembly, reliability, prompt template; working prompts in `docs/prompts/`.
 - **RE-SEND RULE (mandatory, owner's request 13.11.2026 — learned the hard way, 226.5 credits lost):**
   Re-send a clip to the SAME provider only when that one clip lags far behind the others in the same run:
   at least half of the run's clips have finished AND this clip has waited more than max(5 min, 2 x the median wait of the finished clips).
