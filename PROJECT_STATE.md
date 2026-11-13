@@ -42,5 +42,12 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   pulls back while he ages, change happens during the motion; 5 s clips (KIE_SECONDS=5), 75.5 cr each, 226.5 total, 137-148 s; balance 200.9.
   Mean frame difference 10.6-17.4 vs 2.7-7.0 in run 3. Full video sped up x1.15 (14.3 s). Page shows runs 3+ side by side.
   Risks seen: heavy motion blur in T1 claps, wide laughing mouth, T3 background switches late.
-- [ ] Owner compares run 3 vs run 4. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
+- [x] Owner rated runs 3-4: T1 (street Spider-Man -> indoor shirt) failed both; T2 best = run 4 ("excellent, best so far");
+  T3 best = run 3 ("5 stars"). 4/6 passed. Full run 4: "better, but he never leaves his spot" -> cause: aligned start/end frames + prompt.
+  Decision: two strategies chosen per pair — similar photos = aging in place; very different place/outfit = travel move (runs off, camera follows, place changes).
+- [x] Run 5 (T1 travel, 6 s): FIRST attempt blocked by KIE moderation ("sensitive information", not charged) — wording about the child's body.
+  Reworded (no body words) -> success, 90.6 cr, 96 s: runs off down the sidewalk, sidewalk turns into the playroom, runs back in the white shirt.
+  Flaw: invented a red cape. Best-of full video (T1 run 5 + T2 run 4 + T3 run 3, 15 s) on the test page. Balance 110.3.
+  Lesson: moderation false positives on child photos are a failure mode -> pre-tested wording, automatic reworded retry, fallback transition.
+- [ ] Owner rates run 5. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
