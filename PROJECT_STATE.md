@@ -49,5 +49,10 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   Reworded (no body words) -> success, 90.6 cr, 96 s: runs off down the sidewalk, sidewalk turns into the playroom, runs back in the white shirt.
   Flaw: invented a red cape. Best-of full video (T1 run 5 + T2 run 4 + T3 run 3, 15 s) on the test page. Balance 110.3.
   Lesson: moderation false positives on child photos are a failure mode -> pre-tested wording, automatic reworded retry, fallback transition.
-- [ ] Owner rates run 5. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
+- [x] Owner: run 5 full video "very reasonable, passes"; flaw: after the turn the mask/cape stayed ~1 s in the playroom (place and outfit changed at different moments).
+- [x] Run 6 (T1 travel v2, 6 s, 90.6 cr, 118 s): prompt orders the change — place, outfit and mask change TOGETHER while his back is to the camera;
+  when he turns he is already in the white shirt; "no cape at any time". Claude's look: fixed (no cape, no mask after the turn).
+  Full video v2 (T1 run 6 + T2 run 4 + T3 run 3) on the test page. KIE balance 19.7 (top-up needed for more runs).
+  Prompt lessons: say WHEN each change happens (all at once, while the face/back hides it); forbid invented items by name.
+- [ ] Owner rates run 6. Next: 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
