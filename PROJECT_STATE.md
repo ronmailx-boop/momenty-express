@@ -91,11 +91,31 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   The 5-min re-send did NOT help (the 3 accepted copies finished later than the originals; 8 more were refused for lack of credits) and cost 226.5.
   => re-sending to the same provider only helps a single stuck clip; a slow queue needs a second provider (fal) or an honest longer promise.
   KIE status checks also returned 502 once: the server must retry. Balance 41.6.
-- [ ] Owner rates run 8.
+- [x] Owner on run 8: OK except T4 (spin with mother): the mother got an invented ponytail and a changed face -> OTHER PEOPLE RULE added.
+  Guidelines consolidated in `docs/transition-guidelines.md` (merged, PR #3). KIE top-ups so far: 4 x $5 = $20 (+80 free credits);
+  used ~4,038 credits; balance 41.6 (top up before the next run). Re-send losses: 377.5 credits total, of which 226.5 pure loss (run 8).
 - (done above) Measurement experiment (approved 13.11, scaled to 30 s): 12 photos of one child, months apart, Echoes pace (~2.5 s per photo),
   11 transitions, automatic strategy by rules (Claude decides and logs each choice), ONE attempt each (+ automatic reworded retry only on
   moderation blocks), Claude checks frames + owner rates, full 30 s video. Measure first-try pass rate per strategy, block rate, wait p50/p95,
   cost per 30 s. Budget ~755 cr (8 in-place x 60.4 + 3 travel x 90.6); owner tops up $5 (balance ~1,020).
   Test page: "mark the child" tap for group photos (stored as items[].subject {x,y} normalized), folder button accept fix for Galaxy S25 FE.
 - Echoes music: own upload (user bears the rights), built-in library (source unstated), AI custom song (provider unstated; KIE sells Suno — unverified). 8-10 photos months apart; automatic face crop (better detector, e.g. MediaPipe/YuNet); music; subject tap for group photos.
-- [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
+- [x] (replaced) measurement plan: done as runs 7-8 at 30 s scale. Open: the KIE privacy email.
+
+## Conversation summary (13.11.2026, before /compact)
+- Question that started it: can a "one click, no retries, ready in X minutes" growing-up video site (based on Momenty) work?
+  Answer so far: the METHOD works (owner: "we have a winner"), but the one-click AUTOMATION is not built and success is measured on 2 children only.
+- Other answers given: Google Play can approve such an app (Play Billing ~15% is mandatory for in-app purchases; AI-content report button;
+  photo moderation; account deletion; data safety; biometric/face matching must be disclosed). KIE vs fal vs Atlas: KIE small Colorado LLC
+  reseller, privacy policy covers only email; Atlas NY, SOC 2 claimed; fal large. Echoes music: own upload (user bears rights), built-in
+  library (source unstated), AI custom song (provider unstated). 60 s at Echoes pace ~24 photos; our measured cost ~$0.30-0.45 per transition,
+  ~$4-5 for 12 photos with no retries.
+- Launch readiness (owner asked 13.11): NOT ready. Missing: (1) automation of what Claude did by hand — a vision model that describes each photo,
+  picks the action/strategy per the guidelines, an automatic judge and a fallback transition; (2) measurement on 5-10 photo sets;
+  (3) the site + server (can reuse Momenty: Firebase, render job, Paddle, music picker) with KIE + fal fallback and the re-send rule;
+  (4) a reliable time promise (measured 3-33 min); (5) KIE written privacy commitments, privacy policy, terms, accessibility statement.
+
+## Next step (exact)
+Owner decides: Claude prepares a detailed work plan for phase 1 = automate the pipeline (vision-model photo description -> action & strategy
+per `docs/transition-guidelines.md` -> prompts -> KIE with the re-send rule and fal fallback -> automatic frame check -> assembly), then run it
+on 5-10 photo sets. Before any paid run: top up KIE (balance 41.6). Plan only until the owner approves (CLAUDE.md).
