@@ -23,5 +23,11 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   Kling 3.0 Pro = best overall (T3 rides from park to beach); Kling 3.0 Std close to Pro, slight see-through in T2;
   identity: in T1/T2 the Kling 3.0 models made the BLUE-hat child the subject (owner: red coat) — Kling 4.0 picked the red coat (1 sample).
   Lesson: with several people the prompt must name who grows (e.g. user taps the person; competitor uses face matching).
-- [ ] Owner rates; summarize per model: clean rate, cost, wait time.
+- [x] Run 2 (13.11, T1+T2, Kling 3.0 Pro/Std): prompt names the subject ("the boy in the red coat on the right"; the blue-hat child walks in/out from the side)
+  vs the same + a Kling element (2 face/body crops of the subject). 8/8 succeeded, 564.8 credits; balance 608.6.
+  Claude's look: NAME ONLY = right child in 4/4 (Pro and Std), clean moves (T2: blue hat walks out left, red coat runs at the camera -> bike).
+  NAME + REFERENCE = worse: see-through blends (T1 Pro and Std), and in T2 Pro the blue-hat child is carried into the park scene.
+  Decision candidate: Kling 3.0 Std (720p, 60.4 cr ~ $0.30, ~1.5 min) with a prompt that names the subject; no element references.
+  Product: for photos with several people the app must know who the child is (tap to confirm a pre-selected face) and describe him in the prompt.
+- [ ] Owner rates all clips on the test page.
 - [ ] Then: measurement experiment plan (25 pairs × 2 attempts) and the KIE privacy email.
