@@ -161,6 +161,9 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
    KIE balance 36.94. Options for the owner: (a) wait for KIE and retry; (b) Anthropic key as an environment variable + new session,
    switch `vision()` to the Anthropic API; (c) give the fal key the "models:requests:submit" permission and use fal's
    `openrouter/router/vision` (a separate vision provider, as production needs anyway).
+   OWNER'S DECISION (14.11): stay with KIE for this project, not fal (cheaper, and Echoes uses KIE too). Options (b) and (c) are off.
+   Known risk: KIE for both vision and video = single point of failure; the production server must at least retry and queue.
+   Re-checked 14.11: still 502. A one-hour self check-in was scheduled in the session to retry.
    When vision works: rebuild the 12 square photos of run 8 (originals = assets of the test artifact, `align_faces.py` with the
    tapped subjects), run `auto_plan.py`, compare with `docs/prompts/run8-baby-varied.json`, report, then stage B.
 No paid Kling run before the owner tops up and approves stage C.
