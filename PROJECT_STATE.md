@@ -396,6 +396,18 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Product ideas (not done): AI intro/outro scene with a title, 4:5 vertical format, music, group ducks/jumps (needs care with
   the OTHER PEOPLE RULE).
 
+### Echoes video 2 + the song (14.11.2026) - `docs/competitor-video-life.md`
+- "Tany" (141 s, 720x720, ~31 photos, ~4.4 s per photo, a Facebook/Instagram ad): same template (AI intro at a door with the
+  name, white light; outro of the couple). New moves seen: hair whip, arms up that stay up in the new place, camera from the
+  feet up, dress twirl / dance spin; adults move and hug.
+- APPLIED (untested): new moves `hair_whip` (needs long/curly hair), `arms_up` (bridge), `twirl` (needs dress/skirt);
+  camera_to_floor finish = starts at the feet in the new place and tilts up; the "needs" check also reads hair and clothes.
+- THE SONG: transcribed both videos (faster-whisper small). Both are PERSONAL AI songs written from the customer's answers:
+  video 1 = Venezuela -> Israel, psychoanalyst, 78, 3 children, 2 granddaughters; video 2 = 10th wedding anniversary,
+  camper trips, the daughter's name. Not a library song. Generator not provable from the audio (metadata stripped by
+  Facebook); style fits Suno, which KIE sells - unverified.
+- Product idea: a personal song from a short questionnaire. Next: test one song via KIE (Suno): cost, time (owner approval).
+
 ### Launch estimate (14.11.2026, owner asked "when will we be ready to launch?")
 - Answer: about 6-10 weeks, IF the quality gate in stage 1 is passed; stage 1 is the uncertain part.
 - Now: baby (run 10) 5/5 acceptable after the automatic retry; child 3-6 (runs 11-12) only 2-3/5 owner-good, only 2 proven moves

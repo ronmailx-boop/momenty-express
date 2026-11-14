@@ -118,7 +118,7 @@ HIDES = {
     "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "finish": "pops back up into view", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
     "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "finish": "the cup is still tipped up, then comes down", "needs": ["cup", "bottle", "glass", "mug"]},
     # competitor video: runs toward the camera, the camera tilts down to the feet and the ground, then tilts up in the new place
-    "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor", "finish": "the camera is still pointing at the floor, then tilts back up to the child"},
+    "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor", "finish": "in the new place the camera starts at the feet and tilts up to the face"},
     # competitor video (bar mitzvah): an object that belongs to the SECOND photo swings in front of the camera, then is in its place
     "next_object": {"stages": ["toddler", "child", "teen_adult"], "text": "an object that is in the SECOND photo (name it) swings in close in front of the camera and hides the face for a moment", "finish": "that object is still close to the camera, then settles into its place in the second photo", "needs_next": True},
     "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "finish": "is still running with the back to the camera, then turns around and comes back", "solo": True, "travel": True, "moves": True},
@@ -126,6 +126,11 @@ HIDES = {
     "jump_spin": {"stages": ["child"], "text": "turns around slowly on the spot, so the back faces the camera for a full second", "finish": "is still turning slowly with the back to the camera, then completes the turn to face the camera", "solo": True, "moves": True, "speed": 1.1},
     "crouch_jump": {"stages": ["toddler", "child"], "text": "crouches down quickly and drops below the lower edge of the frame while the camera stays at head height", "finish": "jumps back up into view", "moves": True},
     "walk_across": {"stages": ["child", "teen_adult"], "off": "run 12: owner 'the worst transition'", "text": "walks sideways across the frame close to the camera, so the shoulder fills the view for a moment", "finish": "is still walking across, then stops and turns to the camera", "solo": True, "moves": True},
+    # Echoes video 2 (14.11): hair flies across the face during a quick head spin; arms thrown up stay up in the new place;
+    # a twirl (dress / skirt) carries into the next photo
+    "hair_whip": {"stages": ["child", "teen_adult"], "text": "spins the head quickly so the long hair flies across the face", "finish": "the hair is still flying, then settles and the face appears", "needs": ["long", "curly", "ponytail", "wavy"], "solo": True},
+    "arms_up": {"stages": ["toddler", "child", "teen_adult"], "text": "throws both arms up high in joy and leans back laughing, the arms and a quick camera tilt hide the face for a moment", "finish": "the arms are still up high in the new place, then come down"},
+    "twirl": {"stages": ["toddler", "child", "teen_adult"], "text": "twirls around once so the dress or skirt flares out, the back passing the camera", "finish": "is still finishing the twirl, then faces the camera", "needs": ["dress", "skirt", "gown", "tutu"], "solo": True, "moves": True},
     "ride_away": {"stages": ["toddler", "child"], "text": "rides the ride-on toy away from the camera with the back to it", "finish": "is still riding with the back to the camera, then turns and rides back toward the camera", "needs": ["ride-on", "toy car", "bike", "bicycle", "tricycle", "scooter", "motorbike", "motorcycle"], "solo": True, "moves": True},
     "behind_object": {"stages": ["toddler", "child"], "off": "run 12: owner 'bad transition' (walked behind a wall edge)", "text": "walks behind the nearest big object in the photo and is hidden by it for a moment", "finish": "steps out from behind it, then faces the camera", "needs": ["door", "doorway", "sofa", "couch", "tree", "curtain", "toy car", "ride-on", "table"], "solo": True, "moves": True},
     "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
@@ -154,7 +159,7 @@ def choose(first, cmp, used, i, second=None):
     stage, others = first["stage"], bool(first["others"])
     # the place may differ (run 7: T2, T3, T9, T10 were in-place by hand with a new background)
     similar = cmp["same_pose_kind"] and cmp["similar_framing"]
-    hay = " ".join([first["pose"], first["place"]] + first["objects"]).lower()
+    hay = " ".join([first["pose"], first["place"], first.get("hair", ""), first.get("clothes", "")] + first["objects"]).lower()
     # a child who stands in a crib or sits strapped in is not free to run (run 7 T8, T10 were sent to "travel")
     contained = bool(first.get("contained")) or bool(CONTAINED.search(first["pose"] + " " + first["place"]))
     fits = [k for k, h in HIDES.items() if stage in h["stages"] and not h.get("off")     # "off" = failed with the owner
