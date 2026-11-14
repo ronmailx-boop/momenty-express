@@ -1,0 +1,59 @@
+{
+ "video": "(test page, results/r11-full)",
+ "transitions": 5,
+ "first_try_pass": 2,
+ "after_retry": 3,
+ "fallback": 0,
+ "outcome": {
+  "1": "retry",
+  "2": "first try",
+  "3": "retry",
+  "4": "first try",
+  "5": "retry"
+ },
+ "minutes_to_video": 14.6,
+ "kling_credits": 619.1,
+ "vision_credits_this_session": 2.69,
+ "total_credits": 621.8,
+ "usd": 3.11,
+ "photo_checks": [
+  {
+   "photo": 1,
+   "faces": 1,
+   "note": "face 60px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 2,
+   "faces": 1,
+   "note": "face 98px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 3,
+   "faces": 1,
+   "note": "face 159px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 4,
+   "faces": 1,
+   "note": "face 238px, share 0.25",
+   "tapped": false
+  },
+  {
+   "photo": 5,
+   "faces": 1,
+   "note": "face 125px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 6,
+   "faces": 1,
+   "note": "face 67px, share 0.22",
+   "tapped": false
+  }
+ ],
+ "video_seconds": 18.708333,
+ "note": "minutes_to_video includes the stopped first start; real run 10:15:51-10:27:05 = 11.2 min"
+}

@@ -311,9 +311,49 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   in the background -> upload clips + video as assets of the test page (Artifact publish asset:true) -> write `results/r11-*`
   rows (run 11) -> owner rates -> read `ratings`, add to `docs/judge/labels.json`.
 
+### Run 11 = stage D, set 1 (14.11.2026)
+- Owner topped up KIE (balance 1,083.3) and uploaded 6 new photos: one boy alone (~2-6 y): red ride-on car on a sidewalk,
+  lying on the floor, blue jacket + glasses indoors, Spider-Man shirt against a wall, holding a cap and toy indoors, on a red
+  ride-on motorbike. No group photos (no taps). Photo ids: 1f496101..., 47ed2976..., 21757770..., f834379b..., 10a14bef..., 84fdce11...
+- First start STOPPED before any clip (cost ~2 vision credits): the vision model put all 6 photos at stage "child", and for
+  "child" the code had no bridge move except run_and_turn -> T2 got hand_over_lens (a slide-change move, 0/3 with the owner).
+- FIX (`auto_plan.py`, free): hands/toy peekaboo and head turn now also for "child"; toy_peekaboo also accepts ball/container/box;
+  new bridge `cap_over_face` (toddler/child, needs cap/hat/helmet); `jump_spin` got a `finish` (lands facing the camera);
+  run_and_turn only once per video unless no other bridge fits (first re-plan gave 3 runs of 5). Guidelines section 3 updated.
+- Plan: T1 run off and turn (6 s), T2 hands peekaboo (from lying to standing), T3 head turn to the hoop, T4 jump spin,
+  T5 peekaboo with the gray container. Expected ~393 credits + retries.
+- Command: `run_set.py OUT 01..06.jpg --max-credits 900` (background, restarted 10:15).
+- RESULT: 5/5 clips ready in 351-379 s (slow queue, all equally slow -> no re-sends, correct). Judge: 2/5 first try
+  (T2 hands peekaboo, T4 jump spin). Rejected: T1 run off (code: end match 0.57 < 0.6 - Claude's look: GOOD clip, likely a
+  false reject), T3 head turn (code: motion 3.58 < 4, camera "stays still"), T5 container peekaboo (vision: crossfade +
+  see-through faces). Retries all passed (91-111 s): T1 hands peekaboo, T3 hands peekaboo, T5 jump spin onto the motorbike.
+  No fallback. 11.2 min of real run (report says 14.6: includes the stopped start), 621.8 credits ($3.11), video 18.7 s.
+  KIE balance 458.0.
+- Claude's look at the final video: all 5 continuous; T1-retry: white shirt appears while still in the red car (outfit before place);
+  hands peekaboo 3 times in 5 transitions (retries did not avoid used moves).
+- FIX (`run_set.py`, free): a retry also excludes the moves of the neighbouring transitions and is added to `used`.
+- Files: `docs/prompts/run11-stage-d.json`, `docs/judge/run11-report.json`; clips + video on the test page (`results/r11-*`, run 11).
+- OWNER'S RATINGS run 11 (14.11): full video "too many frames hiding the face with the hands; the same movement must never
+  come twice". T1 run off and come back "good transition" (judge rejected it: false reject); T1-retry hands "start not impressive,
+  odd look up"; T2 hands "needs another transition, not hands over the face"; T3 head turn "slideshow" (judge right);
+  T3-retry hands "fine, nice"; T4 spin "too fast, looks like a bug" (judge passed); T5 container peekaboo "very bad, classic
+  slideshow" (judge right); T5-retry spin "ok, not perfect, too fast".
+  Owner pass: first try 1/5, final video 2/5 (T3-retry, T5-retry). Judge agreed 4/8. Labels added (`docs/judge/labels.json`).
+- CHANGES after the ratings (free; guidelines sections 3 and 8):
+  `auto_plan.py`: no move repeats in a video (unused only; a long video may reuse one not in the last 3); hands peekaboo and
+  head turn only up to toddler; spin is slow (back to camera a full second) with its own speed x1.1; new child bridge moves
+  crouch_jump, walk_across, ride_away (needs a ride-on/bike), behind_object (needs door/sofa/tree/curtain/table/car);
+  object words match whole words only ("glasses" matched "glass" -> cup move). `run_set.py`: per-move speed in assembly.
+  `judge.py`: MATCH 0.6 -> 0.5.
+  Re-plan of run 11 photos: T1 run and turn, T2 crouch and jump up, T3 slow spin, T4 walk across close to the camera,
+  T5 helmet peekaboo = 5 different bridge moves (~2.7 credits for the re-plans).
+- Open: the judge can't see "too fast" or "slideshow" well (passed T4 spin, T2/T1-retry hands); a 60 s video (18 transitions)
+  needs more bridge moves per age than exist now.
+
 ## Next step (exact)
-1. Stage D (recommended over re-running run 9's photos): owner tops up KIE (~$5 per 6-photo set; balance 83) and uploads a NEW set
-   of 6 photos (another child or an older age, walking/running, some outdoors -> tests the travel move); run 11 with run_set.py.
+1. Stage D set 2: owner uploads another 6-photo set (KIE balance ~455 = one more set). Run with run_set.py: it tests the new
+   rules (no repeats, crouch/walk-across/ride/behind-object moves, slow spin). Optional: re-run run 11's photos with the new plan
+   (~400 credits) to compare directly.
 2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)

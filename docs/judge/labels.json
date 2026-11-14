@@ -238,5 +238,37 @@
  "r10-t5-retry": {
   "pass": 1,
   "why": "not bad at all"
+ },
+ "r11-t1": {
+  "pass": 1,
+  "why": "good transition (judge rejected: end match 0.57)"
+ },
+ "r11-t1-retry": {
+  "pass": 0,
+  "why": "start not impressive, odd that he looks up at the start"
+ },
+ "r11-t2": {
+  "pass": 0,
+  "why": "needs another transition, not hiding the face with the hands"
+ },
+ "r11-t3": {
+  "pass": 0,
+  "why": "looks like a slideshow (head turn, still camera)"
+ },
+ "r11-t3-retry": {
+  "pass": 1,
+  "why": "fine, nice transition"
+ },
+ "r11-t4": {
+  "pass": 0,
+  "why": "too fast, looks like a bug (spin, sped x1.5)"
+ },
+ "r11-t5": {
+  "pass": 0,
+  "why": "very bad, classic slideshow"
+ },
+ "r11-t5-retry": {
+  "pass": 1,
+  "why": "ok, not perfect, too fast"
  }
 }

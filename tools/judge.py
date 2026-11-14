@@ -81,7 +81,8 @@ def code_verdict(c):
 # hard cut: only Veo's end cut (ratio 10.9) passes 8; a hand over the lens reaches 6.0. Extra faces: the rejected clip with the
 # changed mother has 13 of ~24 sampled frames, approved clips at most 7. Motion under 4: 3 rejected clips (slideshow / nothing
 # happens), the lowest approved clip has 4.6.
-CUT_JUMP, CUT_RATIO, EXTRA_FACE_FRAMES, MIN_MOTION, MATCH = 25.0, 8.0, 10, 4.0, 0.6
+# MATCH 0.6 -> 0.5 (run 11 T1: end match 0.57, owner "good transition"; wrong photos score 0.03-0.12)
+CUT_JUMP, CUT_RATIO, EXTRA_FACE_FRAMES, MIN_MOTION, MATCH = 25.0, 8.0, 10, 4.0, 0.5
 
 
 def grid(fs, path, center=None, cols=4, cell=256, fps=24):
