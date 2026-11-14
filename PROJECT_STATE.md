@@ -275,10 +275,18 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Judge v3 (told to fail "slide changes") was WORSE (3/6: rejected both good in-place clips, still passed both slideshows) -> reverted.
   Slideshow is prevented at the source; the judge can't see it in 12 still frames. Owner ratings stay the measure for it.
 
+### Run 10 (14.11.2026): A/B on run 9's 6 photos with the bridge rule
+- Plan (descriptions re-made, so not identical to the dry re-plan): T1 head turn and back, T2 "below the rail" (the bench railing:
+  her mother lowers her into the bouncer in one movement), T3 in-place, T4 toy peekaboo, T5 in-place. No slide-change moves.
+- Clips 98-116 s; judge 4/5 first try; T5 rejected ("abrupt change with the face visible") -> retry passed. No fallback.
+  8.3 min, 458.3 credits ($2.29). KIE balance after: 85.5 (top-up needed for any further run).
+- Files: `docs/prompts/run10-bridge.json`, `docs/judge/run10-report.json`; clips on the test page (`results/r10-*`, run 10).
+- Open: owner rates run 10 -> is "slideshow" gone? Compare with run 9 (3/5 owner passes).
+- Note: photo descriptions differ between runs (vision model is not deterministic) -> the plan for the same photos can change.
+
 ## Next step (exact)
-1. Run 10 = A/B on the SAME 6 photos with the bridge rule (`python3 tools/run_set.py OUT <run 9 photos+taps> --max-credits 540`;
-   photos: rebuild with db_photos.py from the test page db; ~460 credits of the 547.7 left). Needs the owner's OK.
-   Owner rates -> did "slideshow" go away? If yes: stage D (more sets, other ages: older child for the travel move).
+1. Owner rates run 10 on the test page. If "slideshow" is gone: stage D (more sets, other ages: an older child for the travel
+   move); needs a KIE top-up (balance 85.5; ~460 credits per 6-photo set).
 2. In-place clips pass but are "simple, almost no motion": give in-place a bigger action (guidelines section 4) in the next round.
 
 ## Competitor research (13.11.2026)
