@@ -414,6 +414,9 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Hebrew: mostly intelligible by machine transcription; some mispronunciations (e.g. "adumah" -> "hadumah"; version 2 says
   "Noan"). Owner to listen (files sent in chat, not in git). KIE balance after: 42.6.
 - Open: Hebrew quality, commercial-use rights of Suno songs via KIE, privacy of personal details sent to the provider.
+- Song 2 (owner's real birthday video for "Roma", 58 s): Hebrew birthday lyrics from what the video shows, duration 58 ->
+  2 versions of 57.6/57.9 s in 30 s, 12 credits; audio replaced with ffmpeg (video untouched, 2 s fade). Version 2 says the
+  name clearly; version 1 sounds "Romab". Both videos sent in chat (not in git). KIE balance ~30.6.
 
 ### Launch estimate (14.11.2026, owner asked "when will we be ready to launch?")
 - Answer: about 6-10 weeks, IF the quality gate in stage 1 is passed; stage 1 is the uncertain part.
