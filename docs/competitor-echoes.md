@@ -50,3 +50,15 @@ Collected by the owner with Claude in Chrome on his own account; only what the s
 - Still unknown: clip duration, std/pro, resolution (need the clip file), the full animation catalog (not shown in trial).
 - Reported by the browser extension in its summary (not yet measured by us on the file): clips are 5 s, 720p, 9:16;
   signed links expire after 12 h (`expiresIn: 43200`). 720p fits Kling 3.0 Standard and the public demo videos (720x1280).
+
+## The trial clip itself (measured 14.11.2026; file kept out of the repo)
+- Raw Kling output, not re-encoded by Echoes: metadata tag `AIGC: {"ContentProducer":"kling", ...}`,
+  encoder `Lavc60.31.102 h264_slapi`. 720x1276, 24 fps, 121 frames = 5.04 s, 7.6 Mbit/s -> **Kling 3.0 Standard, 5 s**.
+- Input: two baby photos (3:4), one face each, cropped to 9:16 by the site; no visible face-centred zoom.
+- What happens (retry version, category "natural"):
+  0-1.5 s  stays on photo 1; the baby kicks, laughs, pushes up (action that fits the pose).
+  1.5-2.5 s the baby turns the head away while the camera swings around behind.
+  2.5-3.3 s back of the head to the camera: sheet colour, clothes and place change together while the face is hidden.
+  3.3-5 s  the baby turns back, already in photo 2 (crib, toys), and settles into the last frame.
+- So their method = our "hiding" method (section 3 of transition-guidelines.md): one natural action, face hidden by a
+  turn + camera move, everything changes at once, reveal, settle. No flash or glow in this clip.
