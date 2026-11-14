@@ -108,16 +108,17 @@ COMPARE = """Two photos of the same child, the first earlier, the second later. 
 # "finish" are kept only as a last resort.
 HIDES = {
     "roll_face_down": {"stages": ["lying_baby", "sitting_baby"], "text": "rolls over onto the front, face down", "solo": True},
-    "hands_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "covers the face with both hands as in peekaboo", "finish": "the hands are still over the face, then come down"},
-    "toy_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "lifts the toy up in front of the face", "finish": "the toy is still in front of the face, then comes down", "needs": ["toy", "plush", "doll", "teddy", "book", "rattle"]},
+    "hands_peekaboo": {"stages": ["sitting_baby", "toddler", "child"], "text": "covers the face with both hands as in peekaboo", "finish": "the hands are still over the face, then come down"},
+    "toy_peekaboo": {"stages": ["sitting_baby", "toddler", "child"], "text": "lifts the toy up in front of the face", "finish": "the toy is still in front of the face, then comes down", "needs": ["toy", "plush", "doll", "teddy", "book", "rattle", "ball", "container", "box"]},
     "hand_over_lens": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "reaches out and a hand covers the lens"},
-    "head_turn_away": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "turns the head fully away from the camera to look at something", "finish": "the head is still turned away, then turns back to the camera"},
+    "head_turn_away": {"stages": ["lying_baby", "sitting_baby", "toddler", "child"], "text": "turns the head fully away from the camera to look at something", "finish": "the head is still turned away, then turns back to the camera"},
     "face_fills_frame": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "the camera moves in until the face is so close that it blurs and fills the frame"},
     "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "finish": "pops back up into view", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
     "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "finish": "the cup is still tipped up, then comes down", "needs": ["cup", "bottle", "glass", "mug"]},
     "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor"},
     "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "finish": "is still running with the back to the camera, then turns around and comes back", "solo": True, "travel": True, "moves": True},
-    "jump_spin": {"stages": ["child"], "text": "jumps and spins once, the back passing the camera", "solo": True, "moves": True},
+    "cap_over_face": {"stages": ["toddler", "child"], "text": "pulls the cap down over the face", "finish": "the cap is still over the face, then it is pushed back up", "needs": ["cap", "hat", "helmet"]},
+    "jump_spin": {"stages": ["child"], "text": "jumps and spins once, the back passing the camera", "finish": "is still finishing the spin with the back to the camera, then lands facing the camera", "solo": True, "moves": True},
     "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
     "walk_past_camera": {"stages": ["teen_adult"], "text": "walks close past the camera, blurring the frame", "solo": True},
 }
@@ -145,7 +146,8 @@ def choose(first, cmp, used, i):
         # bridge moves 4/4)
         return "in_place", [], 5
     runner = stage in ("toddler", "child") and not others and not contained and not cmp["same_place_kind"]
-    if runner and "run_and_turn" in allowed:
+    # variety (owner on run 7: "very boring"): travel again only when no other bridge move fits
+    if runner and "run_and_turn" in allowed and ("run_and_turn" not in used or not bridge_fits):
         return "travel", ["run_and_turn"], 6
     allowed = [k for k in allowed if not HIDES[k].get("travel")] or ["hand_over_lens"]
     # moves not used yet in this video first (run 8 by hand: 11 different moves), then object-based moves (they tie

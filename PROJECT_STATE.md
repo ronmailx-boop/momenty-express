@@ -315,7 +315,14 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Owner topped up KIE (balance 1,083.3) and uploaded 6 new photos: one boy alone (~2-6 y): red ride-on car on a sidewalk,
   lying on the floor, blue jacket + glasses indoors, Spider-Man shirt against a wall, holding a cap and toy indoors, on a red
   ride-on motorbike. No group photos (no taps). Photo ids: 1f496101..., 47ed2976..., 21757770..., f834379b..., 10a14bef..., 84fdce11...
-- Command: `run_set.py OUT 01..06.jpg --max-credits 900` (background).
+- First start STOPPED before any clip (cost ~2 vision credits): the vision model put all 6 photos at stage "child", and for
+  "child" the code had no bridge move except run_and_turn -> T2 got hand_over_lens (a slide-change move, 0/3 with the owner).
+- FIX (`auto_plan.py`, free): hands/toy peekaboo and head turn now also for "child"; toy_peekaboo also accepts ball/container/box;
+  new bridge `cap_over_face` (toddler/child, needs cap/hat/helmet); `jump_spin` got a `finish` (lands facing the camera);
+  run_and_turn only once per video unless no other bridge fits (first re-plan gave 3 runs of 5). Guidelines section 3 updated.
+- Plan: T1 run off and turn (6 s), T2 hands peekaboo (from lying to standing), T3 head turn to the hoop, T4 jump spin,
+  T5 peekaboo with the gray container. Expected ~393 credits + retries.
+- Command: `run_set.py OUT 01..06.jpg --max-credits 900` (background, restarted 10:15).
 
 ## Next step (exact)
 1. Stage D (recommended over re-running run 9's photos): owner tops up KIE (~$5 per 6-photo set; balance 83) and uploads a NEW set
