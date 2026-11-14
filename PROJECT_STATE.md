@@ -163,6 +163,13 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   a contained child (fix works); in-place only in T2. Differences: T2/T4 hand used the mother lifting/spinning her (auto never moves
   adults: safer after the ponytail finding); T3 hand used the brother tickling (auto: hands peekaboo); T7 hand reached for the lens
   (auto: head turn); T9 hand looked at the window (auto: face fills frame); T10 hand dropped a thing (auto: head turn again).
+- How to rebuild the run 8 inputs in a new session (scratchpad is wiped):
+  originals = assets of the test artifact; `Artifact read` with `paths` does NOT work for assets, `read_asset` (claude-artifacts MCP,
+  slug 984e01bb-de0a-4c67-99e2-0baa544d86f8) does: it saves each JPEG under the session's tool-results folder.
+  Order and taps are in db `session/photos` (photo 2 @0.417,0.437; 3 @0.342,0.532; 4 @0.52,0.339).
+  `pip install opencv-python-headless` (cv2 is not preinstalled), then
+  `python3 tools/align_faces.py OUT/sq 01.jpg 02.jpg@0.417,0.437 03.jpg@0.342,0.532 04.jpg@0.52,0.339 05.jpg ... 12.jpg`,
+  then `python3 tools/auto_plan.py OUT/plan OUT/sq/photo1-sq.jpg ... photo12-sq.jpg` (~5 credits, ~3 min).
 - Known gaps: descriptions sometimes wrong in small ways (photo 6 crib called "bed"; photo 5 stroller called "car seat");
   prompts are long (~1,400 chars) with many people lines in group photos; only 2 children tested.
 
