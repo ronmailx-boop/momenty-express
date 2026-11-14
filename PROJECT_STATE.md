@@ -149,14 +149,20 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
      is too strict: use same_pose_kind and similar_framing only.
   Otherwise fine: age-appropriate hiding moves, no adjacent repeats, no moves that turn the mother.
 - Lesson: KIE for both vision and video is a single point of failure. Production needs a separate vision provider.
-- KIE balance 14.11: 40.3 credits.
+- KIE balance 14.11: 40.3 credits (36.94 later the same day).
 
 ## Next step (exact)
-1. Fix the two rules above in `tools/auto_plan.py` (`choose`).
-2. Rebuild the 12 square photos of run 8 (download the originals from the test artifact, `align_faces.py` with the tapped subjects) and
-   re-run stage A when KIE's Gemini answers again (test first with a one-line text call). If it stays down, ask the owner for an
-   Anthropic key as an environment variable (new session) and switch `vision()` to the Anthropic API.
-3. Compare the 11 automatic prompts with `docs/prompts/run8-baby-varied.json`, report to the owner, then stage B.
+1. [x] (14.11) Fixed the two rules in `tools/auto_plan.py` `choose`: new describe field `contained` + a word check
+   (crib, cot, playpen, stroller, car seat, high chair, held, on a lap...) -> no travel and no running/jumping hiding moves;
+   in-place test is now `same_pose_kind and similar_framing`. Checked offline with made-up descriptions.
+2. [ ] Re-run stage A. BLOCKED (14.11, second session): every KIE chat model returns 502 "upstream request failed" after 30 s
+   (gemini-3-8-flash, gemini-4-argon = KIE's suggested replacement, claude/v1/messages); other Gemini names are retired/unsupported.
+   fal: the session's fal key gets 403 "required models:requests:submit" (key has no permission to run models).
+   KIE balance 36.94. Options for the owner: (a) wait for KIE and retry; (b) Anthropic key as an environment variable + new session,
+   switch `vision()` to the Anthropic API; (c) give the fal key the "models:requests:submit" permission and use fal's
+   `openrouter/router/vision` (a separate vision provider, as production needs anyway).
+   When vision works: rebuild the 12 square photos of run 8 (originals = assets of the test artifact, `align_faces.py` with the
+   tapped subjects), run `auto_plan.py`, compare with `docs/prompts/run8-baby-varied.json`, report, then stage B.
 No paid Kling run before the owner tops up and approves stage C.
 
 ## Competitor research (13.11.2026)
