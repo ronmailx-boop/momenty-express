@@ -139,7 +139,10 @@ def choose(first, cmp, used, i):
                and not (others and h.get("solo"))                       # adults must not be turned or left behind
                and not (contained and h.get("moves"))                   # no running / jumping out of a crib or seat
                and (not h.get("needs") or any(w in hay for w in h["needs"]))]
-    if similar:
+    bridge_fits = [k for k in allowed if HIDES[k].get("finish") and not HIDES[k].get("travel")]
+    if similar and not bridge_fits:
+        # in-place only when no bridge move fits (owner, runs 9-10: in-place 3/5, two of them "simple, almost no motion";
+        # bridge moves 4/4)
         return "in_place", [], 5
     runner = stage in ("toddler", "child") and not others and not contained and not cmp["same_place_kind"]
     if runner and "run_and_turn" in allowed:
@@ -190,7 +193,9 @@ TEMPLATE = ("One continuous shot with no cuts, no flashes, no dissolves and no a
             "continuous movement, never like a cut or a slide change. {Poss} face stays one clear face whenever it is visible, never doubled or "
             "see-through. In each photo {pron} looks exactly as in that photo (face, eyes, hair). {people}"
             "No people, objects or text that are not in the photos.{ban}")
-IN_PLACE = "the camera moves in and back out during one big action"
+IN_PLACE = ("one big continuous movement keeps going through the change (for example both arms go up high and come down, or a "
+            "big lean toward the camera and back) while the camera moves in and back out; the aging happens in the middle of the "
+            "movement, never while the child is still")
 
 
 def load_cache(out):
@@ -214,7 +219,8 @@ def write_one(i, photos, desc, cmps, gender, used, prev_cam, exclude=(), note=""
     if exclude and strategy == "in_place":        # in-place was rejected: hide the change this time
         strategy, seconds = "hiding", 5
     camera = next(c for c in CAMERAS[i % len(CAMERAS):] + CAMERAS if c != prev_cam)
-    how = ("In-place aging: no hiding; one big action that fits the pose while " + IN_PLACE + ", and the child visibly grows during it."
+    how = ("In-place aging: no hiding; " + IN_PLACE + ". The child visibly grows during the movement and is still moving "
+           "when the second photo's place and clothes appear."
            if strategy == "in_place" else
            "Pick ONE hiding move from (prefer the first): " + "; ".join(f'{k} = the child {HIDES[k]["text"]}' for k in hides) + ".")
     w = vision(WRITE.format(a=json.dumps(a), b=json.dumps(b), cmp=json.dumps(cmp), strategy=strategy, how=how,
