@@ -242,9 +242,19 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   Not included: advertising (likely the largest cost), server/storage (cents), music (undecided), refunds, support, income tax.
   Echoes charges $29.90 (~110 ILS) for the same minute.
 
+### Photo upload path for stage C (14.11.2026)
+- The test page (https://claude.ai/artifact/KopYK45HGjQw4BdNKCEY79, source `tools/transition-test.html`, version 10) now also saves
+  each uploaded photo into its database as base64 chunks: `photodata/<assetId>-<k>` {id, k, n, b64} (200,000 chars each); the item
+  in `session/photos` carries `chunks`. Reason: the asset store can't be read from every session (read_asset was gone 14.11).
+- Run 7/8 photo list archived to `archive/photos-run7-8`; `session/photos` emptied for the new set (assets not deleted).
+- To fetch: ArtifactData get `session/photos` and list `photodata` (query.limit 1000) with out_dir = DB, then
+  `python3 tools/db_photos.py DB OUT` -> OUT/01.jpg ... + the run_set.py arguments with the taps (tested: byte-identical).
+- Upload instructions for the owner: 6 photos of one child (see the chat list 14.11): 1 baby lying alone; 2 baby with people (tap
+  the child); 3 seated in a high chair/stroller with an object; 4 seated, framed like 3 (in-place test); 5 toddler outdoors standing;
+  6 child indoors. Run with `--max-credits 900` after a $5 top-up (~455-530 credits expected, ceiling ~830).
+
 ## Next step (exact)
-1. Owner: top up KIE (~$6-10 for stage C; balance 7.73) and supply a NEW set of ~12 photos of one child (months apart),
-   marking the child in group photos.
+1. Owner: top up KIE $5 and upload 6 photos on the test page (mark the child in the group photo), then write "העליתי".
 2. Run stage C with `tools/run_set.py`; owner rates every transition; compare with the judge's verdicts.
 3. Then stage D (4 more sets) if C goes well.
 

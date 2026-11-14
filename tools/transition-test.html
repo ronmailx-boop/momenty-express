@@ -93,7 +93,7 @@ dialog::backdrop { background: rgb(0 0 0 / .6); }
   <section id="photosSec" hidden>
     <div style="display:grid;gap:4px">
       <h2>1. התמונות, לפי הסדר</h2>
-      <p class="muted">לסרטון של 30 שניות: 12 תמונות של אותו ילד, מהגיל הצעיר למבוגר, כמה חודשים בין תמונה לתמונה. בתמונה שיש בה עוד אנשים, לחץ "סמן את הילד" והקש על הפנים שלו.</p>
+      <p class="muted">תמונות של אותו ילד, מהגיל הצעיר למבוגר, כמה חודשים בין תמונה לתמונה. בתמונה שיש בה עוד אנשים, לחץ "סמן את הילד" והקש על הפנים שלו.</p>
     </div>
     <ol id="photos" class="photos"></ol>
     <p id="empty" class="muted">עוד אין תמונות. "הוסף מהגלריה" פותח את גלריית התמונות, ו"הוסף מתיקיות" פותח את מנהל הקבצים (למשל תיקיית Download או WhatsApp). אפשר לבחור כמה תמונות בבת אחת; הן נכנסות לפי סדר הבחירה, ואפשר לסדר אחר כך.</p>
@@ -143,7 +143,20 @@ dialog::backdrop { background: rgb(0 0 0 / .6); }
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  const MODELS_PER_TRANSITION = 1, CREDITS_PER_CLIP = 70, BALANCE_HINT = 1020;
+  const MODELS_PER_TRANSITION = 1, CREDITS_PER_CLIP = 75.5, BALANCE_HINT = 1000;
+  // Each photo is also kept in the page's database as base64 chunks (photodata/<assetId>-<k>), so Claude can read it
+  // with the database tools even when the asset store is not reachable from its session.
+  const CHUNK = 200000;
+  function toBase64(blob) {
+    return new Promise((res, rej) => { const r = new FileReader();
+      r.onload = () => res(String(r.result).split(",")[1]); r.onerror = () => rej(new Error("read")); r.readAsDataURL(blob); });
+  }
+  async function saveChunks(id, blob) {
+    const b64 = await toBase64(blob), n = Math.ceil(b64.length / CHUNK);
+    for (let k = 0; k < n; k++)
+      await db.doc(`photodata/${id}-${k}`).set({ id, k, n, type: "image/jpeg", b64: b64.slice(k * CHUNK, (k + 1) * CHUNK) });
+    return n;
+  }
   const ISSUES = [["double", "ראש כפול"], ["ghost", "שקיפות"], ["extra", "אדם שהומצא"], ["bg", "רקע נמס"], ["hair", "שיער/מגדר השתנה"], ["face", "פנים לא דומות"], ["jump", "קפיצה בסוף"]];
   let db = null, assets = null, items = [], status = "draft", results = [], ratings = {}, busy = 0;
 
@@ -161,7 +174,7 @@ dialog::backdrop { background: rgb(0 0 0 / .6); }
   async function savePhotos() {
     $("saveErr").textContent = "";
     try {
-      await db.doc("session/photos").set({ items: items.filter(i => i.id).map(({ id, url, w, h, subject }) => ({ id, url, w, h, subject: subject || null })), status, updatedAt: Date.now() });
+      await db.doc("session/photos").set({ items: items.filter(i => i.id).map(({ id, url, w, h, subject, chunks }) => ({ id, url, w, h, subject: subject || null, chunks: chunks || 0 })), status, updatedAt: Date.now() });
     } catch (e) { $("saveErr").textContent = "השמירה נכשלה (" + (e && e.code || "שגיאה") + "). נסה שוב בעוד רגע."; }
   }
 
@@ -217,6 +230,7 @@ dialog::backdrop { background: rgb(0 0 0 / .6); }
   async function remove(i) {
     const [it] = items.splice(i, 1); renderPhotos(); await savePhotos();
     if (it && it.id) try { await assets.delete(it.id); } catch (_) {}
+    if (it && it.id && it.chunks) for (let k = 0; k < it.chunks; k++) try { await db.doc(`photodata/${it.id}-${k}`).delete(); } catch (_) {}
   }
 
   function shrink(file) {
@@ -244,6 +258,7 @@ dialog::backdrop { background: rgb(0 0 0 / .6); }
       try {
         const s = await shrink(f); it.preview = s.preview; it.w = s.w; it.h = s.h; renderPhotos();
         const up = await assets.upload(s.blob); it.id = up.id; it.url = up.url;
+        it.chunks = await saveChunks(up.id, s.blob);
         await savePhotos();
       } catch (e) {
         it.error = e && e.message === "decode" ? "לא הצלחתי לקרוא את הקובץ. נסה תמונה בפורמט JPG." : "ההעלאה נכשלה (" + (e && e.code || "שגיאה") + "). מחק ונסה שוב.";
