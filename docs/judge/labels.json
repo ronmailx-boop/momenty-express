@@ -270,5 +270,13 @@
  "r11-t5-retry": {
   "pass": 1,
   "why": "ok, not perfect, too fast"
+ },
+ "r12-t2-fallback": {
+  "pass": 0,
+  "why": "local fallback = frozen photos, 'very bad, like a slideshow'"
+ },
+ "r12-t5-fallback": {
+  "pass": 0,
+  "why": "local fallback near the end = 'slideshow, no motion'"
  }
 }

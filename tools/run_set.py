@@ -6,10 +6,11 @@
   3 generate  all transitions in parallel on Kling 3.0 Std via KIE; RE-SEND RULE (PROJECT_STATE.md); a content-filter
               block gets one reworded prompt
   4 judge     code checks + vision checklist (judge.py)
-  5 retry     a rejected clip gets ONE new clip with another hiding move, judged again
-  6 fallback  still rejected (or failed twice): a local transition, push-in on the face, white flash, pull-out (no AI, free)
-  7 assemble  guidelines section 8: drop each clip's first frame, speed 4 s x1.3 / 5-6 s x1.5, hold the last photo 1.2 s,
-              fade to black 0.8 s -> OUT/video.mp4, and OUT/report.json with the numbers phase 1 measures
+  5 retry     a rejected clip gets up to TWO new clips, each with another hiding move, judged again; the run refuses to
+              start if --max-credits leaves no room for 2 retries
+  6 fallback  LAST RESORT (owner, run 12: looks like frozen photos): still rejected after 2 retries -> push-in, white flash, pull-out
+  7 assemble  guidelines section 8: drop each clip's first frame, speed 4 s x1.3 / 5-6 s x1.5, no still hold at the end (fade on the last clip),
+              -> OUT/video.mp4, and OUT/report.json with the numbers phase 1 measures
 
 State is saved in OUT/state.json after every step, so a re-run resumes and never pays twice for the same clip.
 
@@ -186,11 +187,15 @@ class Run:
                             f"{trim}setpts=PTS/{speed},fps={FPS},scale=960:960,format=yuv420p", "-c:v", "libx264", "-crf", "18", dst],
                            check=True)
             files.append(dst)
-        hold = os.path.join(work, "hold.mp4")
-        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-loop", "1", "-t", "2.0", "-i", self.st["photos"][-1], "-vf",
-                        f"scale=960:960,fps={FPS},fade=t=out:st=1.2:d=0.8,format=yuv420p", "-c:v", "libx264", "-crf", "18", hold],
+        # no still hold at the end (owner, run 12: "toward the end a slideshow, no motion"): the last clip keeps moving
+        # and fades out over its last 0.6 s
+        last, faded = files[-1], os.path.join(work, "last-faded.mp4")
+        dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", last],
+                                   capture_output=True, text=True, check=True).stdout)
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", last, "-vf",
+                        f"fade=t=out:st={max(0.0, dur - 0.6):.2f}:d=0.6,format=yuv420p", "-c:v", "libx264", "-crf", "18", faded],
                        check=True)
-        files.append(hold)
+        files[-1] = faded
         lst = os.path.join(work, "list.txt")
         open(lst, "w").write("".join(f"file '{os.path.abspath(f)}'\n" for f in files))
         video = os.path.join(self.out, "video.mp4")
@@ -213,6 +218,14 @@ def main():
     log(f"cropped {len(photos)} photos")
     plan, prompts = AP.make_plan(os.path.join(args.out, "plan"), photos)
     steps, n = plan["transitions"], len(photos) - 1
+    # run 12: a cap with no room for retries sent 2 of 5 transitions to the local fallback, which the owner saw as frozen
+    # photos ("very bad, like a slideshow"). Refuse to start unless the cap leaves room for at least 2 retries.
+    base = sum(s["seconds"] for s in steps) * CREDITS_PER_S
+    need = base + 2 * 5 * CREDITS_PER_S
+    if not args.use_clips and args.max_credits < need and not run.st["clips"]:
+        log(f"STOP: clips cost {base:.1f}, a cap of {args.max_credits} leaves no room for 2 retries (need {need:.1f}). "
+            f"Top up or use fewer photos.")
+        sys.exit(2)
 
     # 3 generate everything in parallel
     first = [f"t{t}" for t in range(1, n + 1)]
@@ -235,7 +248,7 @@ def main():
 
     # 4 judge, 5 one retry with another hiding move
     def best(t):
-        for k in (f"t{t}-retry", f"t{t}-reword", f"t{t}"):
+        for k in (f"t{t}-retry2", f"t{t}-retry", f"t{t}-reword", f"t{t}"):
             c = run.st["clips"].get(k)
             if c and c.get("state") == "success":
                 return k, c
@@ -249,10 +262,12 @@ def main():
             log(f"{k}: judge {'PASS' if v['pass'] else 'FAIL'} {v['code_problems']} {v['vision'].get('issues', [])}")
         return c["verdict"]["pass"]
 
-    retry = []
-    for t in range(1, n + 1):
+    # up to 2 retries per transition (run 12: the local fallback looks like frozen photos - last resort only)
+    for suffix in ("retry", "retry2"):
+      retry = []
+      for t in range(1, n + 1):
         k, c = best(t)
-        if k and not judged(k, c) and f"t{t}-retry" not in run.st["clips"]:
+        if k and not judged(k, c) and f"t{t}-{suffix}" not in run.st["clips"] and not k.endswith("retry2"):
             # never the rejected move, and not the moves of the neighbouring transitions (run 11: two retries both
             # picked hands peekaboo, next to a hands peekaboo T2 = 3 in a 5-transition video)
             near = [steps[j]["hide"] for j in (t - 2, t) if 0 <= j < len(steps) and steps[j]["hide"]]
@@ -260,25 +275,25 @@ def main():
                                         exclude=([c["step"]["hide"]] if c["step"]["hide"] else ["in_place"]) + near)
             used.append(step["hide"]) if step["hide"] else None
             steps[t - 1] = step
-            run.new_clip(f"t{t}-retry", t, prompt, step["seconds"], step)
-            retry.append(f"t{t}-retry")
-    run.poll(retry)
+            run.new_clip(f"t{t}-{suffix}", t, prompt, step["seconds"], step)
+            retry.append(f"t{t}-{suffix}")
+      run.poll(retry)
 
     # 6 fallback, 7 assemble
     parts, outcome = [], {}
     for t in range(1, n + 1):
         k, c = best(t)
         if k and judged(k, c):
-            parts.append((c["file"], c["seconds"], AP.HIDES.get(c["step"].get("hide") or "", {}).get("speed") or "clip")); outcome[t] = "first try" if k == f"t{t}" else k.split("-")[1]
+            parts.append((c["file"], c["seconds"], AP.HIDES.get(c["step"].get("hide") or "", {}).get("speed") or "clip")); outcome[t] = "first try" if k == f"t{t}" else k.split("-", 1)[1]
         else:
             parts.append((run.fallback(t), 3.2, "fallback")); outcome[t] = "fallback"
-            log(f"t{t}: fallback transition used")
+            log(f"t{t}: LOCAL FALLBACK used (looks like still photos - owner rated it a slideshow)")
     video = run.assemble(parts)
 
     credits = sum(c.get("credits", 0) for c in run.st["clips"].values()) + AP.credits
     report = {"video": video, "transitions": n,
               "first_try_pass": sum(v == "first try" for v in outcome.values()),
-              "after_retry": sum(v in ("retry", "reword") for v in outcome.values()),
+              "after_retry": sum(v in ("retry", "retry2", "reword") for v in outcome.values()),
               "fallback": sum(v == "fallback" for v in outcome.values()),
               "outcome": outcome, "minutes_to_video": round((time.time() - t0) / 60, 1),
               "kling_credits": round(sum(c.get("credits", 0) for c in run.st["clips"].values()), 1),

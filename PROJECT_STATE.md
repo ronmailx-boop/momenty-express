@@ -360,10 +360,17 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Claude's look: T1 good, T3 spin continuous, T4 goes behind a wall/door edge and comes out in the hallway.
 - Files: `docs/prompts/run12-rerun-new-rules.json`, `docs/judge/run12-report.json`; test page `results/r12-*` (run 12).
 - Lesson for budgets: max-credits must leave room for at least 1-2 retries (~75 each), or the run ends with fallbacks.
+- OWNER on run 12 full video: "what are all the frozen pictures, very bad, like a SLIDESHOW"; "toward the end too, a slideshow,
+  no motion". Cause (checked): the 2 local fallbacks (T2 at 0:04-0:06, T5 before the motorbike) = still photos with a zoom, plus
+  the 1.2 s still hold of the last photo + fade. Per-transition ratings of r12 not given yet.
+- FIX (`run_set.py`, free): up to 2 Kling retries per transition before the local fallback (now last resort, logged loudly);
+  the run refuses to start if --max-credits < clips + 2 retries (tested: STOP at 445 with 392.6 of clips); no still hold at the
+  end - the last clip fades out over its last 0.6 s (tested). Guidelines section 8.
 
 ## Next step (exact)
-1. Owner rates run 12 on the test page (compare with run 11) -> read `ratings`, add r12-* to `docs/judge/labels.json`, apply.
-2. KIE top-up (~$5) before the next run; then stage D set 2 (new 6-photo set).
+1. Owner may still rate the r12 clips (T1, T3 slow spin, T4 behind an object are new moves) -> read `ratings`, add to labels.
+2. KIE top-up before the next run: balance ~55; a 6-photo run needs >= ~545 (clips + 2 retries) -> ~$5 top-up is NOT enough,
+   ~$3 more is (or use 5 photos). Then stage D set 2 (new 6-photo set).
 3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
