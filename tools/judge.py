@@ -84,38 +84,60 @@ def code_verdict(c):
 CUT_JUMP, CUT_RATIO, EXTRA_FACE_FRAMES, MIN_MOTION, MATCH = 25.0, 8.0, 10, 4.0, 0.6
 
 
-def grid(fs, path, n=12, cols=4, cell=256):
-    idx = np.linspace(0, len(fs) - 1, n).round().astype(int)
+def grid(fs, path, center=None, cols=4, cell=256, fps=24):
+    """12 frames: 6 spread over the clip and 6 dense (every 2nd frame) around the moment of change, labelled with the time.
+    With 12 even frames (0.45 s apart) the half-second change looked like a cut to the vision model (first calibration)."""
+    n = len(fs)
+    if center is None:
+        center = n // 2
+    spread = set(np.linspace(0, n - 1, 6).round().astype(int))
+    dense = [min(n - 1, max(0, center + d)) for d in (-5, -3, -1, 1, 3, 5)]
+    idx = sorted(set(dense) | spread)
+    extra = [int(x) for x in np.linspace(0, n - 1, 24).round() if int(x) not in idx]   # overlap at the edges
+    idx = sorted(idx + extra[: max(0, 12 - len(idx))])[:12]
     cells = []
     for k, i in enumerate(idx):
         c = cv2.resize(fs[i], (cell, cell))
-        cv2.putText(c, str(k + 1), (8, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 5)
-        cv2.putText(c, str(k + 1), (8, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        label = f"{k + 1}  {i / fps:.1f}s"
+        cv2.putText(c, label, (8, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 5)
+        cv2.putText(c, label, (8, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
         cells.append(c)
-    rows = [np.hstack(cells[r * cols:(r + 1) * cols]) for r in range(n // cols)]
+    rows = [np.hstack(cells[r * cols:(r + 1) * cols]) for r in range(len(cells) // cols)]
     cv2.imwrite(path, np.vstack(rows), [cv2.IMWRITE_JPEG_QUALITY, 85])
     return path
 
 
-JUDGE = """You check one AI-generated clip for a family's growing-up video. The clip must be one continuous shot that starts on
-an earlier photo of a child (frame 1) and ends on a later photo of the same child, older (frame 12). The image is a 4x3 grid of
-12 frames in time order, numbered 1-12. The instructions the video model got:
+JUDGE = """You check one AI-generated clip for a family's growing-up video. The image is a 4x3 grid of 12 frames in time order,
+numbered and timed (6 spread over the clip, 6 close together around the moment of change). Frame 1 is the earlier photo of a
+child, frame 12 the later photo of the same child, older, often in another place, other clothes and with other people around.
+How these clips are MEANT to work (this is correct, do not count it as a fault): the child does one natural action; while the
+face is briefly hidden, turned away, blurred by motion or covered (hand, toy, cup, roll, camera move), age, hair, clothes, people
+and place ALL change at once, within about half a second; then the shot settles on the later photo. A fast change at that moment
+is the method, not a cut. People and clothes in the later photo are naturally different from the earlier photo.
+The instructions the video model got:
 ---
 {prompt}
 ---
-Judge only what you see. Fields:
-"subject_ok": true if the child who grows is the subject the instructions name (or the only child), not another person,
-"real_transition": true if the child visibly changes from the first photo to the second during an action or a hiding moment
-     that fits the instructions; false if it is a slideshow, a crossfade/dissolve, a sudden cut, or nothing happens until the end,
-"face_ok": false if any frame shows a doubled, see-through, melted or badly deformed face or extra limbs,
-"others_ok": false if another person changes face, hair or hairstyle, or clothes, turns into someone else, or an invented
-     person or big object appears,
-"pass": true only if all four are true and you would show this clip to the family,
-"issues": short list of the problems you see, with frame numbers."""
+Fail only on real faults you can see. Fields:
+"subject_ok": false if the person who turns into the later child is clearly another person than the subject the instructions
+     name (e.g. the wrong one of two children),
+"real_transition": false only if: nothing moves and the picture just switches (a slideshow), or the two photos are visibly
+     blended on top of each other for several frames (a crossfade with ghost images), or the scene jumps with no action, no
+     motion and nothing hiding the face at that moment, or the motion is chaotic (people fall, melt, merge),
+"face_ok": false if a face that is in clear view (not motion-blurred, not partly covered) is doubled, see-through or deformed,
+"others_ok": false if a person changes while in clear view in a way that matches neither photo (invented hair or hairstyle,
+     another face), or a person or big object appears that is in neither photo,
+"pass": true if all four are true,
+"issues": short list of the real faults, with frame numbers."""
+
+
+def center_of_change(fs):
+    small = [cv2.resize(cv2.cvtColor(f, cv2.COLOR_BGR2GRAY), (64, 64)).astype(np.float32) for f in fs]
+    return int(np.argmax([np.abs(small[i + 1] - small[i]).mean() for i in range(len(small) - 1)]))
 
 
 def vision_verdict(fs, prompt, work):
-    g = grid(fs, os.path.join(work, "grid.jpg"))
+    g = grid(fs, os.path.join(work, "grid.jpg"), center_of_change(fs))
     AP.OUT = work
     return AP.vision(JUDGE.format(prompt=prompt or "(not available)"), [g])
 
@@ -140,7 +162,7 @@ def calibrate(clips, meta, labels, out):
         work = os.path.join(out, k)
         os.makedirs(work, exist_ok=True)
         c, fs = code_checks(os.path.join(clips, k + ".mp4"))
-        g = grid(fs, os.path.join(work, "grid.jpg"))
+        g = grid(fs, os.path.join(work, "grid.jpg"), int(c["jump_at"] * (len(fs) - 1)))
         AP.OUT = out
         v = AP.vision(JUDGE.format(prompt=meta[k].get("prompt") or "(not available)"), [g])
         rows.append({"id": k, "owner": lab["pass"], "owner_why": lab["why"], "code": c, "code_problems": code_verdict(c), "vision": v})
