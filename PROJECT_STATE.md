@@ -302,9 +302,18 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   below the rail) and T5 is "run off and come back" (travel, not yet tested in an automatic run). No in-place left.
 - Watch: the writer sometimes adds a "people" line for a person who is in neither photo (T3: "an adult steps in").
 
+### Session end 14.11.2026 (owner opens a new session)
+- Test page ready for stage D: run 9/10 photo list archived to `archive/photos-run9-10` (photos and their `photodata/*` chunks
+  kept; ids e12a2780..., c0cde596..., 8e495574..., 6513f487..., 1ec097d0..., 805b0473...), `session/photos` emptied.
+- New session start: read this file; `pip install opencv-python-headless`; check KIE balance
+  (`GET https://api.kie.ai/api/v1/chat/credit`); when the owner writes "העליתי": ArtifactData get `session/photos` + list
+  `photodata` (out_dir) -> `python3 tools/db_photos.py DB OUT/orig` -> `python3 tools/run_set.py OUT <args> --max-credits <balance-10>`
+  in the background -> upload clips + video as assets of the test page (Artifact publish asset:true) -> write `results/r11-*`
+  rows (run 11) -> owner rates -> read `ratings`, add to `docs/judge/labels.json`.
+
 ## Next step (exact)
-1. KIE top-up (balance ~83), then run 11 = the same 6 photos with the new plan (~460 credits) to test T3 bridge + T5 travel;
-   owner rates. Or go straight to stage D with a new set (other ages) and test the same rules there.
+1. Stage D (recommended over re-running run 9's photos): owner tops up KIE (~$5 per 6-photo set; balance 83) and uploads a NEW set
+   of 6 photos (another child or an older age, walking/running, some outdoors -> tests the travel move); run 11 with run_set.py.
 2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
