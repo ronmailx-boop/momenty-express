@@ -1,0 +1,194 @@
+{
+ "t1-kling25-turbo": {
+  "pass": 0,
+  "why": "low quality, chaotic"
+ },
+ "t1-kling3-pro": {
+  "pass": 0,
+  "why": "wrong child grows"
+ },
+ "t1-kling3-pro-ref": {
+  "pass": 0,
+  "why": "no transition, slideshow"
+ },
+ "t1-kling3-std": {
+  "pass": 0,
+  "why": "wrong child grows"
+ },
+ "t1-veo31-fast": {
+  "pass": 0,
+  "why": "wrong child, low quality"
+ },
+ "t2-kling25-turbo": {
+  "pass": 0,
+  "why": "low quality"
+ },
+ "t2-kling3-pro": {
+  "pass": 0,
+  "why": "wrong child grows"
+ },
+ "t2-kling3-pro-name": {
+  "pass": 0,
+  "why": "no real transition"
+ },
+ "t2-kling3-pro-ref": {
+  "pass": 0,
+  "why": "no real growing transition"
+ },
+ "t2-kling3-std": {
+  "pass": 0,
+  "why": "wrong child grows"
+ },
+ "t2-kling3-std-name": {
+  "pass": 0,
+  "why": "no real growing transition"
+ },
+ "t2-kling3-std-ref": {
+  "pass": 1,
+  "why": "reasonable, not amazing"
+ },
+ "t2-kling4": {
+  "pass": 0,
+  "why": "no real transition"
+ },
+ "t2-veo31-fast": {
+  "pass": 0,
+  "why": "no transition"
+ },
+ "t3-kling25-turbo": {
+  "pass": 0,
+  "why": "bad, unusable"
+ },
+ "t3-kling3-pro": {
+  "pass": 1,
+  "why": "good"
+ },
+ "t3-kling3-std": {
+  "pass": 1,
+  "why": "good"
+ },
+ "t3-veo31-fast": {
+  "pass": 0,
+  "why": "face problem"
+ },
+ "r3-t1": {
+  "pass": 0,
+  "why": "bad transition"
+ },
+ "r3-t2": {
+  "pass": 1,
+  "why": "passes"
+ },
+ "r3-t3": {
+  "pass": 1,
+  "why": "excellent"
+ },
+ "r4-t1": {
+  "pass": 0,
+  "why": "boring, no motion, ugly transition"
+ },
+ "r4-t2": {
+  "pass": 1,
+  "why": "best so far"
+ },
+ "r4-t3": {
+  "pass": 1,
+  "why": "good, passes"
+ },
+ "r5-t1": {
+  "pass": 1,
+  "why": "passes (cape stays ~1 s)"
+ },
+ "r6-t1": {
+  "pass": 1,
+  "why": "winner"
+ },
+ "r7-t1": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t2": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t3": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t4": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t5": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t6": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t7": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t8": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t9": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t10": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r7-t11": {
+  "pass": 1,
+  "why": "fine (whole video: boring)"
+ },
+ "r8-t1": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t2": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t3": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t4": {
+  "pass": 0,
+  "why": "mother got an invented ponytail and a changed face"
+ },
+ "r8-t5": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t6": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t7": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t8": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t9": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t10": {
+  "pass": 1,
+  "why": "ok"
+ },
+ "r8-t11": {
+  "pass": 1,
+  "why": "ok"
+ }
+}
