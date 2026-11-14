@@ -226,6 +226,18 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Compared with "2-3 candidates per transition" (the first plan): $13.60-20.40 per minute. One try + judge + one retry + free
   fallback costs ~1.26x the base instead of 2-3x.
 
+- Comparison with Echoes (14.11.2026): same model and provider (Kling 3.0 Std via KIE, `kiekling3`), so the cost per clip is about
+  the same (~$0.38) unless they have a KIE volume discount. Echoes' "1 minute" = 13 photos (12 clips, ~$4.53 + customer retries
+  they pay for; their demos show ~22 photos/min though). Ours for 13 photos: ~$5.70 expected. Our advantage is not cost but one
+  click (no customer review); the judge + retry costs ~20% more. Savings to try: 4 s clips (-20%), ask KIE for a volume discount
+  (in the same email as the privacy questions).
+- Price and profit at 89 ILS per minute (owner's proposed price, incl. 18% VAT; rate assumed ~3.70 ILS/USD, not checked):
+  AI cost per 19-photo minute: expected ~32 ILS, bad day ~38, ceiling ~56; 13-photo minute ~21.
+  Web (Paddle 5% + $0.50): 89 - VAT 13.6 - fee 6.3 = 69 left -> profit ~37 ILS (42%); bad day ~31; ceiling ~13.
+  App (Google Play 15%): 64 left -> profit ~32 ILS (36%); bad day ~26; ceiling ~8. With a 13-photo minute: ~48 (web) / ~43 (app).
+  Not included: advertising (likely the largest cost), server/storage (cents), music (undecided), refunds, support, income tax.
+  Echoes charges $29.90 (~110 ILS) for the same minute.
+
 ## Next step (exact)
 1. Owner: top up KIE (~$6-10 for stage C; balance 7.73) and supply a NEW set of ~12 photos of one child (months apart),
    marking the child in group photos.
