@@ -190,5 +190,29 @@
  "r8-t11": {
   "pass": 1,
   "why": "ok"
+ },
+ "r9-t1": {
+  "pass": 0,
+  "why": "looks like a slideshow (roll, then opens held by mother)"
+ },
+ "r9-t2": {
+  "pass": 1,
+  "why": "perfect (hands peekaboo carried across the change)"
+ },
+ "r9-t3": {
+  "pass": 1,
+  "why": "ok but simple, almost no motion"
+ },
+ "r9-t4": {
+  "pass": 0,
+  "why": "slideshow, not aging (plush toy; ghosting)"
+ },
+ "r9-t4-retry": {
+  "pass": 0,
+  "why": "almost a slideshow (hand over lens)"
+ },
+ "r9-t5": {
+  "pass": 1,
+  "why": "good aging"
  }
 }

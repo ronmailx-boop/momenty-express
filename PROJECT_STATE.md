@@ -125,7 +125,7 @@ sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rul
 Stages, with a stop and a report to the owner between them:
 - [x] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). DONE 14.11.
 - [x] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only). First version done 14.11.
-- [ ] C: first full run on a NEW set of 12 photos (~1,000 credits). Script ready (`tools/run_set.py`, dry run passed). Needs a KIE top-up, the photos and the owner's OK.
+- [~] C: first full run, done on 6 photos (run 9, 14.11) after a $5 top-up. Waiting for the owner's ratings.
 - [ ] D: 4 more sets of different ages (~830 credits each).
 Not in phase 1: site, server, payment, music, legal documents.
 Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo sets of 12.
@@ -253,10 +253,33 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   the child); 3 seated in a high chair/stroller with an object; 4 seated, framed like 3 (in-place test); 5 toddler outdoors standing;
   6 child indoors. Run with `--max-credits 900` after a $5 top-up (~455-530 credits expected, ceiling ~830).
 
+### Stage C, run 9 (14.11.2026): first fully automatic run, 6 photos of the run 7/8 girl (new photos except photo 1)
+- Command: `python3 tools/run_set.py OUT <6 photos, taps on 2 and 6> --max-credits 900` (photos rebuilt with db_photos.py).
+- Plan: T1 roll face-down, T2 hands peekaboo, T3 in-place, T4 toy peekaboo (yellow plush), T5 in-place.
+- Clips ready 137-169 s after submit (normal queue, no re-sends). Judge: 4/5 pass first try; T4 rejected (stroller shows through
+  the later photo, frames 8-10 - Claude's look confirms) -> retry with hand-over-lens, ready in 102 s, passed. No fallback.
+- Totals: 7.3 min from start to video, 457.4 credits ($2.29: Kling 453 + vision 4.4), video 18.7 s.
+  KIE balance after: 547.7.
+- Files: prompts `docs/prompts/run9-stage-c.json`, report `docs/judge/run9-report.json`; clips + full video on the test page
+  (`results/r9-*`, run 9; the rejected T4 is shown too, labelled). Video not in git.
+- OWNER'S RATINGS (14.11): pass T2 (hands peekaboo, "perfect"), T3 (in-place, "simple, almost no motion"), T5 (in-place, "good aging");
+  fail T1 (roll -> "slideshow"), T4 (plush -> "slideshow"), T4-retry (hand over lens -> "almost a slideshow"). Owner pass 3/5 first try.
+  Judge v2 agreed 4/6; both misses were "slideshow" clips it passed. Added to `docs/judge/labels.json` (r9-*).
+- CAUSE (Claude's frame look): in T2 the hands are still over her face in the NEW place, then come down = one continuous movement.
+  In T1 she rolls in the crib, a blur, and the shot opens in a different pose (in her mother's arms) = slide change. Hand over the
+  lens = whole frame dark, then a new photo = slide change.
+- FIX (14.11, free): BRIDGE RULE. `auto_plan.py` HIDES now carry `finish` for bridge moves (hands/toy/cup peekaboo, head turn and
+  back, duck below rail and pop up, run off and come back); `choose` offers only bridge moves when one fits; the writer returns
+  `finish` and the template says the movement carries on through the change "never like a cut or a slide change".
+  Guidelines section 3 updated. Re-plan of run 9 photos: T1 head turn, T2 hands peekaboo, T3 in-place, T4 head turn, T5 in-place.
+- Judge v3 (told to fail "slide changes") was WORSE (3/6: rejected both good in-place clips, still passed both slideshows) -> reverted.
+  Slideshow is prevented at the source; the judge can't see it in 12 still frames. Owner ratings stay the measure for it.
+
 ## Next step (exact)
-1. Owner: top up KIE $5 and upload 6 photos on the test page (mark the child in the group photo), then write "העליתי".
-2. Run stage C with `tools/run_set.py`; owner rates every transition; compare with the judge's verdicts.
-3. Then stage D (4 more sets) if C goes well.
+1. Run 10 = A/B on the SAME 6 photos with the bridge rule (`python3 tools/run_set.py OUT <run 9 photos+taps> --max-credits 540`;
+   photos: rebuild with db_photos.py from the test page db; ~460 credits of the 547.7 left). Needs the owner's OK.
+   Owner rates -> did "slideshow" go away? If yes: stage D (more sets, other ages: older child for the travel move).
+2. In-place clips pass but are "simple, almost no motion": give in-place a bigger action (guidelines section 4) in the next round.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
