@@ -350,11 +350,21 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Open: the judge can't see "too fast" or "slideshow" well (passed T4 spin, T2/T1-retry hands); a 60 s video (18 transitions)
   needs more bridge moves per age than exist now.
 
+### Run 12 (14.11.2026): run 11's photos again with the new rules (direct A/B)
+- Plan: T1 run and turn, T2 walk across, T3 slow spin (x1.1), T4 behind an object, T5 helmet/container peekaboo; no repeats.
+- Clips 177-197 s (normal queue). Judge: 3/5 first try (T1, T3, T4). Rejected: T2 walk across (doubled child in frame 7;
+  Claude's look: he barely gets up, then jumps to standing), T5 helmet over the face (scenes blend frames 7-10).
+- NO retries: `--max-credits 445` with 392.6 already spent left no room for a 75.5 clip (Claude's mistake: told the owner
+  there was room for one). T2 and T5 got the free local fallback. 7.1 min, 397.3 credits ($1.99), video 19.0 s.
+  KIE balance after: ~58.
+- Claude's look: T1 good, T3 spin continuous, T4 goes behind a wall/door edge and comes out in the hallway.
+- Files: `docs/prompts/run12-rerun-new-rules.json`, `docs/judge/run12-report.json`; test page `results/r12-*` (run 12).
+- Lesson for budgets: max-credits must leave room for at least 1-2 retries (~75 each), or the run ends with fallbacks.
+
 ## Next step (exact)
-1. Stage D set 2: owner uploads another 6-photo set (KIE balance ~455 = one more set). Run with run_set.py: it tests the new
-   rules (no repeats, crouch/walk-across/ride/behind-object moves, slow spin). Optional: re-run run 11's photos with the new plan
-   (~400 credits) to compare directly.
-2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
+1. Owner rates run 12 on the test page (compare with run 11) -> read `ratings`, add r12-* to `docs/judge/labels.json`, apply.
+2. KIE top-up (~$5) before the next run; then stage D set 2 (new 6-photo set).
+3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.

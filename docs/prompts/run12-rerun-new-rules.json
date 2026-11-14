@@ -1,0 +1,251 @@
+{
+ "t1": {
+  "step": {
+   "from": 1,
+   "strategy": "travel",
+   "hide": "run_and_turn",
+   "camera": "follows the movement",
+   "seconds": 6,
+   "compare": {
+    "same_place_kind": false,
+    "same_pose_kind": false,
+    "similar_framing": false,
+    "only_in_first": [
+     "red ride-on toy car"
+    ],
+    "only_in_second": []
+   },
+   "problems": [
+    "a face is not clear"
+   ]
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. Seated with both hands on the steering wheel, he looks startled, lets go, climbs out of the red toy car, and runs away with his back to the camera as it follows him. The change happens all at once while he runs with his back to the camera: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: Still running across the indoor tiles, he turns, lies back, and looks up. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra people at any time. No duplicate car at any time. By the end there is no red toy car, no steering wheel, no gray sweatshirt.",
+  "seconds": 6,
+  "credits": 90.6,
+  "verdict": {
+   "pass": true,
+   "code_problems": [],
+   "vision": {
+    "subject_ok": true,
+    "real_transition": true,
+    "face_ok": true,
+    "others_ok": true,
+    "pass": true,
+    "issues": []
+   }
+  },
+  "state": "success"
+ },
+ "t2": {
+  "step": {
+   "from": 2,
+   "strategy": "hiding",
+   "hide": "walk_across",
+   "camera": "rises slowly",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": true,
+    "same_pose_kind": false,
+    "similar_framing": false,
+    "only_in_first": [],
+    "only_in_second": [
+     "green hula hoop",
+     "white chair or ladder",
+     "orange cabinet"
+    ]
+   },
+   "problems": [
+    "a face is not clear"
+   ]
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. Lying on his back and looking toward the camera, he looks curious, sits up, then rises and walks sideways close to the lens. The camera rises slowly as his shoulder fills the view for a moment. The change happens all at once while his shoulder fills the view: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: His shoulder is still crossing the lens, then he steps clear. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra people at any time. No duplicate child at any time.",
+  "seconds": 5,
+  "credits": 75.5,
+  "verdict": {
+   "pass": false,
+   "code_problems": [],
+   "vision": {
+    "subject_ok": true,
+    "real_transition": true,
+    "face_ok": true,
+    "others_ok": false,
+    "pass": false,
+    "issues": [
+     "Frame 7: the older boy is visible behind the still-present, blurred younger boy, briefly creating a duplicate child."
+    ]
+   }
+  },
+  "state": "success"
+ },
+ "t3": {
+  "step": {
+   "from": 3,
+   "strategy": "hiding",
+   "hide": "jump_spin",
+   "camera": "stays still",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": false,
+    "same_pose_kind": true,
+    "similar_framing": true,
+    "only_in_first": [
+     "blue jacket",
+     "glasses",
+     "green hoop",
+     "white chair"
+    ],
+    "only_in_second": [
+     "Spider-Man T-shirt"
+    ]
+   },
+   "problems": []
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. Standing and looking up at the camera, he gives a curious squint and slowly turns on the spot until his back faces the camera for a full second. The camera stays still as he continues turning. The change happens all at once while his back faces the camera during the continuing turn: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: He is still turning, then faces the camera and stops. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra hands at any time. No duplicate child at any time. By the end there is no blue glasses, no blue jacket, no green hoop.",
+  "seconds": 5,
+  "credits": 75.5,
+  "verdict": {
+   "pass": true,
+   "code_problems": [],
+   "vision": {
+    "subject_ok": true,
+    "real_transition": true,
+    "face_ok": true,
+    "others_ok": true,
+    "pass": true,
+    "issues": []
+   }
+  },
+  "state": "success"
+ },
+ "t4": {
+  "step": {
+   "from": 4,
+   "strategy": "hiding",
+   "hide": "behind_object",
+   "camera": "slides to the side",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": false,
+    "same_pose_kind": false,
+    "similar_framing": false,
+    "only_in_first": [],
+    "only_in_second": [
+     "toy container",
+     "dark bag"
+    ]
+   },
+   "problems": []
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. He starts standing and facing the camera, then glances toward the doorway with a curious, furrowed expression and steps sideways behind the wall beside it. The camera slides to the side as the wall briefly hides him. The change happens all at once while the wall hides him mid-step: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: He is still stepping sideways, then stops holding the gray container. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra hands at any time. No duplicate child at any time. By the end there is no blue Spider-Man shirt.",
+  "seconds": 5,
+  "credits": 75.5,
+  "verdict": {
+   "pass": true,
+   "code_problems": [],
+   "vision": {
+    "subject_ok": true,
+    "real_transition": true,
+    "face_ok": true,
+    "others_ok": true,
+    "pass": true,
+    "issues": []
+   }
+  },
+  "state": "success"
+ },
+ "t5": {
+  "step": {
+   "from": 5,
+   "strategy": "hiding",
+   "hide": "toy_peekaboo",
+   "camera": "moves slowly closer",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": false,
+    "same_pose_kind": false,
+    "similar_framing": true,
+    "only_in_first": [
+     "helmet",
+     "container"
+    ],
+    "only_in_second": [
+     "ride-on toy vehicle"
+    ]
+   },
+   "problems": []
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. Standing in the hallway with the gray container and colorful item, he lifts the helmet in front of his face with a curious, focused look as the camera moves slowly closer, keeping it raised until his face is hidden. The change happens all at once while the helmet hides his face as he begins lowering it: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: He is still lowering the helmet, then grips the handlebars. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra hands at any time. No floating helmet at any time. By the end there is no helmet, no gray container, no colorful item.",
+  "seconds": 5,
+  "credits": 75.5,
+  "verdict": {
+   "pass": false,
+   "code_problems": [],
+   "vision": {
+    "subject_ok": true,
+    "real_transition": false,
+    "face_ok": true,
+    "others_ok": true,
+    "pass": false,
+    "issues": [
+     "Frames 7-10 visibly blend the earlier white-shirt scene with the later bike scene for several frames."
+    ]
+   }
+  },
+  "state": "success"
+ },
+ "t2-retry": {
+  "step": {
+   "from": 2,
+   "strategy": "hiding",
+   "hide": "crouch_jump",
+   "camera": "rises slowly",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": true,
+    "same_pose_kind": false,
+    "similar_framing": false,
+    "only_in_first": [],
+    "only_in_second": [
+     "green hula hoop",
+     "white chair or ladder",
+     "orange cabinet"
+    ]
+   },
+   "problems": [
+    "a face is not clear"
+   ]
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. Lying on his back and looking toward the camera, he grows curious, rolls to his side, and pushes up into a crouch. As the camera rises slowly, he ducks below the lower edge of the frame. The change happens all at once while he is below the lower edge, still rising from the crouch: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: He is still rising from the crouch, then looks up at the camera. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No duplicate child at any time. No extra hands at any time. By the end there is no white shirt, no red car graphic.",
+  "seconds": 5,
+  "credits": null,
+  "verdict": null,
+  "state": "refused"
+ },
+ "t5-retry": {
+  "step": {
+   "from": 5,
+   "strategy": "hiding",
+   "hide": "run_to_camera",
+   "camera": "moves slowly closer",
+   "seconds": 5,
+   "compare": {
+    "same_place_kind": false,
+    "same_pose_kind": false,
+    "similar_framing": true,
+    "only_in_first": [
+     "helmet",
+     "container"
+    ],
+    "only_in_second": [
+     "ride-on toy vehicle"
+    ]
+   },
+   "problems": []
+  },
+  "prompt": "One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and end exactly on the second photo. The same boy is in both photos, a little older in the second. His expression changes naturally with what he is doing (curious, focused, surprised, delighted); he does not smile the whole time. He starts standing while holding the gray container and colorful item, then runs straight toward the camera, clutching them tightly with a startled expression as the camera slowly moves closer until his face blurs the frame. The change happens all at once while he rushes toward the camera: his age, hair, clothes and the place all turn into the second photo's together. The same movement carries on through the change without a break: He is still rushing close to the lens, then pulls back. Then he eases into the second photo's pose over the last half second, so the last frame is the second photo. It must look like one continuous movement, never like a cut or a slide change. His face stays one clear face whenever it is visible, never doubled or see-through. In each photo he looks exactly as in that photo (face, eyes, hair). No people, objects or text that are not in the photos. No extra people at any time. No extra hands at any time. By the end there is no gray container, no colorful item, no helmet.",
+  "seconds": 5,
+  "credits": null,
+  "verdict": null,
+  "state": "refused"
+ }
+}
