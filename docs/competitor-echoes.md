@@ -62,3 +62,10 @@ Collected by the owner with Claude in Chrome on his own account; only what the s
   3.3-5 s  the baby turns back, already in photo 2 (crib, toys), and settles into the last frame.
 - So their method = our "hiding" method (section 3 of transition-guidelines.md): one natural action, face hidden by a
   turn + camera move, everything changes at once, reveal, settle. No flash or glow in this clip.
+- **First version** (default, `prompt_variation_id growing-...`; same specs: Kling tag, 720x1276, 5.04 s):
+  0-0.5 s on photo 1; 0.5-1.5 s the baby turns the head away; 1.5-2.5 s slides off the bed, back to the camera;
+  2.5-3.5 s walks/runs across the room, camera follows, the shirt appears mid-run; 3.5-4.5 s climbs into the crib;
+  last 0.5 s turns to the camera = photo 2. This is our "travel" move (guidelines section 3).
+  Flaws: a baby of a few months walks and climbs (not believable); the clothes change in plain view, not hidden.
+- So the default is a travel move with a following camera, and the retry category "natural" gives a calmer
+  in-place head-turn. Two of our three strategies, picked without regard to the child's age.
