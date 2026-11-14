@@ -1,0 +1,58 @@
+{
+ "video": "/tmp/claude-0/-home-user-momenty-express/e5df42fe-6acf-5008-83c9-f46520bcf869/scratchpad/c1/run/video.mp4",
+ "transitions": 5,
+ "first_try_pass": 4,
+ "after_retry": 1,
+ "fallback": 0,
+ "outcome": {
+  "1": "first try",
+  "2": "first try",
+  "3": "first try",
+  "4": "retry",
+  "5": "first try"
+ },
+ "minutes_to_video": 7.3,
+ "kling_credits": 453.0,
+ "vision_credits_this_session": 4.43,
+ "total_credits": 457.4,
+ "usd": 2.29,
+ "photo_checks": [
+  {
+   "photo": 1,
+   "faces": 1,
+   "note": "face 89px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 2,
+   "faces": 2,
+   "note": "face 150px, share 0.24",
+   "tapped": true
+  },
+  {
+   "photo": 3,
+   "faces": 1,
+   "note": "face 192px, share 0.30",
+   "tapped": false
+  },
+  {
+   "photo": 4,
+   "faces": 1,
+   "note": "face 173px, share 0.27",
+   "tapped": false
+  },
+  {
+   "photo": 5,
+   "faces": 1,
+   "note": "face 102px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 6,
+   "faces": 2,
+   "note": "face 79px, share 0.22",
+   "tapped": true
+  }
+ ],
+ "video_seconds": 18.708333
+}

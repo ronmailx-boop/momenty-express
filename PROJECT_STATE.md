@@ -125,7 +125,7 @@ sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rul
 Stages, with a stop and a report to the owner between them:
 - [x] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). DONE 14.11.
 - [x] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only). First version done 14.11.
-- [ ] C: first full run on a NEW set of 12 photos (~1,000 credits). Script ready (`tools/run_set.py`, dry run passed). Needs a KIE top-up, the photos and the owner's OK.
+- [~] C: first full run, done on 6 photos (run 9, 14.11) after a $5 top-up. Waiting for the owner's ratings.
 - [ ] D: 4 more sets of different ages (~830 credits each).
 Not in phase 1: site, server, payment, music, legal documents.
 Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo sets of 12.
@@ -253,9 +253,21 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   the child); 3 seated in a high chair/stroller with an object; 4 seated, framed like 3 (in-place test); 5 toddler outdoors standing;
   6 child indoors. Run with `--max-credits 900` after a $5 top-up (~455-530 credits expected, ceiling ~830).
 
+### Stage C, run 9 (14.11.2026): first fully automatic run, 6 photos of the run 7/8 girl (new photos except photo 1)
+- Command: `python3 tools/run_set.py OUT <6 photos, taps on 2 and 6> --max-credits 900` (photos rebuilt with db_photos.py).
+- Plan: T1 roll face-down, T2 hands peekaboo, T3 in-place, T4 toy peekaboo (yellow plush), T5 in-place.
+- Clips ready 137-169 s after submit (normal queue, no re-sends). Judge: 4/5 pass first try; T4 rejected (stroller shows through
+  the later photo, frames 8-10 - Claude's look confirms) -> retry with hand-over-lens, ready in 102 s, passed. No fallback.
+- Totals: 7.3 min from start to video, 457.4 credits ($2.29: Kling 453 + vision 4.4), video 18.7 s.
+  KIE balance after: 547.7.
+- Files: prompts `docs/prompts/run9-stage-c.json`, report `docs/judge/run9-report.json`; clips + full video on the test page
+  (`results/r9-*`, run 9; the rejected T4 is shown too, labelled). Video not in git.
+- Open: owner rates each transition on the test page -> compare with the judge (first measured agreement on a new set).
+
 ## Next step (exact)
-1. Owner: top up KIE $5 and upload 6 photos on the test page (mark the child in the group photo), then write "העליתי".
-2. Run stage C with `tools/run_set.py`; owner rates every transition; compare with the judge's verdicts.
+1. Owner rates run 9 on the test page (each transition + the full video); compare with the judge.
+2. Balance 547.7 is enough for one more 6-photo set (~460-530): a different child or age, ideally older (runner / travel strategy
+   is not yet tested by the automatic pipeline).
 3. Then stage D (4 more sets) if C goes well.
 
 ## Competitor research (13.11.2026)
