@@ -120,9 +120,9 @@ HIDES = {
     "cap_over_face": {"stages": ["toddler", "child"], "text": "pulls the cap down over the face", "finish": "the cap is still over the face, then it is pushed back up", "needs": ["cap", "hat", "helmet"]},
     "jump_spin": {"stages": ["child"], "text": "turns around slowly on the spot, so the back faces the camera for a full second", "finish": "is still turning slowly with the back to the camera, then completes the turn to face the camera", "solo": True, "moves": True, "speed": 1.1},
     "crouch_jump": {"stages": ["toddler", "child"], "text": "crouches down quickly and drops below the lower edge of the frame while the camera stays at head height", "finish": "jumps back up into view", "moves": True},
-    "walk_across": {"stages": ["child", "teen_adult"], "text": "walks sideways across the frame close to the camera, so the shoulder fills the view for a moment", "finish": "is still walking across, then stops and turns to the camera", "solo": True, "moves": True},
+    "walk_across": {"stages": ["child", "teen_adult"], "off": "run 12: owner 'the worst transition'", "text": "walks sideways across the frame close to the camera, so the shoulder fills the view for a moment", "finish": "is still walking across, then stops and turns to the camera", "solo": True, "moves": True},
     "ride_away": {"stages": ["toddler", "child"], "text": "rides the ride-on toy away from the camera with the back to it", "finish": "is still riding with the back to the camera, then turns and rides back toward the camera", "needs": ["ride-on", "toy car", "bike", "bicycle", "tricycle", "scooter", "motorbike", "motorcycle"], "solo": True, "moves": True},
-    "behind_object": {"stages": ["toddler", "child"], "text": "walks behind the nearest big object in the photo and is hidden by it for a moment", "finish": "steps out from behind it, then faces the camera", "needs": ["door", "doorway", "sofa", "couch", "tree", "curtain", "toy car", "ride-on", "table"], "solo": True, "moves": True},
+    "behind_object": {"stages": ["toddler", "child"], "off": "run 12: owner 'bad transition' (walked behind a wall edge)", "text": "walks behind the nearest big object in the photo and is hidden by it for a moment", "finish": "steps out from behind it, then faces the camera", "needs": ["door", "doorway", "sofa", "couch", "tree", "curtain", "toy car", "ride-on", "table"], "solo": True, "moves": True},
     "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
     "walk_past_camera": {"stages": ["teen_adult"], "text": "walks close past the camera, blurring the frame", "solo": True},
 }
@@ -130,6 +130,14 @@ CAMERAS = ["follows the movement", "rises slowly", "stays still", "slides to the
 CONTAINED = re.compile(r"\b(crib|cot|playpen|stroller|pram|buggy|car ?seat|high ?chair|bouncer|strapped|buckled|held|"
                        r"carried|in (his|her|their|the) arms|on (his|her|their|the) (lap|shoulders|hip))\b", re.I)
 BANNED = re.compile(r"\b(body|bodies|naked|nude|bare|skin|chest|belly|tummy|bottom|legs?|thighs?|diaper|nappy|underwear)\b", re.I)
+
+
+NEG_TO = {"startled": "surprised", "startles": "lights up", "furrows his brow": "raises his eyebrows",
+          "furrows her brow": "raises her eyebrows", "furrowed": "bright", "frowning": "smiling", "frowns": "grins",
+          "puzzled": "curious", "serious": "playful", "stern": "playful", "angry": "excited", "scared": "excited",
+          "frightened": "excited", "sad": "happy", "worried": "curious", "confused": "curious", "grumpy": "playful",
+          "squints": "grins", "squint": "grin", "pouts": "giggles", "pouting": "giggling", "scowls": "grins"}
+NEGATIVE = re.compile(r"\b(" + "|".join(sorted(map(re.escape, NEG_TO), key=len, reverse=True)) + r")\b", re.I)
 
 
 def choose(first, cmp, used, i):
@@ -140,7 +148,7 @@ def choose(first, cmp, used, i):
     hay = " ".join([first["pose"], first["place"]] + first["objects"]).lower()
     # a child who stands in a crib or sits strapped in is not free to run (run 7 T8, T10 were sent to "travel")
     contained = bool(first.get("contained")) or bool(CONTAINED.search(first["pose"] + " " + first["place"]))
-    fits = [k for k, h in HIDES.items() if stage in h["stages"]
+    fits = [k for k, h in HIDES.items() if stage in h["stages"] and not h.get("off")     # "off" = failed with the owner
             and not (others and h.get("solo"))                          # adults must not be turned or left behind
             and not (contained and h.get("moves"))                      # no running / jumping out of a crib or seat
             and (not h.get("needs") or any(re.search(r"\b" + re.escape(w) + r"s?\b", hay) for w in h["needs"]))]  # whole words: "glasses" is not a "glass"
@@ -181,7 +189,8 @@ Rules:
   lowers them). Never black out the whole frame and never jump to an unrelated pose: that looks like a slideshow.
 Fields:
 "hide": the id of the hiding move you chose from the list ("" for in-place),
-"action": 1-2 sentences in present tense, starting from photo 1's pose: the action, an expression that is not just a smile,
+"action": 1-2 sentences in present tense, starting from photo 1's pose: the action, a warm happy expression (curious, playful,
+          delighted, excited, laughing; never angry, frowning, furrowed, sad, scared, startled, puzzled or serious),
           the camera move, and (unless in-place) the hiding moment. Call the child "{pron}" (never "they" unless {pron} is "they"). Say only the action and hiding;
           do not describe the second photo, the template does that.
 "finish": how the SAME gesture ends in photo 2's place, in present tense, 6-15 words, e.g. "her hands are still over her face, then she lowers them" ("" for in-place),
@@ -195,7 +204,8 @@ Fields:
 
 TEMPLATE = ("One continuous shot with no cuts, no flashes, no dissolves and no added effects. Start exactly on the first photo and "
             "end exactly on the second photo. The same {who} is in both photos, a little older in the second.{named} {Poss} expression "
-            "changes naturally with what {pron} is doing (curious, focused, surprised, delighted); {pron} does not smile the whole time. "
+            "changes naturally with what {pron} is doing, always warm and happy (curious, playful, delighted, excited, laughing); "
+            "never angry, frowning, sad, scared or serious. "
             "{action} The change happens all at once while {whilst}: {poss} age, hair, clothes and the place all turn into the second "
             "photo's together. The same movement carries on through the change without a break: {finish}. Then {pron} eases into "
             "the second photo's pose over the last half second, so the last frame is the second photo. It must look like one "
@@ -245,8 +255,12 @@ def write_one(i, photos, desc, cmps, gender, used, prev_cam, exclude=(), note=""
     finish = (w.get("finish") or "").strip().rstrip(".") or (
         f"in the second photo's place {pron} " + HIDES[hide]["finish"] if hide and HIDES[hide].get("finish")
         else f"{pron} finishes the action in the second photo's place")
+    # owner, run 12 T4: "where did this angry face come from? not right for a moving growing-up video" - the writer had
+    # written "a curious, furrowed expression". Replace negative expression words whatever the model writes.
+    action = NEGATIVE.sub(lambda m: NEG_TO.get(m.group(0).lower(), "curious"), w["action"].strip())
+    finish = NEGATIVE.sub(lambda m: NEG_TO.get(m.group(0).lower(), "curious"), finish)
     prompt = TEMPLATE.format(finish=finish, who=who, named=named, Poss=poss.capitalize(), poss=poss, pron=pron,
-                             action=w["action"].strip(), whilst=whilst, people=people, ban=ban)
+                             action=action, whilst=whilst, people=people, ban=ban)
     problems = [f"banned word: {m}" for m in sorted(set(x.lower() for x in BANNED.findall(prompt)))]
     if (a["others"] or b["others"]) and not people:
         problems.append("other people are in the photos but the prompt does not pin them")

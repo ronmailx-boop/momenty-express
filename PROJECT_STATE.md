@@ -350,11 +350,44 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Open: the judge can't see "too fast" or "slideshow" well (passed T4 spin, T2/T1-retry hands); a 60 s video (18 transitions)
   needs more bridge moves per age than exist now.
 
+### Run 12 (14.11.2026): run 11's photos again with the new rules (direct A/B)
+- Plan: T1 run and turn, T2 walk across, T3 slow spin (x1.1), T4 behind an object, T5 helmet/container peekaboo; no repeats.
+- Clips 177-197 s (normal queue). Judge: 3/5 first try (T1, T3, T4). Rejected: T2 walk across (doubled child in frame 7;
+  Claude's look: he barely gets up, then jumps to standing), T5 helmet over the face (scenes blend frames 7-10).
+- NO retries: `--max-credits 445` with 392.6 already spent left no room for a 75.5 clip (Claude's mistake: told the owner
+  there was room for one). T2 and T5 got the free local fallback. 7.1 min, 397.3 credits ($1.99), video 19.0 s.
+  KIE balance after: ~58.
+- Claude's look: T1 good, T3 spin continuous, T4 goes behind a wall/door edge and comes out in the hallway.
+- Files: `docs/prompts/run12-rerun-new-rules.json`, `docs/judge/run12-report.json`; test page `results/r12-*` (run 12).
+- Lesson for budgets: max-credits must leave room for at least 1-2 retries (~75 each), or the run ends with fallbacks.
+- OWNER on run 12 full video: "what are all the frozen pictures, very bad, like a SLIDESHOW"; "toward the end too, a slideshow,
+  no motion". Cause (checked): the 2 local fallbacks (T2 at 0:04-0:06, T5 before the motorbike) = still photos with a zoom, plus
+  the 1.2 s still hold of the last photo + fade. Per-transition ratings of r12 not given yet.
+- FIX (`run_set.py`, free): up to 2 Kling retries per transition before the local fallback (now last resort, logged loudly);
+  the run refuses to start if --max-credits < clips + 2 retries (tested: STOP at 445 with 392.6 of clips); no still hold at the
+  end - the last clip fades out over its last 0.6 s (tested). Guidelines section 8.
+- OWNER on run 12 at 0:12 (T4): "where did this angry face come from? not right for a moving growing-up video".
+  Cause: the writer wrote "a curious, furrowed expression"; our template asked for "an expression that is not just a smile,
+  focused, does not smile the whole time" (run 7 fix against "boring") and pushed toward serious faces; "startled" in T1/T2 too.
+- FIX (free): template + writer ask for warm happy expressions only (curious, playful, delighted, excited, laughing; never angry,
+  frowning, sad, scared, serious); `auto_plan.NEGATIVE` replaces negative words in the action/finish whatever the model writes;
+  judge field `mood_ok` (fail if the child clearly looks angry/sad/scared in 2+ frames). Tested on r12: T4 -> mood_ok false
+  ("frowning in frames 2-4"), T3 -> pass. Guidelines section 4.
+- OWNER'S RATINGS run 12 (14.11): T2 walk across "the worst transition"; T3 slow spin "very reasonable"; T4 behind an object
+  "angry face and a bad transition"; T5 helmet peekaboo "medium, not perfect" (judge rejected it); T5 fallback "classic slideshow".
+  T1 not rated (same move rated "good" in run 11). Judge: right on T2, T3; wrong on T4 (passed; the new mood check fails it) and
+  harsh on T5. Labels added.
+- APPLIED: walk_across and behind_object turned off (`"off"` in HIDES, skipped by `choose`). Table of results by move for
+  ages 3-6 in guidelines section 3. Child moves left: run and turn, slow spin, object/cap/cup peekaboo (need an object),
+  crouch and jump up, ride away (need a ride-on) - the last three untested. Slide-change moves only as a last resort.
+- Comparison runs 11 -> 12 (same photos): owner-good transitions in the final video 2/5 -> about 2-3/5 (T1, T3, T5 medium);
+  fallbacks and frozen frames were the worst part of run 12 -> fixed (2 retries, budget check, no still end).
+
 ## Next step (exact)
-1. Stage D set 2: owner uploads another 6-photo set (KIE balance ~455 = one more set). Run with run_set.py: it tests the new
-   rules (no repeats, crouch/walk-across/ride/behind-object moves, slow spin). Optional: re-run run 11's photos with the new plan
-   (~400 credits) to compare directly.
-2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
+1. (done) run 12 ratings applied.
+2. KIE top-up before the next run: balance ~55; a 6-photo run needs >= ~545 (clips + 2 retries) -> ~$5 top-up is NOT enough,
+   ~$3 more is (or use 5 photos). Then stage D set 2 (new 6-photo set).
+3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.

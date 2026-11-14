@@ -270,5 +270,29 @@
  "r11-t5-retry": {
   "pass": 1,
   "why": "ok, not perfect, too fast"
+ },
+ "r12-t2-fallback": {
+  "pass": 0,
+  "why": "local fallback = frozen photos, 'very bad, like a slideshow'"
+ },
+ "r12-t5-fallback": {
+  "pass": 0,
+  "why": "classic slideshow, not right at all for a growing-up video"
+ },
+ "r12-t4": {
+  "pass": 0,
+  "why": "angry face, not right for the video, and a bad transition (behind an object)"
+ },
+ "r12-t2": {
+  "pass": 0,
+  "why": "the worst transition (walk across)"
+ },
+ "r12-t3": {
+  "pass": 1,
+  "why": "very reasonable (slow spin x1.1)"
+ },
+ "r12-t5": {
+  "pass": 1,
+  "why": "medium, not perfect (helmet peekaboo; judge rejected it)"
  }
 }

@@ -1,0 +1,58 @@
+{
+ "video": "(test page, results/r12-full)",
+ "transitions": 5,
+ "first_try_pass": 3,
+ "after_retry": 0,
+ "fallback": 2,
+ "outcome": {
+  "1": "first try",
+  "2": "fallback",
+  "3": "first try",
+  "4": "first try",
+  "5": "fallback"
+ },
+ "minutes_to_video": 7.1,
+ "kling_credits": 392.6,
+ "vision_credits_this_session": 4.7,
+ "total_credits": 397.3,
+ "usd": 1.99,
+ "photo_checks": [
+  {
+   "photo": 1,
+   "faces": 1,
+   "note": "face 60px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 2,
+   "faces": 1,
+   "note": "face 98px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 3,
+   "faces": 1,
+   "note": "face 159px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 4,
+   "faces": 1,
+   "note": "face 238px, share 0.25",
+   "tapped": false
+  },
+  {
+   "photo": 5,
+   "faces": 1,
+   "note": "face 125px, share 0.22",
+   "tapped": false
+  },
+  {
+   "photo": 6,
+   "faces": 1,
+   "note": "face 67px, share 0.22",
+   "tapped": false
+  }
+ ],
+ "video_seconds": 19.0
+}
