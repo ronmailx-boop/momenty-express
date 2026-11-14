@@ -110,12 +110,17 @@ HIDES = {
     "roll_face_down": {"stages": ["lying_baby", "sitting_baby"], "text": "rolls over onto the front, face down", "solo": True},
     "hands_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "covers the face with both hands as in peekaboo", "finish": "the hands are still over the face, then come down"},
     "toy_peekaboo": {"stages": ["sitting_baby", "toddler", "child"], "text": "lifts the toy up in front of the face", "finish": "the toy is still in front of the face, then comes down", "needs": ["toy", "plush", "doll", "teddy", "book", "rattle", "ball", "container", "box"]},
-    "hand_over_lens": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "reaches out and a hand covers the lens"},
+    # competitor video (14.11): the palm comes close to the lens, stays a moment, then pulls back in the NEW place - a bridge,
+    # never a dark frame (run 9: the dark version was "almost a slideshow")
+    "hand_over_lens": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "reaches toward the camera until the open palm fills the view (the palm stays lit and visible, never a dark frame)", "finish": "the open palm is still close to the camera, then pulls back to reveal the new place"},
     "head_turn_away": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "turns the head fully away from the camera to look at something", "finish": "the head is still turned away, then turns back to the camera"},
     "face_fills_frame": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "the camera moves in until the face is so close that it blurs and fills the frame"},
     "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "finish": "pops back up into view", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
     "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "finish": "the cup is still tipped up, then comes down", "needs": ["cup", "bottle", "glass", "mug"]},
-    "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor"},
+    # competitor video: runs toward the camera, the camera tilts down to the feet and the ground, then tilts up in the new place
+    "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor", "finish": "the camera is still pointing at the floor, then tilts back up to the child"},
+    # competitor video (bar mitzvah): an object that belongs to the SECOND photo swings in front of the camera, then is in its place
+    "next_object": {"stages": ["toddler", "child", "teen_adult"], "text": "an object that is in the SECOND photo (name it) swings in close in front of the camera and hides the face for a moment", "finish": "that object is still close to the camera, then settles into its place in the second photo", "needs_next": True},
     "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "finish": "is still running with the back to the camera, then turns around and comes back", "solo": True, "travel": True, "moves": True},
     "cap_over_face": {"stages": ["toddler", "child"], "text": "pulls the cap down over the face", "finish": "the cap is still over the face, then it is pushed back up", "needs": ["cap", "hat", "helmet"]},
     "jump_spin": {"stages": ["child"], "text": "turns around slowly on the spot, so the back faces the camera for a full second", "finish": "is still turning slowly with the back to the camera, then completes the turn to face the camera", "solo": True, "moves": True, "speed": 1.1},
@@ -132,6 +137,10 @@ CONTAINED = re.compile(r"\b(crib|cot|playpen|stroller|pram|buggy|car ?seat|high 
 BANNED = re.compile(r"\b(body|bodies|naked|nude|bare|skin|chest|belly|tummy|bottom|legs?|thighs?|diaper|nappy|underwear)\b", re.I)
 
 
+# owner's record so far: 0 = proven good, 1 = untested, 2 = weak (guidelines section 3 table)
+RANK = {"hands_peekaboo": 0, "head_turn_away": 0, "below_rail": 0, "run_and_turn": 0, "jump_spin": 0,
+        "toy_peekaboo": 2, "hand_over_lens": 2, "roll_face_down": 2}
+
 NEG_TO = {"startled": "surprised", "startles": "lights up", "furrows his brow": "raises his eyebrows",
           "furrows her brow": "raises her eyebrows", "furrowed": "bright", "frowning": "smiling", "frowns": "grins",
           "puzzled": "curious", "serious": "playful", "stern": "playful", "angry": "excited", "scared": "excited",
@@ -140,7 +149,7 @@ NEG_TO = {"startled": "surprised", "startles": "lights up", "furrows his brow": 
 NEGATIVE = re.compile(r"\b(" + "|".join(sorted(map(re.escape, NEG_TO), key=len, reverse=True)) + r")\b", re.I)
 
 
-def choose(first, cmp, used, i):
+def choose(first, cmp, used, i, second=None):
     """Strategy and the hiding / camera moves the writer may pick from (guidelines sections 3, 4 and 6)."""
     stage, others = first["stage"], bool(first["others"])
     # the place may differ (run 7: T2, T3, T9, T10 were in-place by hand with a new background)
@@ -151,6 +160,7 @@ def choose(first, cmp, used, i):
     fits = [k for k, h in HIDES.items() if stage in h["stages"] and not h.get("off")     # "off" = failed with the owner
             and not (others and h.get("solo"))                          # adults must not be turned or left behind
             and not (contained and h.get("moves"))                      # no running / jumping out of a crib or seat
+            and (not h.get("needs_next") or bool((second or {}).get("objects")))
             and (not h.get("needs") or any(re.search(r"\b" + re.escape(w) + r"s?\b", hay) for w in h["needs"]))]  # whole words: "glasses" is not a "glass"
     # owner, run 11 full video: "the same movement must never come twice". Unused moves only; a long video that runs out
     # of moves may reuse one that is not among the last 3 transitions (open issue: needs more moves).
@@ -167,7 +177,7 @@ def choose(first, cmp, used, i):
     allowed = [k for k in allowed if not HIDES[k].get("travel")] or ["hand_over_lens"]
     # moves not used yet in this video first (run 8 by hand: 11 different moves), then object-based moves (they tie
     # the action to this photo: cup, toy, rail)
-    allowed.sort(key=lambda k: (not HIDES[k].get("finish"), used.count(k), not HIDES[k].get("needs"), (list(HIDES).index(k) + i) % len(HIDES)))
+    allowed.sort(key=lambda k: (not HIDES[k].get("finish"), used.count(k), RANK.get(k, 1), not HIDES[k].get("needs"), (list(HIDES).index(k) + i) % len(HIDES)))
     bridges = [k for k in allowed if HIDES[k].get("finish")]
     return "hiding", (bridges or allowed)[:3], 5          # never offer a slide-change move while a bridge move fits
 
@@ -232,7 +242,7 @@ def write_one(i, photos, desc, cmps, gender, used, prev_cam, exclude=(), note=""
     pron = {"girl": "she", "boy": "he"}.get(gender, "they")
     poss = {"she": "her", "he": "his", "they": "their"}[pron]
     a, b, cmp = desc[i], desc[i + 1], cmps[i]
-    strategy, hides, seconds = choose(a, cmp, list(used) + list(exclude), i)
+    strategy, hides, seconds = choose(a, cmp, list(used) + list(exclude), i, b)
     hides = [h for h in hides if h not in exclude] or [h for h in HIDES if h not in exclude and a["stage"] in HIDES[h]["stages"]
                                                           and not HIDES[h].get("moves")][:3]
     if exclude and strategy == "in_place":        # in-place was rejected: hide the change this time

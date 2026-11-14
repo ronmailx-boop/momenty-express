@@ -383,6 +383,19 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Comparison runs 11 -> 12 (same photos): owner-good transitions in the final video 2/5 -> about 2-3/5 (T1, T3, T5 medium);
   fallbacks and frozen frames were the worst part of run 12 -> fixed (2 retries, budget check, no still end).
 
+### Competitor video analysis (14.11.2026) - `docs/competitor-video-life.md`
+- Owner uploaded a competitor video ("Dad, 78 years!", 188 s, 720x900, ~45 photos, ~4 s per photo, music). Measured: no frozen
+  stretch at all (1 s at the end), constant motion, one hard cut. AI intro scene with a title + white light once (door to the past).
+- Bridge moves seen: object from the NEXT photo swings in (tallit); lit palm fills the lens and pulls back in the new place;
+  camera tilts to the floor and back up; whole group ducks and rises; jump with arms up; picks up the child and walks off;
+  in-place big laugh; hat over the lens. Everyone always happy.
+- APPLIED (untested): hand_over_lens and camera_to_floor are bridges now (finish); new `next_object` (needs objects in photo 2);
+  speed x1.25 for 5-6 s clips (x1.2 for 4 s) -> ~4 s per photo, also fewer transitions per minute (cheaper per minute);
+  `RANK` in auto_plan: proven moves first, untested next, weak last. Choice test on run 12 descriptions: run and turn,
+  slow spin, camera to floor, next object, crouch and jump.
+- Product ideas (not done): AI intro/outro scene with a title, 4:5 vertical format, music, group ducks/jumps (needs care with
+  the OTHER PEOPLE RULE).
+
 ### Launch estimate (14.11.2026, owner asked "when will we be ready to launch?")
 - Answer: about 6-10 weeks, IF the quality gate in stage 1 is passed; stage 1 is the uncertain part.
 - Now: baby (run 10) 5/5 acceptable after the automatic retry; child 3-6 (runs 11-12) only 2-3/5 owner-good, only 2 proven moves
