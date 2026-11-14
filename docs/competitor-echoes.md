@@ -69,3 +69,7 @@ Collected by the owner with Claude in Chrome on his own account; only what the s
   Flaws: a baby of a few months walks and climbs (not believable); the clothes change in plain view, not hidden.
 - So the default is a travel move with a following camera, and the retry category "natural" gives a calmer
   in-place head-turn. Two of our three strategies, picked without regard to the child's age.
+
+## סרטון לדוגמה של Echoes (14.11.2026)
+- ניתוח מלא: `docs/competitor-video-life.md` ("Dad, 78 years!", 188 שנ׳, כ-45 תמונות, כ-4 שנ׳ לתמונה, 720×900, מוזיקה).
+- אין אף קטע קפוא; פתיחה וסיום בסצנת AI עם כותרת; הבזק לבן רק פעם אחת בפתיחה; כל המעברים תנועות גשר.
