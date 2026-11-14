@@ -311,7 +311,7 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   in the background -> upload clips + video as assets of the test page (Artifact publish asset:true) -> write `results/r11-*`
   rows (run 11) -> owner rates -> read `ratings`, add to `docs/judge/labels.json`.
 
-### Run 11 = stage D, set 1 (14.11.2026, in progress)
+### Run 11 = stage D, set 1 (14.11.2026)
 - Owner topped up KIE (balance 1,083.3) and uploaded 6 new photos: one boy alone (~2-6 y): red ride-on car on a sidewalk,
   lying on the floor, blue jacket + glasses indoors, Spider-Man shirt against a wall, holding a cap and toy indoors, on a red
   ride-on motorbike. No group photos (no taps). Photo ids: 1f496101..., 47ed2976..., 21757770..., f834379b..., 10a14bef..., 84fdce11...
@@ -323,10 +323,22 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Plan: T1 run off and turn (6 s), T2 hands peekaboo (from lying to standing), T3 head turn to the hoop, T4 jump spin,
   T5 peekaboo with the gray container. Expected ~393 credits + retries.
 - Command: `run_set.py OUT 01..06.jpg --max-credits 900` (background, restarted 10:15).
+- RESULT: 5/5 clips ready in 351-379 s (slow queue, all equally slow -> no re-sends, correct). Judge: 2/5 first try
+  (T2 hands peekaboo, T4 jump spin). Rejected: T1 run off (code: end match 0.57 < 0.6 - Claude's look: GOOD clip, likely a
+  false reject), T3 head turn (code: motion 3.58 < 4, camera "stays still"), T5 container peekaboo (vision: crossfade +
+  see-through faces). Retries all passed (91-111 s): T1 hands peekaboo, T3 hands peekaboo, T5 jump spin onto the motorbike.
+  No fallback. 11.2 min of real run (report says 14.6: includes the stopped start), 621.8 credits ($3.11), video 18.7 s.
+  KIE balance 458.0.
+- Claude's look at the final video: all 5 continuous; T1-retry: white shirt appears while still in the red car (outfit before place);
+  hands peekaboo 3 times in 5 transitions (retries did not avoid used moves).
+- FIX (`run_set.py`, free): a retry also excludes the moves of the neighbouring transitions and is added to `used`.
+- Files: `docs/prompts/run11-stage-d.json`, `docs/judge/run11-report.json`; clips + video on the test page (`results/r11-*`, run 11).
+- Waiting: owner's ratings (incl. the rejected T1/T3/T5 first tries -> judge calibration: is T1 a false reject?).
 
 ## Next step (exact)
-1. Stage D (recommended over re-running run 9's photos): owner tops up KIE (~$5 per 6-photo set; balance 83) and uploads a NEW set
-   of 6 photos (another child or an older age, walking/running, some outdoors -> tests the travel move); run 11 with run_set.py.
+1. Owner rates run 11 on the test page -> read `ratings`, add r11-* to `docs/judge/labels.json`, compare with the judge
+   (especially T1 first try, end match 0.57; consider lowering MATCH or using the best of the last few frames).
+2. Stage D set 2: owner uploads another 6-photo set (KIE balance 458 = enough for one more set).
 2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)

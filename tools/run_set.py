@@ -252,8 +252,13 @@ def main():
     for t in range(1, n + 1):
         k, c = best(t)
         if k and not judged(k, c) and f"t{t}-retry" not in run.st["clips"]:
+            # never the rejected move, and not the moves of the neighbouring transitions (run 11: two retries both
+            # picked hands peekaboo, next to a hands peekaboo T2 = 3 in a 5-transition video)
+            near = [steps[j]["hide"] for j in (t - 2, t) if 0 <= j < len(steps) and steps[j]["hide"]]
             step, prompt = AP.write_one(t - 1, photos, plan["photos"], plan["compares"], plan["gender"], used, None,
-                                        exclude=[c["step"]["hide"]] if c["step"]["hide"] else ["in_place"])
+                                        exclude=([c["step"]["hide"]] if c["step"]["hide"] else ["in_place"]) + near)
+            used.append(step["hide"]) if step["hide"] else None
+            steps[t - 1] = step
             run.new_clip(f"t{t}-retry", t, prompt, step["seconds"], step)
             retry.append(f"t{t}-retry")
     run.poll(retry)
