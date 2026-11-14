@@ -53,3 +53,11 @@
 - תוצאה: בשתי הגרסאות השירה מתחילה בשנ׳ 0 (בלי פתיחה). "גבר" ב-49.5 (גרסה 1) / 50.9 (גרסה 2) -> נער ב-53.
   פשרה: A = גרסה 2 עם `--shift 2.0` (שירה מ-2 שנ׳, "גבר" ב-52.9); B = גרסה 1 עם `--shift 0.5` (שירה מיד, "גבר" ~50).
   12 קרדיטים, 22 שנ׳. התמלול לא מבחין בין "אותךָ" ל"אותָךְ": לשון הזכר נבדקת באוזן של הבעלים.
+
+## שיר חמישי: רומה, פופ מערבי (14.11.2026)
+- הבעלים: אהב את גרסה A, אבל הסגנון יצא "מזרחי" ואת השורה "ופתאום אתה כמעט גבר" להסיר.
+- השורה הוחלפה ב"ועוד שנה נפלאה מחכה לְךָ" (לא מתארת, אז אין צורך בסנכרון ובהזזה: השירה מתחילה בשנ׳ 0).
+- סגנון: "modern western pop, bright upbeat feel-good birthday pop, 120 bpm, major key, acoustic guitar strums, piano, handclaps,
+  punchy pop drums, synth bass, catchy pop chorus, warm mature adult female pop vocals, vocals start immediately, no instrumental intro,
+  not Middle Eastern, no oriental scales". לקח: "Hebrew pop" + ukulele/handclaps לבד נוטה למזרחית; צריך "western pop, major key".
+- 2 גרסאות (59.2/58.2 שנ׳), 27 שנ׳, 12 קרדיטים. יתרה 982.6.

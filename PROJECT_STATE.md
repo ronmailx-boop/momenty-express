@@ -440,6 +440,8 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - [x] Upbeat version (owner asked: happy, vocals from the start, masculine): no [Intro] + "vocals start immediately" in the style
   -> vocals at 0 s in both versions; niqqud on gendered words. A = v2 shift 2.0 (line synced at 53), B = v1 shift 0.5. 12 credits.
   Owner topped up $5; KIE balance ~994.6. Waiting for the owner's pick (A/B) and ear on masculine forms.
+- [x] Owner liked upbeat A but: drop the "almost a man" line, and make it pop, not Mizrahi -> "western pop, major key, acoustic
+  guitar, piano" + "not Middle Eastern"; line replaced by "ועוד שנה נפלאה מחכה לְךָ"; no shift. 2 versions sent; balance 982.6.
 - Next for songs: questionnaire -> LLM lyrics in make_song.py; style library per occasion; rights/privacy.
 
 ## Next step (exact) - session end 14.11.2026 (afternoon)
