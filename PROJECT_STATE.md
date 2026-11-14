@@ -115,10 +115,49 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   (3) the site + server (can reuse Momenty: Firebase, render job, Paddle, music picker) with KIE + fal fallback and the re-send rule;
   (4) a reliable time promise (measured 3-33 min); (5) KIE written privacy commitments, privacy policy, terms, accessibility statement.
 
+## Phase 1 plan (approved by the owner 14.11.2026)
+Goal: one script, photos folder -> finished video, nobody in the loop. Output numbers: first-pass rate, time to video, cost per video.
+Pipeline: (1) photo checks (YuNet: faces, size, sharpness) (2) crop `tools/align_faces.py` (3) vision model describes each photo
+(4) code rules pick strategy + hiding move + camera per pair, per `docs/transition-guidelines.md` (5) vision model writes the action
+sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rule; reworded retry on a moderation block
+(7) automatic judge = code checks (first/last frame match, no hard cut, no doubled face / extra person) + vision model on 8-10 frames
+(8) one retry with another hiding move, then a local face-morph fallback (9) assembly (guidelines section 8).
+Stages, with a stop and a report to the owner between them:
+- [ ] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). IN PROGRESS.
+- [ ] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only).
+- [ ] C: first full run on a NEW set of 12 photos (~830 credits). Needs a KIE top-up and the owner's OK first.
+- [ ] D: 4 more sets of different ages (~830 credits each).
+Not in phase 1: site, server, payment, music, legal documents.
+Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo sets of 12.
+
+### Stage A status (14.11.2026)
+- Script: `tools/auto_plan.py OUT_DIR photo1-sq.jpg ...` -> `plan.json` + `prompts.json`. Answers are cached in OUT_DIR/vision-cache.json
+  (a re-run resumes), photos are uploaded as 768 px copies and passed by URL, describe/compare calls run 6 in parallel.
+- Vision model (owner approved KIE for the experiment): Gemini 3.8 Flash, `POST https://api.kie.ai/gemini-3-8-flash-openai/v1/chat/completions`
+  (OpenAI chat format, image_url by URL or base64 data URL, `stream:false`, answer in choices[0].message.content, cost in `credits_consumed`).
+  Measured: 0.06 credits and ~14 s per photo description; the whole stage A is ~2 credits.
+  An Anthropic key can NOT be saved as a network secret here (request_credential refuses Anthropic hosts); it would have to be an
+  environment variable + a new session. Claude through KIE (`/claude/v1/messages`) works for text but fails on images (500).
+- Run on the 12 photos of run 8 stopped at 23 of 34 calls: all Gemini models on KIE started returning "upstream request failed" after 30 s
+  (also for plain text). 12 descriptions + 11 comparisons were done; the 11 prompt-writing calls are missing. Cost so far ~1.3 credits.
+  The cache was in the session scratchpad and is NOT in the repo (it describes private photos): a new session re-runs it (~2 credits).
+  The 12 square photos are also only in the scratchpad; originals are assets of the test artifact (`session/photos` in its db).
+- Findings from the automatic strategy choice vs the hand choice of run 7 (fix BEFORE the next run):
+  1. T8 and T10 got "travel / run_and_turn" for a baby: the model called her "toddler" because she stands in the crib.
+     Rule to add: no travel when the child is strapped in (stroller, car seat, high chair), inside a crib, or held.
+  2. "in_place" was never chosen (by hand: T2, T3, T9, T10). The test `same_place_kind and same_pose_kind and similar_framing`
+     is too strict: use same_pose_kind and similar_framing only.
+  Otherwise fine: age-appropriate hiding moves, no adjacent repeats, no moves that turn the mother.
+- Lesson: KIE for both vision and video is a single point of failure. Production needs a separate vision provider.
+- KIE balance 14.11: 40.3 credits.
+
 ## Next step (exact)
-Owner decides: Claude prepares a detailed work plan for phase 1 = automate the pipeline (vision-model photo description -> action & strategy
-per `docs/transition-guidelines.md` -> prompts -> KIE with the re-send rule and fal fallback -> automatic frame check -> assembly), then run it
-on 5-10 photo sets. Before any paid run: top up KIE (balance 41.6). Plan only until the owner approves (CLAUDE.md).
+1. Fix the two rules above in `tools/auto_plan.py` (`choose`).
+2. Rebuild the 12 square photos of run 8 (download the originals from the test artifact, `align_faces.py` with the tapped subjects) and
+   re-run stage A when KIE's Gemini answers again (test first with a one-line text call). If it stays down, ask the owner for an
+   Anthropic key as an environment variable (new session) and switch `vision()` to the Anthropic API.
+3. Compare the 11 automatic prompts with `docs/prompts/run8-baby-varied.json`, report to the owner, then stage B.
+No paid Kling run before the owner tops up and approves stage C.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
