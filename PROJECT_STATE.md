@@ -212,6 +212,32 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   `python3 tools/run_set.py OUT photo1.jpg photo2.jpg@x,y ... ` (x,y = tapped child in a group photo, 0..1), in the background
   (~10-20 min); then show the owner video.mp4 + report.json and collect ratings per transition (compare with the judge).
 
+### Cost of a 1-minute video (calculated 14.11.2026 from measured numbers; 1 KIE credit = $0.005)
+- Pace: a 5 s clip sped x1.5 = ~3.3 s of video per transition -> 60 s = ~18 transitions = ~19 photos (+2 s end hold).
+  (Echoes' pace 2.5 s/photo = ~24 photos for the same minute and ~30% more cost.)
+- Base: 18 x 75.5 = 1,359 credits = $6.80.
+- Judge retries: rejection rate measured 15-20% (calibration on our method 6/30; dry run 2/11) -> ~3.6 retries x 75.5 = ~270 cr ($1.35).
+  A second rejection = free local fallback (no extra cost).
+- Re-sends (stuck clips): ~1 per video on average (~75 cr, $0.38); the rule caps them at 20% of the clips.
+- Content-filter blocks: not charged. Vision (plan + judge): ~10 cr ($0.05).
+- EXPECTED: ~1,715 credits = ~$8.60 per minute. Bad day (30% retries + 20% re-sends): ~2,040 cr = ~$10.20.
+  Hard ceiling with run_set's rules: ~2,990 cr = ~$15.
+- Cheaper option to test: 4 s clips (60.4 cr, x1.3 = 3.1 s) = ~$5.90 base per minute (~$7.50 expected), less room for the action.
+- Compared with "2-3 candidates per transition" (the first plan): $13.60-20.40 per minute. One try + judge + one retry + free
+  fallback costs ~1.26x the base instead of 2-3x.
+
+- Comparison with Echoes (14.11.2026): same model and provider (Kling 3.0 Std via KIE, `kiekling3`), so the cost per clip is about
+  the same (~$0.38) unless they have a KIE volume discount. Echoes' "1 minute" = 13 photos (12 clips, ~$4.53 + customer retries
+  they pay for; their demos show ~22 photos/min though). Ours for 13 photos: ~$5.70 expected. Our advantage is not cost but one
+  click (no customer review); the judge + retry costs ~20% more. Savings to try: 4 s clips (-20%), ask KIE for a volume discount
+  (in the same email as the privacy questions).
+- Price and profit at 89 ILS per minute (owner's proposed price, incl. 18% VAT; rate assumed ~3.70 ILS/USD, not checked):
+  AI cost per 19-photo minute: expected ~32 ILS, bad day ~38, ceiling ~56; 13-photo minute ~21.
+  Web (Paddle 5% + $0.50): 89 - VAT 13.6 - fee 6.3 = 69 left -> profit ~37 ILS (42%); bad day ~31; ceiling ~13.
+  App (Google Play 15%): 64 left -> profit ~32 ILS (36%); bad day ~26; ceiling ~8. With a 13-photo minute: ~48 (web) / ~43 (app).
+  Not included: advertising (likely the largest cost), server/storage (cents), music (undecided), refunds, support, income tax.
+  Echoes charges $29.90 (~110 ILS) for the same minute.
+
 ## Next step (exact)
 1. Owner: top up KIE (~$6-10 for stage C; balance 7.73) and supply a NEW set of ~12 photos of one child (months apart),
    marking the child in group photos.
