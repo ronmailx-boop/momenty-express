@@ -373,9 +373,18 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   frowning, sad, scared, serious); `auto_plan.NEGATIVE` replaces negative words in the action/finish whatever the model writes;
   judge field `mood_ok` (fail if the child clearly looks angry/sad/scared in 2+ frames). Tested on r12: T4 -> mood_ok false
   ("frowning in frames 2-4"), T3 -> pass. Guidelines section 4.
+- OWNER'S RATINGS run 12 (14.11): T2 walk across "the worst transition"; T3 slow spin "very reasonable"; T4 behind an object
+  "angry face and a bad transition"; T5 helmet peekaboo "medium, not perfect" (judge rejected it); T5 fallback "classic slideshow".
+  T1 not rated (same move rated "good" in run 11). Judge: right on T2, T3; wrong on T4 (passed; the new mood check fails it) and
+  harsh on T5. Labels added.
+- APPLIED: walk_across and behind_object turned off (`"off"` in HIDES, skipped by `choose`). Table of results by move for
+  ages 3-6 in guidelines section 3. Child moves left: run and turn, slow spin, object/cap/cup peekaboo (need an object),
+  crouch and jump up, ride away (need a ride-on) - the last three untested. Slide-change moves only as a last resort.
+- Comparison runs 11 -> 12 (same photos): owner-good transitions in the final video 2/5 -> about 2-3/5 (T1, T3, T5 medium);
+  fallbacks and frozen frames were the worst part of run 12 -> fixed (2 retries, budget check, no still end).
 
 ## Next step (exact)
-1. Owner may still rate the r12 clips (T1, T3 slow spin, T4 behind an object are new moves) -> read `ratings`, add to labels.
+1. (done) run 12 ratings applied.
 2. KIE top-up before the next run: balance ~55; a 6-photo run needs >= ~545 (clips + 2 retries) -> ~$5 top-up is NOT enough,
    ~$3 more is (or use 5 photos). Then stage D set 2 (new 6-photo set).
 3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.

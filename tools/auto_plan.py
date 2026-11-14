@@ -120,9 +120,9 @@ HIDES = {
     "cap_over_face": {"stages": ["toddler", "child"], "text": "pulls the cap down over the face", "finish": "the cap is still over the face, then it is pushed back up", "needs": ["cap", "hat", "helmet"]},
     "jump_spin": {"stages": ["child"], "text": "turns around slowly on the spot, so the back faces the camera for a full second", "finish": "is still turning slowly with the back to the camera, then completes the turn to face the camera", "solo": True, "moves": True, "speed": 1.1},
     "crouch_jump": {"stages": ["toddler", "child"], "text": "crouches down quickly and drops below the lower edge of the frame while the camera stays at head height", "finish": "jumps back up into view", "moves": True},
-    "walk_across": {"stages": ["child", "teen_adult"], "text": "walks sideways across the frame close to the camera, so the shoulder fills the view for a moment", "finish": "is still walking across, then stops and turns to the camera", "solo": True, "moves": True},
+    "walk_across": {"stages": ["child", "teen_adult"], "off": "run 12: owner 'the worst transition'", "text": "walks sideways across the frame close to the camera, so the shoulder fills the view for a moment", "finish": "is still walking across, then stops and turns to the camera", "solo": True, "moves": True},
     "ride_away": {"stages": ["toddler", "child"], "text": "rides the ride-on toy away from the camera with the back to it", "finish": "is still riding with the back to the camera, then turns and rides back toward the camera", "needs": ["ride-on", "toy car", "bike", "bicycle", "tricycle", "scooter", "motorbike", "motorcycle"], "solo": True, "moves": True},
-    "behind_object": {"stages": ["toddler", "child"], "text": "walks behind the nearest big object in the photo and is hidden by it for a moment", "finish": "steps out from behind it, then faces the camera", "needs": ["door", "doorway", "sofa", "couch", "tree", "curtain", "toy car", "ride-on", "table"], "solo": True, "moves": True},
+    "behind_object": {"stages": ["toddler", "child"], "off": "run 12: owner 'bad transition' (walked behind a wall edge)", "text": "walks behind the nearest big object in the photo and is hidden by it for a moment", "finish": "steps out from behind it, then faces the camera", "needs": ["door", "doorway", "sofa", "couch", "tree", "curtain", "toy car", "ride-on", "table"], "solo": True, "moves": True},
     "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
     "walk_past_camera": {"stages": ["teen_adult"], "text": "walks close past the camera, blurring the frame", "solo": True},
 }
@@ -148,7 +148,7 @@ def choose(first, cmp, used, i):
     hay = " ".join([first["pose"], first["place"]] + first["objects"]).lower()
     # a child who stands in a crib or sits strapped in is not free to run (run 7 T8, T10 were sent to "travel")
     contained = bool(first.get("contained")) or bool(CONTAINED.search(first["pose"] + " " + first["place"]))
-    fits = [k for k, h in HIDES.items() if stage in h["stages"]
+    fits = [k for k, h in HIDES.items() if stage in h["stages"] and not h.get("off")     # "off" = failed with the owner
             and not (others and h.get("solo"))                          # adults must not be turned or left behind
             and not (contained and h.get("moves"))                      # no running / jumping out of a crib or seat
             and (not h.get("needs") or any(re.search(r"\b" + re.escape(w) + r"s?\b", hay) for w in h["needs"]))]  # whole words: "glasses" is not a "glass"

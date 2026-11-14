@@ -277,10 +277,22 @@
  },
  "r12-t5-fallback": {
   "pass": 0,
-  "why": "local fallback near the end = 'slideshow, no motion'"
+  "why": "classic slideshow, not right at all for a growing-up video"
  },
  "r12-t4": {
   "pass": 0,
-  "why": "angry/frowning face (prompt said 'furrowed expression'): not right for a moving growing-up video"
+  "why": "angry face, not right for the video, and a bad transition (behind an object)"
+ },
+ "r12-t2": {
+  "pass": 0,
+  "why": "the worst transition (walk across)"
+ },
+ "r12-t3": {
+  "pass": 1,
+  "why": "very reasonable (slow spin x1.1)"
+ },
+ "r12-t5": {
+  "pass": 1,
+  "why": "medium, not perfect (helmet peekaboo; judge rejected it)"
  }
 }
