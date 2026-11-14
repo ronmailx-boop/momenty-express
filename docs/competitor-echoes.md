@@ -48,3 +48,5 @@ Collected by the owner with Claude in Chrome on his own account; only what the s
 - Limits: 2-101 photos per Growing video, 100 active clips. Aspect chosen up front (`generated_aspect_ratio: "9:16"`).
 - Backend: Supabase (storage + REST) behind api.your-echoes.com; browser polls status every 10-15 s.
 - Still unknown: clip duration, std/pro, resolution (need the clip file), the full animation catalog (not shown in trial).
+- Reported by the browser extension in its summary (not yet measured by us on the file): clips are 5 s, 720p, 9:16;
+  signed links expire after 12 h (`expiresIn: 43200`). 720p fits Kling 3.0 Standard and the public demo videos (720x1280).
