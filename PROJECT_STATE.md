@@ -311,6 +311,12 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   in the background -> upload clips + video as assets of the test page (Artifact publish asset:true) -> write `results/r11-*`
   rows (run 11) -> owner rates -> read `ratings`, add to `docs/judge/labels.json`.
 
+### Run 11 = stage D, set 1 (14.11.2026, in progress)
+- Owner topped up KIE (balance 1,083.3) and uploaded 6 new photos: one boy alone (~2-6 y): red ride-on car on a sidewalk,
+  lying on the floor, blue jacket + glasses indoors, Spider-Man shirt against a wall, holding a cap and toy indoors, on a red
+  ride-on motorbike. No group photos (no taps). Photo ids: 1f496101..., 47ed2976..., 21757770..., f834379b..., 10a14bef..., 84fdce11...
+- Command: `run_set.py OUT 01..06.jpg --max-credits 900` (background).
+
 ## Next step (exact)
 1. Stage D (recommended over re-running run 9's photos): owner tops up KIE (~$5 per 6-photo set; balance 83) and uploads a NEW set
    of 6 photos (another child or an older age, walking/running, some outdoors -> tests the travel move); run 11 with run_set.py.
