@@ -295,11 +295,17 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Judge vs owner: run 9 4/6, run 10 5/6 (caught T5; passed in-place T3 that the owner failed). Its misses are "slideshow" cases.
 - Note: photo descriptions differ between runs (vision model is not deterministic) -> the plan for the same photos can change.
 
+### In-place fix (14.11.2026, free)
+- `auto_plan.choose`: similar photos get a bridge move whenever one fits; in-place only when none fits, and then the prompt asks
+  for one big continuous movement that keeps going through the change ("never while the child is still"). Guidelines section 3.
+- Re-plan of the run 9 and run 10 photos (2.2 credits): every transition is now a bridge move (head turn, hands/toy peekaboo,
+  below the rail) and T5 is "run off and come back" (travel, not yet tested in an automatic run). No in-place left.
+- Watch: the writer sometimes adds a "people" line for a person who is in neither photo (T3: "an adult steps in").
+
 ## Next step (exact)
-1. Fix in-place (free, code): either replace it with a bridge move whenever one fits (in-place only when nothing fits), or give it
-   one big continuous action that runs through the change. Re-plan run 9/10 photos to check (~2 credits).
-2. KIE top-up (balance 85.5), then stage D: new 6-photo sets of other ages (an older child for the travel move), ~460 credits each.
-3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
+1. KIE top-up (balance ~83), then run 11 = the same 6 photos with the new plan (~460 credits) to test T3 bridge + T5 travel;
+   owner rates. Or go straight to stage D with a new set (other ages) and test the same rules there.
+2. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
