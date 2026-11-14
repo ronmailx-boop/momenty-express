@@ -178,7 +178,8 @@ class Run:
         os.makedirs(work, exist_ok=True)
         files = []
         for n, (f, seconds, kind) in enumerate(parts):
-            speed = 1.0 if kind == "fallback" else (1.3 if seconds <= 4 else 1.5)
+            # a move may set its own speed (run 11: the spin sped x1.5 = "too fast, looks like a bug")
+            speed = 1.0 if kind == "fallback" else kind if isinstance(kind, float) else (1.3 if seconds <= 4 else 1.5)
             trim = "" if n == 0 else "trim=start_frame=1,setpts=PTS-STARTPTS,"
             dst = os.path.join(work, f"{n:02d}.mp4")
             subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", f, "-an", "-vf",
@@ -268,7 +269,7 @@ def main():
     for t in range(1, n + 1):
         k, c = best(t)
         if k and judged(k, c):
-            parts.append((c["file"], c["seconds"], "clip")); outcome[t] = "first try" if k == f"t{t}" else k.split("-")[1]
+            parts.append((c["file"], c["seconds"], AP.HIDES.get(c["step"].get("hide") or "", {}).get("speed") or "clip")); outcome[t] = "first try" if k == f"t{t}" else k.split("-")[1]
         else:
             parts.append((run.fallback(t), 3.2, "fallback")); outcome[t] = "fallback"
             log(f"t{t}: fallback transition used")
