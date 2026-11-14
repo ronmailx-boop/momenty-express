@@ -431,6 +431,14 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Main risk: ages 3-6 and teens may not reach 80% in one click. Alternative: launch with "one click + a free fix of a
   transition you don't like" (as Echoes does) -> can launch right after stage 2. Decide after the next 2-3 runs.
 
+### Songs session (14.11.2026, evening)
+- [x] `tools/make_song.py` (lyrics file + style -> KIE Suno 2 versions -> whisper word times -> audio replaced, `--shift` to land a
+  lyric on its moment). Roma emotional ballad, mature female vocals, name with niqqud (clear in 4/4 versions); the one descriptive
+  line "ופתאום אתה כמעט גבר" synced to the teen's appearance at 0:53 (Outro placement + shift 0.7 s). 24 credits; KIE balance 6.6.
+  Details: `docs/music/song-test-kie-suno.md`. Waiting for the owner's ear.
+- Lesson: a lyric meant for a late moment must be the LAST line (Suno spreads lines over the whole duration); whisper times +-0.5 s.
+- Next for songs: KIE top-up needed (6.6 left); questionnaire -> LLM lyrics in make_song.py; style library per occasion; rights/privacy.
+
 ## Next step (exact) - session end 14.11.2026 (afternoon)
 **OWNER (14.11, end of session): "I liked the songs you made. I want to continue the NEXT session with this topic:
 building more songs for clips."** -> the next session is about SONGS first (run 13 of transitions waits).
