@@ -123,7 +123,7 @@ sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rul
 (7) automatic judge = code checks (first/last frame match, no hard cut, no doubled face / extra person) + vision model on 8-10 frames
 (8) one retry with another hiding move, then a local face-morph fallback (9) assembly (guidelines section 8).
 Stages, with a stop and a report to the owner between them:
-- [ ] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). IN PROGRESS.
+- [x] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). DONE 14.11.
 - [ ] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only).
 - [ ] C: first full run on a NEW set of 12 photos (~830 credits). Needs a KIE top-up and the owner's OK first.
 - [ ] D: 4 more sets of different ages (~830 credits each).
@@ -149,23 +149,27 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
      is too strict: use same_pose_kind and similar_framing only.
   Otherwise fine: age-appropriate hiding moves, no adjacent repeats, no moves that turn the mother.
 - Lesson: KIE for both vision and video is a single point of failure. Production needs a separate vision provider.
-- KIE balance 14.11: 40.3 credits (36.94 later the same day).
+- KIE balance 14.11: 40.3 credits (~29 after stage A with GPT).
+
+### Stage A result (14.11.2026)
+- Vision model switched to **GPT on KIE** (`gpt-6-sol` via `/codex/v1/responses`, OpenAI Responses format; fallbacks gpt-5-6-luna,
+  then Gemini). Gemini and Claude-with-images on KIE were down (502/500). Owner's decision: stay with KIE only (cheaper; Echoes uses KIE).
+- Full run on the 12 photos of run 8: 34/34 calls, 4.26 credits, 2:42 min (prompt-only re-runs ~1.6 credits, ~1:45 min).
+- Automatic prompts: `docs/prompts/run8-auto-stage-a.json` (hand version: `docs/prompts/run8-baby-varied.json`).
+- Fixes made after the first look (all in `auto_plan.py`): one pronoun for the whole video (majority gender); no repeated hiding move
+  until others are used (9 different moves in 11); no hands/toy/lens moves for a lying baby; writer told to prefer the first
+  (object-based) move; "never"/"gone" are item lists and the code writes the sentences (free sentences had reversed meaning).
+- Compared with the hand prompts: same move in T1 (roll), T5 (yellow plush), T8 (below the rail), T11 (orange cup); no travel for
+  a contained child (fix works); in-place only in T2. Differences: T2/T4 hand used the mother lifting/spinning her (auto never moves
+  adults: safer after the ponytail finding); T3 hand used the brother tickling (auto: hands peekaboo); T7 hand reached for the lens
+  (auto: head turn); T9 hand looked at the window (auto: face fills frame); T10 hand dropped a thing (auto: head turn again).
+- Known gaps: descriptions sometimes wrong in small ways (photo 6 crib called "bed"; photo 5 stroller called "car seat");
+  prompts are long (~1,400 chars) with many people lines in group photos; only 2 children tested.
 
 ## Next step (exact)
-1. [x] (14.11) Fixed the two rules in `tools/auto_plan.py` `choose`: new describe field `contained` + a word check
-   (crib, cot, playpen, stroller, car seat, high chair, held, on a lap...) -> no travel and no running/jumping hiding moves;
-   in-place test is now `same_pose_kind and similar_framing`. Checked offline with made-up descriptions.
-2. [ ] Re-run stage A. BLOCKED (14.11, second session): every KIE chat model returns 502 "upstream request failed" after 30 s
-   (gemini-3-8-flash, gemini-4-argon = KIE's suggested replacement, claude/v1/messages); other Gemini names are retired/unsupported.
-   fal: the session's fal key gets 403 "required models:requests:submit" (key has no permission to run models).
-   KIE balance 36.94. Options for the owner: (a) wait for KIE and retry; (b) Anthropic key as an environment variable + new session,
-   switch `vision()` to the Anthropic API; (c) give the fal key the "models:requests:submit" permission and use fal's
-   `openrouter/router/vision` (a separate vision provider, as production needs anyway).
-   OWNER'S DECISION (14.11): stay with KIE for this project, not fal (cheaper, and Echoes uses KIE too). Options (b) and (c) are off.
-   Known risk: KIE for both vision and video = single point of failure; the production server must at least retry and queue.
-   Re-checked 14.11: still 502. A one-hour self check-in was scheduled in the session to retry.
-   When vision works: rebuild the 12 square photos of run 8 (originals = assets of the test artifact, `align_faces.py` with the
-   tapped subjects), run `auto_plan.py`, compare with `docs/prompts/run8-baby-varied.json`, report, then stage B.
+1. Owner reviews the stage A report (automatic vs hand prompts).
+2. Stage B: the automatic judge, calibrated on the clips of runs 1-8 the owner already rated (`results/*` + `ratings/*` in the test
+   artifact db; KIE clip URLs are kept 14 days, i.e. until ~27.11). Vision cost only.
 No paid Kling run before the owner tops up and approves stage C.
 
 ## Competitor research (13.11.2026)
