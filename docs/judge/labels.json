@@ -214,5 +214,29 @@
  "r9-t5": {
   "pass": 1,
   "why": "good aging"
+ },
+ "r10-t1": {
+  "pass": 1,
+  "why": "perfect (head turn and back, bridge)"
+ },
+ "r10-t2": {
+  "pass": 1,
+  "why": "excellent (lowered into the bouncer in one movement)"
+ },
+ "r10-t3": {
+  "pass": 0,
+  "why": "not perfect, reminds of a slideshow (in-place)"
+ },
+ "r10-t4": {
+  "pass": 1,
+  "why": "passes (toy peekaboo, bridge)"
+ },
+ "r10-t5": {
+  "pass": 0,
+  "why": "judge is right, not perfect (in-place)"
+ },
+ "r10-t5-retry": {
+  "pass": 1,
+  "why": "not bad at all"
  }
 }

@@ -281,13 +281,25 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Clips 98-116 s; judge 4/5 first try; T5 rejected ("abrupt change with the face visible") -> retry passed. No fallback.
   8.3 min, 458.3 credits ($2.29). KIE balance after: 85.5 (top-up needed for any further run).
 - Files: `docs/prompts/run10-bridge.json`, `docs/judge/run10-report.json`; clips on the test page (`results/r10-*`, run 10).
-- Open: owner rates run 10 -> is "slideshow" gone? Compare with run 9 (3/5 owner passes).
+- OWNER'S RATINGS run 10 (14.11): full video "not bad at all, passes as a growing-up video". T1 head turn "perfect", T2 "excellent",
+  T4 toy peekaboo "passes", T5-retry "not bad"; fail T3 in-place ("reminds of a slideshow"), T5 in-place ("the judge is right").
+  Final video: 5/5 transitions acceptable after the automatic retry (run 9: 3/5 good in the final video).
+
+### Summary of the owner's ratings, runs 9-10 (first fully automatic runs)
+| move type | owner pass first try |
+|---|---|
+| bridge hiding (hands/toy peekaboo, head turn and back, lowered into the seat) | 4/4 |
+| slide-change hiding (roll -> new pose, toy with ghosting, hand over lens) | 0/3 |
+| in-place aging | 3/5 (two passes called "simple, almost no motion") |
+- => the bridge rule works; in-place is now the weakest strategy (looks like a slideshow when the change is visible but nothing moves).
+- Judge vs owner: run 9 4/6, run 10 5/6 (caught T5; passed in-place T3 that the owner failed). Its misses are "slideshow" cases.
 - Note: photo descriptions differ between runs (vision model is not deterministic) -> the plan for the same photos can change.
 
 ## Next step (exact)
-1. Owner rates run 10 on the test page. If "slideshow" is gone: stage D (more sets, other ages: an older child for the travel
-   move); needs a KIE top-up (balance 85.5; ~460 credits per 6-photo set).
-2. In-place clips pass but are "simple, almost no motion": give in-place a bigger action (guidelines section 4) in the next round.
+1. Fix in-place (free, code): either replace it with a bridge move whenever one fits (in-place only when nothing fits), or give it
+   one big continuous action that runs through the change. Re-plan run 9/10 photos to check (~2 credits).
+2. KIE top-up (balance 85.5), then stage D: new 6-photo sets of other ages (an older child for the travel move), ~460 credits each.
+3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
