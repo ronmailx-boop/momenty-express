@@ -9,7 +9,7 @@
   5 retry     a rejected clip gets up to TWO new clips, each with another hiding move, judged again; the run refuses to
               start if --max-credits leaves no room for 2 retries
   6 fallback  LAST RESORT (owner, run 12: looks like frozen photos): still rejected after 2 retries -> push-in, white flash, pull-out
-  7 assemble  guidelines section 8: drop each clip's first frame, speed 4 s x1.3 / 5-6 s x1.5, no still hold at the end (fade on the last clip),
+  7 assemble  guidelines section 8: drop each clip's first frame, speed 4 s x1.2 / 5-6 s x1.25 (~4 s per photo), no still hold at the end (fade on the last clip),
               -> OUT/video.mp4, and OUT/report.json with the numbers phase 1 measures
 
 State is saved in OUT/state.json after every step, so a re-run resumes and never pays twice for the same clip.
@@ -180,7 +180,7 @@ class Run:
         files = []
         for n, (f, seconds, kind) in enumerate(parts):
             # a move may set its own speed (run 11: the spin sped x1.5 = "too fast, looks like a bug")
-            speed = 1.0 if kind == "fallback" else kind if isinstance(kind, float) else (1.3 if seconds <= 4 else 1.5)
+            speed = 1.0 if kind == "fallback" else kind if isinstance(kind, float) else (1.2 if seconds <= 4 else 1.25)   # competitor video: ~4 s per photo; owner: x1.5 "too fast"
             trim = "" if n == 0 else "trim=start_frame=1,setpts=PTS-STARTPTS,"
             dst = os.path.join(work, f"{n:02d}.mp4")
             subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", f, "-an", "-vf",
