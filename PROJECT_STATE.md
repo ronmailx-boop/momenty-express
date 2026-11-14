@@ -167,6 +167,10 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   originals = assets of the test artifact; `Artifact read` with `paths` does NOT work for assets, `read_asset` (claude-artifacts MCP,
   slug 984e01bb-de0a-4c67-99e2-0baa544d86f8) does: it saves each JPEG under the session's tool-results folder.
   Order and taps are in db `session/photos` (photo 2 @0.417,0.437; 3 @0.342,0.532; 4 @0.52,0.339).
+  Run 7/8 photo asset ids in order (saved 14.11 because a new upload on the test page replaces `session/photos`):
+  1001f6fcc0455a99a2f0117de6317478, f9a8a979da60ff59a182bbbb7fa87e58, 4f290097ae6695ad6cf7397c8df35bdf, 44c57262157c66d63d7c4d624a14a5df,
+  00640f874a56f25c9322d7ec9d165bd6, ce9fc88535acea026f5393cf3df1d057, 23130937c15ec429c53ebfed92d491e9, 293663c3e0ae66c79fe3ec988648fb3c,
+  cac77f96f749e2d8ccae013440a9872e, 86fac1f4425fe9244b554211d6b53957, e4a4594b871d70edf48b1401bdd88462, 9f61690a535fd4a8d923e1ac2702e333.
   `pip install opencv-python-headless` (cv2 is not preinstalled), then
   `python3 tools/align_faces.py OUT/sq 01.jpg 02.jpg@0.417,0.437 03.jpg@0.342,0.532 04.jpg@0.52,0.339 05.jpg ... 12.jpg`,
   then `python3 tools/auto_plan.py OUT/plan OUT/sq/photo1-sq.jpg ... photo12-sq.jpg` (~5 credits, ~3 min).
