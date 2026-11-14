@@ -383,6 +383,19 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Comparison runs 11 -> 12 (same photos): owner-good transitions in the final video 2/5 -> about 2-3/5 (T1, T3, T5 medium);
   fallbacks and frozen frames were the worst part of run 12 -> fixed (2 retries, budget check, no still end).
 
+### Launch estimate (14.11.2026, owner asked "when will we be ready to launch?")
+- Answer: about 6-10 weeks, IF the quality gate in stage 1 is passed; stage 1 is the uncertain part.
+- Now: baby (run 10) 5/5 acceptable after the automatic retry; child 3-6 (runs 11-12) only 2-3/5 owner-good, only 2 proven moves
+  (run and turn, slow spin); judge agrees ~60-70%; 2 children tested; no site, server, payment or legal documents.
+- Stages: (1) quality: 4-6 runs on new sets (ages: toddlers, children, babies, teens), test new moves, turn off failures,
+  1-3 weeks, ~$5 per run (~$25-35); (2) product: site + server reusing Momenty (Firebase, render job, Paddle, music), KIE + fal
+  fallback, 2-3 weeks; (3) legal and provider: KIE email (privacy, no training on photos, volume discount), privacy policy, terms,
+  accessibility statement, 1-2 weeks in parallel with 2; (4) beta with 10-20 real families, ~2 weeks, ~$5-9 per 1-minute video.
+- LAUNCH GATE (proposed): on 3 new photo sets in a row, >= 80% of transitions owner-good, zero frozen frames, zero angry faces,
+  video ready in < 15 min. Do not build the site on "one click, no fixes" before the gate is passed.
+- Main risk: ages 3-6 and teens may not reach 80% in one click. Alternative: launch with "one click + a free fix of a
+  transition you don't like" (as Echoes does) -> can launch right after stage 2. Decide after the next 2-3 runs.
+
 ## Next step (exact)
 1. (done) run 12 ratings applied.
 2. KIE top-up before the next run: balance ~55; a 6-photo run needs >= ~545 (clips + 2 retries) -> ~$5 top-up is NOT enough,
