@@ -384,7 +384,7 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   fallbacks and frozen frames were the worst part of run 12 -> fixed (2 retries, budget check, no still end).
 
 ### Competitor video analysis (14.11.2026) - `docs/competitor-video-life.md`
-- Owner uploaded a competitor video ("Dad, 78 years!", 188 s, 720x900, ~45 photos, ~4 s per photo, music). Measured: no frozen
+- Owner uploaded an Echoes video (owner confirmed it is Echoes) ("Dad, 78 years!", 188 s, 720x900, ~45 photos, ~4 s per photo, music). Measured: no frozen
   stretch at all (1 s at the end), constant motion, one hard cut. AI intro scene with a title + white light once (door to the past).
 - Bridge moves seen: object from the NEXT photo swings in (tallit); lit palm fills the lens and pulls back in the new place;
   camera tilts to the floor and back up; whole group ducks and rises; jump with arms up; picks up the child and walks off;
