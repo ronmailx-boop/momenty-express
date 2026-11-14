@@ -124,7 +124,7 @@ sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rul
 (8) one retry with another hiding move, then a local face-morph fallback (9) assembly (guidelines section 8).
 Stages, with a stop and a report to the owner between them:
 - [x] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). DONE 14.11.
-- [ ] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only).
+- [~] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only). First version done 14.11.
 - [ ] C: first full run on a NEW set of 12 photos (~830 credits). Needs a KIE top-up and the owner's OK first.
 - [ ] D: 4 more sets of different ages (~830 credits each).
 Not in phase 1: site, server, payment, music, legal documents.
@@ -149,7 +149,7 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
      is too strict: use same_pose_kind and similar_framing only.
   Otherwise fine: age-appropriate hiding moves, no adjacent repeats, no moves that turn the mother.
 - Lesson: KIE for both vision and video is a single point of failure. Production needs a separate vision provider.
-- KIE balance 14.11: 40.3 credits (~29 after stage A with GPT).
+- KIE balance 14.11: 40.3 credits (~29 after stage A, 7.73 after stage B).
 
 ### Stage A result (14.11.2026)
 - Vision model switched to **GPT on KIE** (`gpt-6-sol` via `/codex/v1/responses`, OpenAI Responses format; fallbacks gpt-5-6-luna,
@@ -173,11 +173,30 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Known gaps: descriptions sometimes wrong in small ways (photo 6 crib called "bed"; photo 5 stroller called "car seat");
   prompts are long (~1,400 chars) with many people lines in group photos; only 2 children tested.
 
+### Stage B result (14.11.2026) - judge v2 (`tools/judge.py`)
+- Labels: `docs/judge/labels.json` = owner's verdicts on 48 clips (ratings on the test page + run 7/8 verdicts), 30 pass / 18 fail.
+  Clips: KIE `recordInfo?taskId=` gives the result URL (tempfile.aiquickdraw.com, allowed), the prompt and the input photo URLs
+  (tempfile.redpandaai.co is NOT reachable from the session; not needed: first/last frames = the photos). Task ids are in the
+  test artifact's `results/*` rows. KIE keeps the clips ~14 days (until ~27.11); the clips are also assets of the test artifact.
+- Code checks (free, ~1 s/clip): hard cut (jump ratio > 8), extra/doubled face (YuNet: >= 10 of ~24 sampled frames with more faces
+  than the first/last frame), almost no motion (< 4 = slideshow); start/end match when the photos are given (untested).
+  Alone: never rejected a clip the owner passed; caught r8-t4 (mother changed), Veo's end cut, 2 slideshows.
+- Vision check: GPT-6 Sol on KIE, one 4x3 grid = 6 frames spread + 6 dense around the biggest frame change (timed labels),
+  prompt explains our method (fast change while the face is hidden is CORRECT). ~0.17 credits per clip.
+  v1 (12 even frames, generic checklist) agreed 23/48: it called our half-second change "a cut". v2 agrees 34/48.
+- Results v2 (`docs/judge/calibration-v2.json`):
+  runs 3-8 (our method, Kling 3.0 Std): 27/30 agree, 0 of 3 bad clips passed, 3 of 27 good clips rejected (r3-t2, r7-t7, r8-t3: "crossfade").
+  runs 1-2 (old prompt, other models): 7/18 agree, 11 of 15 bad clips PASSED: wrong child grows (prompt did not name the subject),
+  "no real growing transition" (owner's taste), Kling 2.5 Turbo / Veo / Kling 4 quality.
+- Gaps: (1) wrong-child detection - add a free face-identity check (OpenCV SFace embeddings: the face that ends as the later child
+  must match the subject's face at the start); (2) only 3 bad clips made with our method -> the bad-clip rate is not measured;
+  stage C will add owner-rated clips; (3) a rejected good clip costs one retry (~75 credits).
+- Credits: stage B used ~20 (calibration v1 11.5 + v2 7.9 + tests). KIE balance 14.11: 7.73.
+
 ## Next step (exact)
-1. Owner reviews the stage A report (automatic vs hand prompts).
-2. Stage B: the automatic judge, calibrated on the clips of runs 1-8 the owner already rated (`results/*` + `ratings/*` in the test
-   artifact db; KIE clip URLs are kept 14 days, i.e. until ~27.11). Vision cost only.
-No paid Kling run before the owner tops up and approves stage C.
+1. Owner: top up KIE (stage B vision runs and stage C both need credits; C ~830 credits).
+2. Add the SFace identity check to `judge.py` (free, code only) and re-check runs 1-2 (wrong child) without new vision calls.
+3. Stage C: first full run on a NEW set of 12 photos, after the owner tops up and approves.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
