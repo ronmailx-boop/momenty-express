@@ -184,59 +184,80 @@ TEMPLATE = ("One continuous shot with no cuts, no flashes, no dissolves and no a
 IN_PLACE = "the camera moves in and back out during one big action"
 
 
-def main():
+def load_cache(out):
     global OUT
-    out, photos = sys.argv[1], sys.argv[2:]
     OUT = out
     os.makedirs(out, exist_ok=True)
     if os.path.exists(os.path.join(out, "vision-cache.json")):
         saved = json.load(open(os.path.join(out, "vision-cache.json")))
         CACHE.update(saved["cache"]); URLS.update(saved["urls"])
+
+
+def write_one(i, photos, desc, cmps, gender, used, prev_cam, exclude=(), note=""):
+    """Plan and prompt for transition i (photo i -> i+1, 0-based). `exclude`: hiding moves not to use (a retry after the judge
+    rejected one); `note`: extra instruction for the writer (e.g. after a content-filter block)."""
+    pron = {"girl": "she", "boy": "he"}.get(gender, "they")
+    poss = {"she": "her", "he": "his", "they": "their"}[pron]
+    a, b, cmp = desc[i], desc[i + 1], cmps[i]
+    strategy, hides, seconds = choose(a, cmp, list(used) + list(exclude), i)
+    hides = [h for h in hides if h not in exclude] or [h for h in HIDES if h not in exclude and a["stage"] in HIDES[h]["stages"]
+                                                          and not HIDES[h].get("moves")][:3]
+    if exclude and strategy == "in_place":        # in-place was rejected: hide the change this time
+        strategy, seconds = "hiding", 5
+    camera = next(c for c in CAMERAS[i % len(CAMERAS):] + CAMERAS if c != prev_cam)
+    how = ("In-place aging: no hiding; one big action that fits the pose while " + IN_PLACE + ", and the child visibly grows during it."
+           if strategy == "in_place" else
+           "Pick ONE hiding move from (prefer the first): " + "; ".join(f'{k} = the child {HIDES[k]["text"]}' for k in hides) + ".")
+    w = vision(WRITE.format(a=json.dumps(a), b=json.dumps(b), cmp=json.dumps(cmp), strategy=strategy, how=how,
+                            camera=camera, stage=a["stage"], pron=pron) + (("\n" + note) if note else ""), [photos[i], photos[i + 1]])
+    hide = w.get("hide") if w.get("hide") in hides else (hides[0] if hides and strategy != "in_place" else "")
+    whilst = w["while"].strip().rstrip(".") if strategy != "in_place" else f"{pron} {'are' if pron == 'they' else 'is'} in the middle of the action"
+    who = ("baby " if "baby" in a["stage"] else "") + gender
+    named = f" {pron.capitalize()} is {a['subject']}." if a["others"] or b["others"] else ""
+    clean = lambda xs: [x.strip().rstrip(".") for x in xs if x.strip() and len(x.split()) <= 4][:3]
+    never, gone = clean(w.get("never", [])), clean(w.get("gone", []))
+    ban = "".join(f" No {x} at any time." for x in never) + (f" By the end there is no {', no '.join(gone)}." if gone else "")
+    people = (w.get("people", "").strip() + " ") if w.get("people") else ""
+    prompt = TEMPLATE.format(who=who, named=named, Poss=poss.capitalize(), poss=poss, pron=pron,
+                             action=w["action"].strip(), whilst=whilst, people=people, ban=ban)
+    problems = [f"banned word: {m}" for m in sorted(set(x.lower() for x in BANNED.findall(prompt)))]
+    if (a["others"] or b["others"]) and not people:
+        problems.append("other people are in the photos but the prompt does not pin them")
+    if not (a["face_clear"] and b["face_clear"]):
+        problems.append("a face is not clear")
+    step = {"from": i + 1, "strategy": strategy, "hide": hide, "camera": camera, "seconds": seconds,
+            "compare": cmp, "problems": problems}
+    return step, prompt
+
+
+def make_plan(out, photos):
+    """All photos -> (plan dict, prompts). Writes OUT/plan.json and OUT/prompts.json."""
+    load_cache(out)
     for p in photos:
         photo_url(p)
     pairs = list(zip(photos, photos[1:]))
     with ThreadPoolExecutor(6) as pool:          # the photo and pair questions do not depend on each other
         desc = list(pool.map(lambda p: vision(DESCRIBE, [p]), photos))
         cmps = list(pool.map(lambda ab: vision(COMPARE, list(ab)), pairs))
-    plan, prompts, used, prev_cam = [], [], [], None
     # one pronoun for the whole video: the model says "child" when unsure in a single photo
     words = [d["gender_word"] for d in desc if d["gender_word"] in ("girl", "boy")]
     gender = max(set(words), key=words.count) if words else "child"
-    pron = {"girl": "she", "boy": "he"}.get(gender, "they")
-    poss = {"she": "her", "he": "his", "they": "their"}[pron]
+    steps, prompts, used, prev_cam = [], [], [], None
     for i in range(len(photos) - 1):
-        a, b = desc[i], desc[i + 1]
-        cmp = cmps[i]
-        strategy, hides, seconds = choose(a, cmp, used, i)
-        camera = next(c for c in CAMERAS[i % len(CAMERAS):] + CAMERAS if c != prev_cam)
-        how = ("In-place aging: no hiding; one big action that fits the pose while " + IN_PLACE + ", and the child visibly grows during it."
-               if strategy == "in_place" else
-               "Pick ONE hiding move from (prefer the first): " + "; ".join(f'{k} = the child {HIDES[k]["text"]}' for k in hides) + ".")
-        w = vision(WRITE.format(a=json.dumps(a), b=json.dumps(b), cmp=json.dumps(cmp), strategy=strategy, how=how,
-                                camera=camera, stage=a["stage"], pron=pron), [photos[i], photos[i + 1]])
-        hide = w.get("hide") if w.get("hide") in hides else (hides[0] if hides else "")
-        whilst = w["while"].strip().rstrip(".") if strategy != "in_place" else f"{pron} {'are' if pron == 'they' else 'is'} in the middle of the action"
-        who = ("baby " if "baby" in a["stage"] else "") + gender
-        named = f" {pron.capitalize()} is {a['subject']}." if a["others"] or b["others"] else ""
-        clean = lambda xs: [x.strip().rstrip(".") for x in xs if x.strip() and len(x.split()) <= 4][:3]
-        never, gone = clean(w.get("never", [])), clean(w.get("gone", []))
-        ban = "".join(f" No {x} at any time." for x in never) + (f" By the end there is no {', no '.join(gone)}." if gone else "")
-        people = (w.get("people", "").strip() + " ") if w.get("people") else ""
-        prompt = TEMPLATE.format(who=who, named=named, Poss=poss.capitalize(), poss=poss, pron=pron,
-                                 action=w["action"].strip(), whilst=whilst, people=people, ban=ban)
-        problems = [f"banned word: {m}" for m in sorted(set(x.lower() for x in BANNED.findall(prompt)))]
-        if (a["others"] or b["others"]) and not people:
-            problems.append("other people are in the photos but the prompt does not pin them")
-        if not (a["face_clear"] and b["face_clear"]):
-            problems.append("a face is not clear")
-        plan.append({"from": i + 1, "strategy": strategy, "hide": hide, "camera": camera, "seconds": seconds,
-                     "compare": cmp, "problems": problems})
-        prompts.append(prompt)
-        used, prev_cam = used + ([hide] if hide else []), camera
-        print(i + 1, strategy, hide, "|", camera, "|", "; ".join(problems) or "ok")
-    json.dump({"photos": desc, "transitions": plan, "vision_credits": round(credits, 2), "vision_models": USED}, open(os.path.join(out, "plan.json"), "w"), indent=1)
+        step, prompt = write_one(i, photos, desc, cmps, gender, used, prev_cam)
+        steps.append(step); prompts.append(prompt)
+        used, prev_cam = used + ([step["hide"]] if step["hide"] else []), step["camera"]
+        print(i + 1, step["strategy"], step["hide"], "|", step["camera"], "|", "; ".join(step["problems"]) or "ok")
+    plan = {"photos": desc, "compares": cmps, "gender": gender, "transitions": steps,
+            "vision_credits": round(credits, 2), "vision_models": USED}
+    json.dump(plan, open(os.path.join(out, "plan.json"), "w"), indent=1)
     json.dump(prompts, open(os.path.join(out, "prompts.json"), "w"), indent=1)
     print("vision credits:", round(credits, 2), USED)
+    return plan, prompts
+
+
+def main():
+    make_plan(sys.argv[1], sys.argv[2:])
 
 
 if __name__ == "__main__":

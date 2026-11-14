@@ -124,8 +124,8 @@ sentences into the fixed template (6) KIE Kling 3.0 Std 5 s with the re-send rul
 (8) one retry with another hiding move, then a local face-morph fallback (9) assembly (guidelines section 8).
 Stages, with a stop and a report to the owner between them:
 - [x] A: describe + strategy + prompts on the 12 photos of run 8, compared with the hand-written prompts (vision cost only). DONE 14.11.
-- [~] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only). First version done 14.11.
-- [ ] C: first full run on a NEW set of 12 photos (~830 credits). Needs a KIE top-up and the owner's OK first.
+- [x] B: the judge, calibrated on the clips of runs 1-8 that the owner already rated (vision cost only). First version done 14.11.
+- [ ] C: first full run on a NEW set of 12 photos (~1,000 credits). Script ready (`tools/run_set.py`, dry run passed). Needs a KIE top-up, the photos and the owner's OK.
 - [ ] D: 4 more sets of different ages (~830 credits each).
 Not in phase 1: site, server, payment, music, legal documents.
 Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo sets of 12.
@@ -193,10 +193,30 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   stage C will add owner-rated clips; (3) a rejected good clip costs one retry (~75 credits).
 - Credits: stage B used ~20 (calibration v1 11.5 + v2 7.9 + tests). KIE balance 14.11: 7.73.
 
+- Tried 14.11: face-identity tracking (OpenCV SFace) to catch "wrong child grows" - it caught nothing: in our method the face is
+  hidden exactly at the change, so the tracks break for good and bad clips alike. Removed. The wrong child is prevented upstream
+  instead (subject-centred crop + the prompt names the subject; run 2: name only = right child 4/4).
+
+### Stage C prepared (14.11.2026): `tools/run_set.py` = one command, photos -> video
+- Steps: crop (align_faces) -> plan (auto_plan.make_plan) -> all clips in parallel on Kling 3.0 Std via KIE with the RE-SEND RULE
+  -> content-filter block = one reworded prompt -> judge (judge.py, with start/end-photo match) -> a rejected clip gets ONE retry
+  with another hiding move (auto_plan.write_one(exclude=...)) -> still rejected = local fallback (push-in on the face, white flash,
+  pull-out; ffmpeg, free) -> assembly per guidelines section 8 -> OUT/video.mp4 + OUT/report.json
+  (first-try passes, retries, fallbacks, minutes to video, credits, USD). State in OUT/state.json: a re-run resumes, never pays twice.
+  `--max-credits N` (default 1200) stops sending clips past N Kling credits.
+- Dry run 14.11 on run 8's photos with run 8's existing clips (`--use-clips`, no Kling): whole chain works, 3-4 min, 2.6 credits.
+  Judge: 9/11 pass; rejected T3 (scene jumps with the face visible) and T4 (the clip the owner rejected: mother changed) -> fallback.
+  Start/end match: right photos 1.0/0.98, wrong photos 0.03/0.12 (threshold 0.6). Output video 37 s (local only, not in git).
+- Stage C cost estimate: 11 clips x 75.5 = ~830 credits + 2-3 retries (~75 each) + ~5 vision = ~1,000 credits (~$5).
+- How to run stage C (new session): attach photos in the session or in a new test artifact; `pip install opencv-python-headless`;
+  `python3 tools/run_set.py OUT photo1.jpg photo2.jpg@x,y ... ` (x,y = tapped child in a group photo, 0..1), in the background
+  (~10-20 min); then show the owner video.mp4 + report.json and collect ratings per transition (compare with the judge).
+
 ## Next step (exact)
-1. Owner: top up KIE (stage B vision runs and stage C both need credits; C ~830 credits).
-2. Add the SFace identity check to `judge.py` (free, code only) and re-check runs 1-2 (wrong child) without new vision calls.
-3. Stage C: first full run on a NEW set of 12 photos, after the owner tops up and approves.
+1. Owner: top up KIE (~$6-10 for stage C; balance 7.73) and supply a NEW set of ~12 photos of one child (months apart),
+   marking the child in group photos.
+2. Run stage C with `tools/run_set.py`; owner rates every transition; compare with the judge's verdicts.
+3. Then stage D (4 more sets) if C goes well.
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
