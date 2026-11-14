@@ -408,6 +408,13 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   Facebook); style fits Suno, which KIE sells - unverified.
 - Product idea: a personal song from a short questionnaire. Next: test one song via KIE (Suno): cost, time (owner approval).
 
+### Personal song test via KIE (Suno) (14.11.2026) - `docs/music/song-test-kie-suno.md`
+- One call (custom mode, V6, Hebrew lyrics written by Claude about a made-up boy "Noam" from run 11's photos, 75 s):
+  2 versions, 77 s each, 20 s to generate, 12 credits (~$0.06). Backend is Suno (cdn2.suno.ai cover, model chirp-hawk).
+- Hebrew: mostly intelligible by machine transcription; some mispronunciations (e.g. "adumah" -> "hadumah"; version 2 says
+  "Noan"). Owner to listen (files sent in chat, not in git). KIE balance after: 42.6.
+- Open: Hebrew quality, commercial-use rights of Suno songs via KIE, privacy of personal details sent to the provider.
+
 ### Launch estimate (14.11.2026, owner asked "when will we be ready to launch?")
 - Answer: about 6-10 weeks, IF the quality gate in stage 1 is passed; stage 1 is the uncertain part.
 - Now: baby (run 10) 5/5 acceptable after the automatic retry; child 3-6 (runs 11-12) only 2-3/5 owner-good, only 2 proven moves
