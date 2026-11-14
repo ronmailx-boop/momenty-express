@@ -103,17 +103,20 @@ COMPARE = """Two photos of the same child, the first earlier, the second later. 
 "only_in_second": list of people or big objects that are in the second photo and not in the first."""
 
 # Hiding moves by developmental stage (guidelines section 3). "needs" = a word that must appear in the photo's objects/pose/place.
+# "finish" = BRIDGE moves: the same gesture is still going on in the second photo's place and ends there (owner, run 9: hands
+# peekaboo = "perfect"; moves that black out the frame or end in an unrelated pose = "looks like a slideshow"). Moves without
+# "finish" are kept only as a last resort.
 HIDES = {
     "roll_face_down": {"stages": ["lying_baby", "sitting_baby"], "text": "rolls over onto the front, face down", "solo": True},
-    "hands_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "covers the face with both hands as in peekaboo"},
-    "toy_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "lifts the toy up in front of the face", "needs": ["toy", "plush", "doll", "teddy", "book", "rattle"]},
+    "hands_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "covers the face with both hands as in peekaboo", "finish": "the hands are still over the face, then come down"},
+    "toy_peekaboo": {"stages": ["sitting_baby", "toddler"], "text": "lifts the toy up in front of the face", "finish": "the toy is still in front of the face, then comes down", "needs": ["toy", "plush", "doll", "teddy", "book", "rattle"]},
     "hand_over_lens": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "reaches out and a hand covers the lens"},
-    "head_turn_away": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "turns the head fully away from the camera to look at something"},
+    "head_turn_away": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "turns the head fully away from the camera to look at something", "finish": "the head is still turned away, then turns back to the camera"},
     "face_fills_frame": {"stages": ["lying_baby", "sitting_baby", "toddler"], "text": "the camera moves in until the face is so close that it blurs and fills the frame"},
-    "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
-    "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "needs": ["cup", "bottle", "glass", "mug"]},
+    "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "finish": "pops back up into view", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
+    "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "finish": "the cup is still tipped up, then comes down", "needs": ["cup", "bottle", "glass", "mug"]},
     "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor"},
-    "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "solo": True, "travel": True, "moves": True},
+    "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "finish": "is still running with the back to the camera, then turns around and comes back", "solo": True, "travel": True, "moves": True},
     "jump_spin": {"stages": ["child"], "text": "jumps and spins once, the back passing the camera", "solo": True, "moves": True},
     "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
     "walk_past_camera": {"stages": ["teen_adult"], "text": "walks close past the camera, blurring the frame", "solo": True},
@@ -144,8 +147,9 @@ def choose(first, cmp, used, i):
     allowed = [k for k in allowed if not HIDES[k].get("travel")] or ["hand_over_lens"]
     # moves not used yet in this video first (run 8 by hand: 11 different moves), then object-based moves (they tie
     # the action to this photo: cup, toy, rail)
-    allowed.sort(key=lambda k: (used.count(k), not HIDES[k].get("needs"), (list(HIDES).index(k) + i) % len(HIDES)))
-    return "hiding", allowed[:3], 5
+    allowed.sort(key=lambda k: (not HIDES[k].get("finish"), used.count(k), not HIDES[k].get("needs"), (list(HIDES).index(k) + i) % len(HIDES)))
+    bridges = [k for k in allowed if HIDES[k].get("finish")]
+    return "hiding", (bridges or allowed)[:3], 5          # never offer a slide-change move while a bridge move fits
 
 
 WRITE = """You write the middle part of a video-model prompt for one transition of a growing-up video: one continuous shot that
@@ -160,11 +164,15 @@ Rules:
   what a child at stage "{stage}" can physically do. Never use an object that is not in the photo.
 - Do not use these words: body, skin, bare, chest, belly, legs, diaper. Describe actions, not the child's physique.
 - Other people never turn their back, never spin, never change. The big action belongs to the child.
+- BRIDGE: the movement must carry across the change without a break. It starts in photo 1's place, is still going on in
+  the first moment in photo 2's place, and ends there (e.g. her hands are still over her face in the new place, then she
+  lowers them). Never black out the whole frame and never jump to an unrelated pose: that looks like a slideshow.
 Fields:
 "hide": the id of the hiding move you chose from the list ("" for in-place),
 "action": 1-2 sentences in present tense, starting from photo 1's pose: the action, an expression that is not just a smile,
           the camera move, and (unless in-place) the hiding moment. Call the child "{pron}" (never "they" unless {pron} is "they"). Say only the action and hiding;
           do not describe the second photo, the template does that.
+"finish": how the SAME gesture ends in photo 2's place, in present tense, 6-15 words, e.g. "her hands are still over her face, then she lowers them" ("" for in-place),
 "while": a short clause that completes "The change happens all at once while ..." (e.g. "her face is down during the roll"),
 "people": one sentence per other person in either photo: that they keep their exact face, hair (quote the hairstyle) and
           clothes; and for a person in only one photo, that they walk in from / step out to the side, whole and solid.
@@ -177,8 +185,9 @@ TEMPLATE = ("One continuous shot with no cuts, no flashes, no dissolves and no a
             "end exactly on the second photo. The same {who} is in both photos, a little older in the second.{named} {Poss} expression "
             "changes naturally with what {pron} is doing (curious, focused, surprised, delighted); {pron} does not smile the whole time. "
             "{action} The change happens all at once while {whilst}: {poss} age, hair, clothes and the place all turn into the second "
-            "photo's together. Then {pron} is revealed in the second photo's place and pose and eases into it over the last half second, "
-            "so the last frame is the second photo. {Poss} face stays one clear face whenever it is visible, never doubled or "
+            "photo's together. The same movement carries on through the change without a break: {finish}. Then {pron} eases into "
+            "the second photo's pose over the last half second, so the last frame is the second photo. It must look like one "
+            "continuous movement, never like a cut or a slide change. {Poss} face stays one clear face whenever it is visible, never doubled or "
             "see-through. In each photo {pron} looks exactly as in that photo (face, eyes, hair). {people}"
             "No people, objects or text that are not in the photos.{ban}")
 IN_PLACE = "the camera moves in and back out during one big action"
@@ -218,7 +227,10 @@ def write_one(i, photos, desc, cmps, gender, used, prev_cam, exclude=(), note=""
     never, gone = clean(w.get("never", [])), clean(w.get("gone", []))
     ban = "".join(f" No {x} at any time." for x in never) + (f" By the end there is no {', no '.join(gone)}." if gone else "")
     people = (w.get("people", "").strip() + " ") if w.get("people") else ""
-    prompt = TEMPLATE.format(who=who, named=named, Poss=poss.capitalize(), poss=poss, pron=pron,
+    finish = (w.get("finish") or "").strip().rstrip(".") or (
+        f"in the second photo's place {pron} " + HIDES[hide]["finish"] if hide and HIDES[hide].get("finish")
+        else f"{pron} finishes the action in the second photo's place")
+    prompt = TEMPLATE.format(finish=finish, who=who, named=named, Poss=poss.capitalize(), poss=poss, pron=pron,
                              action=w["action"].strip(), whilst=whilst, people=people, ban=ban)
     problems = [f"banned word: {m}" for m in sorted(set(x.lower() for x in BANNED.findall(prompt)))]
     if (a["others"] or b["others"]) and not people:
