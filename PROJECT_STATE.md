@@ -432,6 +432,21 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   transition you don't like" (as Echoes does) -> can launch right after stage 2. Decide after the next 2-3 runs.
 
 ## Next step (exact) - session end 14.11.2026 (afternoon)
+**OWNER (14.11, end of session): "I liked the songs you made. I want to continue the NEXT session with this topic:
+building more songs for clips."** -> the next session is about SONGS first (run 13 of transitions waits).
+Plan for the songs session:
+  a. Tool `tools/make_song.py`: input = short questionnaire (name, gender, age or age range, occasion: birthday / growing-up /
+     bar-bat mitzvah / anniversary, 3-6 details from the photos or the family, mood) + optional video file -> an LLM writes
+     Hebrew lyrics (verse-chorus-verse-chorus, name in the chorus, length fitted to the video) -> KIE Suno V6
+     (`POST /api/v1/jobs/createTask`, `model: ai-music-api/generate`, custom_mode, `duration` = video length) -> 2 versions
+     -> if a video is given, replace its audio (ffmpeg, video untouched, 2 s fade) -> send both to the owner.
+     Details and the working call: `docs/music/song-test-kie-suno.md`.
+  b. Hebrew pronunciation: test full spelling (כתיב מלא), partial niqqud on hard words and names, female vs male vocals,
+     V6 vs V6_WILD; compare by transcription (faster-whisper small, language he) + the owner's ear.
+  c. More styles per occasion (happy birthday pop, emotional growing-up ballad, bar mitzvah, anniversary) -> a small style
+     library in the tool.
+  d. Check commercial-use rights of Suno songs bought via KIE and what personal details we send (privacy).
+  Cost: 12 credits (~$0.06) per call (2 versions). KIE balance ~30.6 = 2 calls; top up for more.
 Where we stopped: runs 11-12 rated and applied; Echoes videos 1-2 analysed (moves + pace + personal songs); new moves added
 (next_object, hair_whip, arms_up, twirl, palm/floor bridges, crouch_jump, ride_away, cap_over_face), slower pace x1.25, RANK
 (proven moves first), 2 retries + budget check, no frozen end, warm expressions + judge mood check. All merged to main.
