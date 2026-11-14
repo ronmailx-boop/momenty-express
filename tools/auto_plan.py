@@ -71,7 +71,9 @@ centre of the upper part of the frame. Describe only what is visible. Fields:
 "objects": list of up to 5 clearly visible things the subject could touch or look at (toy, cup, rail, window, strap...),
 "others": list, one item per other person: {"who": "mother"/"man"/"older boy"..., "where": "left"/"behind"/"holding the subject"...,
           "hair": exact hair and hairstyle as seen, "clothes": ..., "face_visible": true/false},
-"face_clear": true if the subject's face is sharp and unobstructed."""
+"face_clear": true if the subject's face is sharp and unobstructed,
+"contained": true if the subject cannot move away freely: strapped in (stroller, car seat, high chair), inside a crib, cot or
+             playpen, or held / carried by someone."""
 
 COMPARE = """Two photos of the same child, the first earlier, the second later. Compare them. Fields:
 "same_place_kind": true if both are the same kind of place with a similar background (e.g. both on a sofa indoors),
@@ -91,26 +93,32 @@ HIDES = {
     "below_rail": {"stages": ["sitting_baby", "toddler"], "text": "ducks down below the rail", "needs": ["rail", "crib", "cot", "bars", "playpen"]},
     "cup_over_face": {"stages": ["sitting_baby", "toddler", "child"], "text": "tips the cup up so that it hides the face", "needs": ["cup", "bottle", "glass", "mug"]},
     "camera_to_floor": {"stages": ["sitting_baby", "toddler", "child", "teen_adult"], "text": "drops something, and the camera follows it down to the floor"},
-    "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "solo": True, "travel": True},
-    "jump_spin": {"stages": ["child"], "text": "jumps and spins once, the back passing the camera", "solo": True},
-    "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True},
+    "run_and_turn": {"stages": ["toddler", "child"], "text": "runs away from the camera with the back to it, then turns around", "solo": True, "travel": True, "moves": True},
+    "jump_spin": {"stages": ["child"], "text": "jumps and spins once, the back passing the camera", "solo": True, "moves": True},
+    "run_to_camera": {"stages": ["toddler", "child"], "text": "runs straight at the camera until very close, blurring the frame", "solo": True, "moves": True},
     "walk_past_camera": {"stages": ["teen_adult"], "text": "walks close past the camera, blurring the frame", "solo": True},
 }
 CAMERAS = ["follows the movement", "rises slowly", "stays still", "slides to the side", "moves slowly closer", "circles a little around"]
+CONTAINED = re.compile(r"\b(crib|cot|playpen|stroller|pram|buggy|car ?seat|high ?chair|bouncer|strapped|buckled|held|"
+                       r"carried|in (his|her|their|the) arms|on (his|her|their|the) (lap|shoulders|hip))\b", re.I)
 BANNED = re.compile(r"\b(body|bodies|naked|nude|bare|skin|chest|belly|tummy|bottom|legs?|thighs?|diaper|nappy|underwear)\b", re.I)
 
 
 def choose(first, cmp, prev_hide, prev_cam, i):
     """Strategy and the hiding / camera moves the writer may pick from (guidelines sections 3, 4 and 6)."""
     stage, others = first["stage"], bool(first["others"])
-    similar = cmp["same_place_kind"] and cmp["same_pose_kind"] and cmp["similar_framing"]
+    # the place may differ (run 7: T2, T3, T9, T10 were in-place by hand with a new background)
+    similar = cmp["same_pose_kind"] and cmp["similar_framing"]
     hay = " ".join([first["pose"], first["place"]] + first["objects"]).lower()
+    # a child who stands in a crib or sits strapped in is not free to run (run 7 T8, T10 were sent to "travel")
+    contained = bool(first.get("contained")) or bool(CONTAINED.search(first["pose"] + " " + first["place"]))
     allowed = [k for k, h in HIDES.items() if stage in h["stages"] and k != prev_hide
                and not (others and h.get("solo"))                       # adults must not be turned or left behind
+               and not (contained and h.get("moves"))                   # no running / jumping out of a crib or seat
                and (not h.get("needs") or any(w in hay for w in h["needs"]))]
     if similar:
         return "in_place", [], 5
-    runner = stage in ("toddler", "child") and not others and not cmp["same_place_kind"]
+    runner = stage in ("toddler", "child") and not others and not contained and not cmp["same_place_kind"]
     if runner and "run_and_turn" in allowed:
         return "travel", ["run_and_turn"], 6
     allowed = [k for k in allowed if not HIDES[k].get("travel")] or ["hand_over_lens"]
