@@ -278,5 +278,9 @@
  "r12-t5-fallback": {
   "pass": 0,
   "why": "local fallback near the end = 'slideshow, no motion'"
+ },
+ "r12-t4": {
+  "pass": 0,
+  "why": "angry/frowning face (prompt said 'furrowed expression'): not right for a moving growing-up video"
  }
 }

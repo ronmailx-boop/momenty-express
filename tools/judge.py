@@ -128,7 +128,9 @@ Fail only on real faults you can see. Fields:
 "face_ok": false if a face that is in clear view (not motion-blurred, not partly covered) is doubled, see-through or deformed,
 "others_ok": false if a person changes while in clear view in a way that matches neither photo (invented hair or hairstyle,
      another face), or a person or big object appears that is in neither photo,
-"pass": true if all four are true,
+"mood_ok": false if the child clearly looks angry, frowning, sad or scared in two or more frames where the face is in clear
+     view (a growing-up video must feel warm; owner, run 12),
+"pass": true if all five are true,
 "issues": short list of the real faults, with frame numbers."""
 
 
@@ -149,7 +151,7 @@ def judge(clip, prompt="", photo_a=None, photo_b=None, work=None):
     c, fs = code_checks(clip, photo_a, photo_b)
     problems = code_verdict(c)
     v = vision_verdict(fs, prompt, work)
-    return {"pass": not problems and bool(v.get("pass")), "code": c, "code_problems": problems, "vision": v}
+    return {"pass": not problems and bool(v.get("pass")) and v.get("mood_ok") is not False, "code": c, "code_problems": problems, "vision": v}
 
 
 def calibrate(clips, meta, labels, out):

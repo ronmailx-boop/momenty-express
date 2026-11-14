@@ -366,6 +366,13 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - FIX (`run_set.py`, free): up to 2 Kling retries per transition before the local fallback (now last resort, logged loudly);
   the run refuses to start if --max-credits < clips + 2 retries (tested: STOP at 445 with 392.6 of clips); no still hold at the
   end - the last clip fades out over its last 0.6 s (tested). Guidelines section 8.
+- OWNER on run 12 at 0:12 (T4): "where did this angry face come from? not right for a moving growing-up video".
+  Cause: the writer wrote "a curious, furrowed expression"; our template asked for "an expression that is not just a smile,
+  focused, does not smile the whole time" (run 7 fix against "boring") and pushed toward serious faces; "startled" in T1/T2 too.
+- FIX (free): template + writer ask for warm happy expressions only (curious, playful, delighted, excited, laughing; never angry,
+  frowning, sad, scared, serious); `auto_plan.NEGATIVE` replaces negative words in the action/finish whatever the model writes;
+  judge field `mood_ok` (fail if the child clearly looks angry/sad/scared in 2+ frames). Tested on r12: T4 -> mood_ok false
+  ("frowning in frames 2-4"), T3 -> pass. Guidelines section 4.
 
 ## Next step (exact)
 1. Owner may still rate the r12 clips (T1, T3 slow spin, T4 behind an object are new moves) -> read `ratings`, add to labels.
