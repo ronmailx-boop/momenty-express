@@ -167,6 +167,10 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   originals = assets of the test artifact; `Artifact read` with `paths` does NOT work for assets, `read_asset` (claude-artifacts MCP,
   slug 984e01bb-de0a-4c67-99e2-0baa544d86f8) does: it saves each JPEG under the session's tool-results folder.
   Order and taps are in db `session/photos` (photo 2 @0.417,0.437; 3 @0.342,0.532; 4 @0.52,0.339).
+  Run 7/8 photo asset ids in order (saved 14.11 because a new upload on the test page replaces `session/photos`):
+  1001f6fcc0455a99a2f0117de6317478, f9a8a979da60ff59a182bbbb7fa87e58, 4f290097ae6695ad6cf7397c8df35bdf, 44c57262157c66d63d7c4d624a14a5df,
+  00640f874a56f25c9322d7ec9d165bd6, ce9fc88535acea026f5393cf3df1d057, 23130937c15ec429c53ebfed92d491e9, 293663c3e0ae66c79fe3ec988648fb3c,
+  cac77f96f749e2d8ccae013440a9872e, 86fac1f4425fe9244b554211d6b53957, e4a4594b871d70edf48b1401bdd88462, 9f61690a535fd4a8d923e1ac2702e333.
   `pip install opencv-python-headless` (cv2 is not preinstalled), then
   `python3 tools/align_faces.py OUT/sq 01.jpg 02.jpg@0.417,0.437 03.jpg@0.342,0.532 04.jpg@0.52,0.339 05.jpg ... 12.jpg`,
   then `python3 tools/auto_plan.py OUT/plan OUT/sq/photo1-sq.jpg ... photo12-sq.jpg` (~5 credits, ~3 min).
@@ -238,9 +242,19 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   Not included: advertising (likely the largest cost), server/storage (cents), music (undecided), refunds, support, income tax.
   Echoes charges $29.90 (~110 ILS) for the same minute.
 
+### Photo upload path for stage C (14.11.2026)
+- The test page (https://claude.ai/artifact/KopYK45HGjQw4BdNKCEY79, source `tools/transition-test.html`, version 10) now also saves
+  each uploaded photo into its database as base64 chunks: `photodata/<assetId>-<k>` {id, k, n, b64} (200,000 chars each); the item
+  in `session/photos` carries `chunks`. Reason: the asset store can't be read from every session (read_asset was gone 14.11).
+- Run 7/8 photo list archived to `archive/photos-run7-8`; `session/photos` emptied for the new set (assets not deleted).
+- To fetch: ArtifactData get `session/photos` and list `photodata` (query.limit 1000) with out_dir = DB, then
+  `python3 tools/db_photos.py DB OUT` -> OUT/01.jpg ... + the run_set.py arguments with the taps (tested: byte-identical).
+- Upload instructions for the owner: 6 photos of one child (see the chat list 14.11): 1 baby lying alone; 2 baby with people (tap
+  the child); 3 seated in a high chair/stroller with an object; 4 seated, framed like 3 (in-place test); 5 toddler outdoors standing;
+  6 child indoors. Run with `--max-credits 900` after a $5 top-up (~455-530 credits expected, ceiling ~830).
+
 ## Next step (exact)
-1. Owner: top up KIE (~$6-10 for stage C; balance 7.73) and supply a NEW set of ~12 photos of one child (months apart),
-   marking the child in group photos.
+1. Owner: top up KIE $5 and upload 6 photos on the test page (mark the child in the group photo), then write "העליתי".
 2. Run stage C with `tools/run_set.py`; owner rates every transition; compare with the judge's verdicts.
 3. Then stage D (4 more sets) if C goes well.
 
