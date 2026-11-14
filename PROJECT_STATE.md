@@ -122,3 +122,4 @@ on 5-10 photo sets. Before any paid run: top up KIE (balance 41.6). Plan only un
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
+- [x] 14.11.2026: owner's own Echoes trial traffic confirms **Echoes = Kling 3.0 via KIE** (`provider: kiekling3`), first+last frame, 4:38 min for one clip; prompt stays server-side. Details in `docs/competitor-echoes.md`. Waiting for the clip file(s) from the owner to measure duration/resolution.

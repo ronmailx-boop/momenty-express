@@ -33,3 +33,18 @@ The dashboard code is behind login and was not inspected. Exact model and prompt
 - Second provider on failure is their standard too.
 - Clothing edit for photos blocked by moderation.
 - Their weak spot = our goal: they rely on customer review and retries; one-click needs an automatic judge.
+
+## Confirmed from the owner's own account traffic (14.11.2026, free trial transition)
+Collected by the owner with Claude in Chrome on his own account; only what the site returned to his browser.
+- **Model: Kling 3.0 through KIE** - `"provider":"kiekling3"` in the generate response and in the clip record.
+  First + last frame (`image_file_path` + `end_image_path`). Same model and provider as ours.
+- Time for one clip: 4 min 38 s (queued 06:24:57 -> completed 06:29:34 UTC). Same KIE queue as ours.
+- Prompt is NOT returned to the browser. Only `prompt_variation_id: "growing-1789501185776"`,
+  `selected_prompt_id` (animation the customer picked) and `morph_instructions` (people instruction; null for 1 face per photo).
+- Faces are counted in the browser before upload: `photo_face_counts: [1,1]`.
+- Retry: `POST /api/clips/regenerate {clip_id, category: "natural"}`; suggested animation name "Camera dip";
+  trial = 2 free retries, daily cap 15 per animation; "stubborn" tip from retry 3.
+- Fallback fields: `generation_provider`, `failure_streak`, `failure_code`, `timed_out`.
+- Limits: 2-101 photos per Growing video, 100 active clips. Aspect chosen up front (`generated_aspect_ratio: "9:16"`).
+- Backend: Supabase (storage + REST) behind api.your-echoes.com; browser polls status every 10-15 s.
+- Still unknown: clip duration, std/pro, resolution (need the clip file), the full animation catalog (not shown in trial).
