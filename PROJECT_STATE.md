@@ -431,11 +431,24 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
 - Main risk: ages 3-6 and teens may not reach 80% in one click. Alternative: launch with "one click + a free fix of a
   transition you don't like" (as Echoes does) -> can launch right after stage 2. Decide after the next 2-3 runs.
 
-## Next step (exact)
-1. (done) run 12 ratings applied.
-2. KIE top-up before the next run: balance ~55; a 6-photo run needs >= ~545 (clips + 2 retries) -> ~$5 top-up is NOT enough,
-   ~$3 more is (or use 5 photos). Then stage D set 2 (new 6-photo set).
-3. Production gaps still open: KIE privacy email (+ ask for a volume discount), music, site/server, legal documents.
+## Next step (exact) - session end 14.11.2026 (afternoon)
+Where we stopped: runs 11-12 rated and applied; Echoes videos 1-2 analysed (moves + pace + personal songs); new moves added
+(next_object, hair_whip, arms_up, twirl, palm/floor bridges, crouch_jump, ride_away, cap_over_face), slower pace x1.25, RANK
+(proven moves first), 2 retries + budget check, no frozen end, warm expressions + judge mood check. All merged to main.
+Personal Hebrew song via KIE/Suno works (12 credits for 2 versions, ~20-30 s); Roma birthday video re-scored (owner to pick v1/v2
+and say if the Hebrew is good enough).
+1. New session start: read this file; `pip install opencv-python-headless`; check KIE balance
+   (`GET https://api.kie.ai/api/v1/chat/credit`; ~30.6 now). A 6-photo run needs >= ~545 credits (clips + 2 retries):
+   the owner tops up (~$5 = ~1,000 credits) BEFORE uploading.
+2. When the owner writes "העליתי" (6 new photos on the test page https://claude.ai/artifact/KopYK45HGjQw4BdNKCEY79):
+   ArtifactData get `session/photos` + list `photodata` (query.limit 1000, out_dir) -> `python3 tools/db_photos.py DB OUT/orig`
+   -> `python3 tools/run_set.py OUT <photos with @x,y taps> --max-credits <balance-10>` in the background (it refuses to start
+   without room for 2 retries) -> look at the frames -> upload clips + video as assets of the test page (Artifact publish
+   asset:true, url = the test page) -> `results/r13-*` rows (run 13) -> owner rates -> read `ratings`, add to
+   `docs/judge/labels.json`, apply fixes. This run tests the new moves.
+3. Music: decide with the owner - personal song (questionnaire -> lyrics by an LLM -> Suno 2 versions -> customer picks).
+   Open: Hebrew pronunciation (try full spelling / partial niqqud), commercial-use rights of Suno songs via KIE, privacy.
+4. Production gaps: KIE privacy email (+ volume discount), site/server, legal documents. Launch gate: see "Launch estimate".
 
 ## Competitor research (13.11.2026)
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
