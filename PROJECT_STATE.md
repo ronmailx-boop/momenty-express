@@ -442,6 +442,9 @@ Owner still has to supply: KIE top-up before C (about $25-30 for C+D), 4-5 photo
   Owner topped up $5; KIE balance ~994.6. Waiting for the owner's pick (A/B) and ear on masculine forms.
 - [x] Owner liked upbeat A but: drop the "almost a man" line, and make it pop, not Mizrahi -> "western pop, major key, acoustic
   guitar, piano" + "not Middle Eastern"; line replaced by "ועוד שנה נפלאה מחכה לְךָ"; no shift. 2 versions sent; balance 982.6.
+- KIE top-ups total (from balance jumps; owner to confirm in KIE billing): 13.11 = 4 x $5 = $20; 14.11 = 3 x $5 = $15
+  (before run 9, before run 11, before the upbeat song) -> $35 total (~130 ILS at ~3.70, rate not checked). Balance 982.6.
+- Open: owner's pick between pop version 1 and 2, and whether the Mizrahi feel is gone.
 - Next for songs: questionnaire -> LLM lyrics in make_song.py; style library per occasion; rights/privacy.
 
 ## Next step (exact) - session end 14.11.2026 (afternoon)
