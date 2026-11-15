@@ -479,6 +479,16 @@ and say if the Hebrew is good enough).
 4. Production gaps: KIE privacy email (+ volume discount), site/server, legal documents. Launch gate: see "Launch estimate".
 
 ## Competitor research (13.11.2026)
+- Recommendations taken from the Echoes info (15.11.2026), in order:
+  1. Personal song INCLUDED in every video (~$0.06 per 2 versions): questionnaire -> Claude writes Hebrew lyrics -> Suno 2 versions ->
+     customer picks. Before launch: KIE written answer on commercial use of Suno songs (fallback: customer uploads own song, own rights);
+     Hebrew pronunciation tests.
+  2. Group photos: pre-select the child for free with local SFace matching against the earlier photos; customer confirms or taps
+     another face. No AWS. Disclose face processing in the privacy policy.
+  3. Second provider: bring fal (Kling 3.0) as automatic fallback into the first server version, not later (KIE = single point of failure).
+  4. Pricing: 6-minute tier to 249-299 ILS (179.90 is break-even).
+  Not taken: customer review + manual retries per animation (their weak spot; we do one click + automatic judge); Vercel/Supabase.
+  Next: start with 1 (questionnaire + auto lyrics in make_song.py, a few styles; 12 credits per call; check KIE balance first).
 - [x] 15.11.2026 owner's prices: 79.90 ILS per minute, 179.90 ILS for 6 minutes (Echoes $29.90 = ~95 ILS / $114.90 = ~366 ILS at
   3.19 ILS/USD). Recalculated at 3.19 and the current pace (~4 s per photo = ~15 photos, 14 clips per minute; ~$6.80 expected, ~$8 bad day
   = ~22 / ~26 ILS per minute). 1 minute: 79.90 - VAT 12.2 - Paddle 5.6 - AI 22 = ~40 ILS profit (bad day ~36). 6 minutes: 179.90 - VAT 27.4
