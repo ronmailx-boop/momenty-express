@@ -479,5 +479,12 @@ and say if the Hebrew is good enough).
 4. Production gaps: KIE privacy email (+ volume discount), site/server, legal documents. Launch gate: see "Launch estimate".
 
 ## Competitor research (13.11.2026)
+- [x] 15.11.2026 owner's prices: 79.90 ILS per minute, 179.90 ILS for 6 minutes (Echoes $29.90 = ~95 ILS / $114.90 = ~366 ILS at
+  3.19 ILS/USD). Recalculated at 3.19 and the current pace (~4 s per photo = ~15 photos, 14 clips per minute; ~$6.80 expected, ~$8 bad day
+  = ~22 / ~26 ILS per minute). 1 minute: 79.90 - VAT 12.2 - Paddle 5.6 - AI 22 = ~40 ILS profit (bad day ~36). 6 minutes: 179.90 - VAT 27.4
+  - Paddle 9.2 - AI ~130 = ~13 ILS (bad day ~-10; Google Play 15% = loss). => the 6-minute tier is break-even; raise it (e.g. 249-299 ILS,
+  still below Echoes) or lower its cost (4 s clips). Echoes includes the Suno song in the price; ours costs ~$0.06 per call (2 versions).
+  Rekognition at Echoes only writes "who becomes who" for photos with 2+ faces (morph_instructions null for 1 face), it does not keep
+  identity; our equivalent = the subject tap, can be pre-selected for free with local SFace matching (no AWS, still disclose face processing).
 - [x] Echoes deep research from public sources: `docs/competitor-echoes.md`. Providers: Runway, Atlas, Higgsfield, AIMLAPI/Kling V2, Hailuo 02, KIE (Seedance, Seedream, Qwen); Rekognition for group photos; customer reviews each animation (free retry each), so not one-click. Exact model/prompts not public. Idea to test: Seedance first+last frame on KIE.
 - [x] 14.11.2026: owner's own Echoes trial traffic confirms **Echoes = Kling 3.0 via KIE** (`provider: kiekling3`), first+last frame, 4:38 min for one clip; prompt stays server-side. Details in `docs/competitor-echoes.md`. Clip measured: raw Kling file (AIGC tag ContentProducer kling), 720x1276, 24 fps, 5.04 s = Kling 3.0 Std 5 s; the transition is a head-turn + camera-swing hiding move, same method as ours.
