@@ -10,6 +10,15 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 - AI provider for tests: KIE (kie.ai, NEXUSAI SERVICES LLC, Denver). Network secret for `api.kie.ai` saved on the Default environment (key `claude-cloud`, 90 days, all models).
   Pay-as-you-go, credits never expire, failed tasks not charged, media kept 14 days, logs 2 months. Balance 13.11: 1,080 credits (~$5.40).
 - KIE is a small reseller; before production ask in writing: no training on photos, deletion, where processed. Atlas Cloud (NY, SOC 2 claimed) is the alternative; fal stays as the automatic fallback.
+- **PRICE: KIE vs fal (16.11.2026, from Momenty repo `replica` PROJECT_STATE + its lab `BILLED` map, plus fal's pricing API today):**
+  | Model | fal | KIE | Atlas |
+  |---|---|---|---|
+  | Kling 3.0 Std | $0.084/s list = ~$0.42 per 5 s clip (NOT verified on a bill) | $0.0755/s 720p = ~$0.38 per 5 s (measured, our runs) | $0.071/s |
+  | Kling 3.0 Pro | billed $0.56 per clip (list $0.14/s; charged as 4 s, or 5 s at $0.112/s no audio) | $0.101/s 1080p (4 s = $0.40) | $0.095/s |
+  | Kling 2.6 Pro / 2.5 Turbo Pro | billed $0.35 per 5 s | 2.5 Turbo $0.315 per 5 s | 2.5 Turbo $0.28, 2.6 Pro $0.35 |
+  => Kling 3.0 Std: KIE only ~10% cheaper than fal (~$5.3 vs ~$5.9 per minute of video, 14 clips). As a fallback fal adds little cost.
+  Conflict: fal's pricing API (`api.fal.ai/v1/models/pricing`) today returns $0.14/s for BOTH v3 standard and v3 pro image-to-video
+  (maybe the with-audio price, or a price change). To settle: run ONE Kling 3.0 Std 5 s clip on fal (~$0.42) and read the real charge.
 - Test page (Artifact, private): https://claude.ai/artifact/KopYK45HGjQw4BdNKCEY79 — source `tools/transition-test.html`.
   db: `session/photos` {items:[{id,url,w,h}], status}, `results/*` {from, model, label, url, credits, cost, seconds, res, state, error, order}, `ratings/<resultId>` {rating, issues[], note}. Photos are assets of the artifact (not in the repo).
 
