@@ -50,6 +50,24 @@ A 4th take was still queued (concurrency limit) at the time of writing.
 
 **Whole project**: KIE 782 credits (982.64 -> 200.64) ~ $3.91 ~ 12.5 ILS, plus ElevenLabs ~0.5 ILS = **~13 ILS**.
 
+## How models were chosen (and what to do instead)
+| Step | Model | Basis for the choice |
+|---|---|---|
+| Upscale | `kie/image-upscale` | Topaz failed first (not charged); kie upscale tested on one face before/after, then run on all. Test-based. |
+| Photo animation | Kling 2.6 | General knowledge that Kling keeps faces; one clip tested for quality and price (63) before the other 4. No comparison with other models. |
+| Envelope transition | Kling 4.0 keyframe | Needed first + last frame so the final face is the real photo; picked 1080p for quality. **Price not checked first (~340 credits).** |
+| Image edit | Nano Banana Pro | Known for local edits that keep the rest of the scene; checked only by looking at the result. |
+| Music | Suno V5, then V6 | V5 with no comparison; V6 was the only non-deprecated option for add-vocals / replace-section. |
+| Voiceover | ElevenLabs v4 | ElevenLabs' own default, supports emotion tags; voices picked from Hebrew filter by description, not by listening. |
+
+Mistake: PROJECT_STATE was read only at the end. It already says Kling 3.0 Std is close to Pro, ~75 credits per 5 s at 720p,
+and supports first + last frame (what Echoes uses). The envelope transition would likely have cost about a quarter.
+
+Rules:
+1. Before any run, read PROJECT_STATE and `docs/transition-guidelines.md` and choose from the models already measured there.
+2. Check the price of every expensive step first (docs / estimate / one short test) and say it to the owner before running.
+3. In the product: model choice comes from a table of measured price + quality, never from general familiarity.
+
 ## Photo preparation
 - Upscale every photo first (WhatsApp photos arrive ~640x852). Cheap, faithful.
 - Other people in a photo: crop to 9:16 around the subject first, blur only what is left (strong Gaussian + slight darkening).
