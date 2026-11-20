@@ -43,7 +43,17 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 - [x] **Skill `security-audit` (Cloudflare, MIT) added 20.11.2026** in `.claude/skills/security-audit/` from
   cloudflare/security-audit-skill @ c1c8a8c. No hooks, no settings, no allowed-tools; the only scripts are two
   read-only Node validators (`validate-*.cjs`, read a JSON file and print errors) run by the agent in a full audit.
-  A zip for claude.ai upload was given to the owner. No audit has been run yet.
+  A zip for claude.ai upload was given to the owner.
+- [x] **First security audit (security-audit skill, quick profile) 20.11.2026** on fe8981e, source-only (no code run):
+  0 confirmed findings, 2 needs-validation leads, 1 area deferred. Reports were in the session scratchpad (not committed).
+  - Lead 1: `tools/db_photos.py:29,32` prints the tap x/y from the shared test-page DB unquoted into the
+    `run_set.py` command line -> fix: float() + 0..1 check + shlex.quote. Owner check: does anyone else have edit access to the test page?
+  - Lead 2: provider `resultUrls` go to `urllib.request.urlretrieve` with no https/host check
+    (`run_set.py:129`, `kie_compare.py:132`, `kie_watch.py:43`, `make_song.py:69`) -> fix: one download helper with an https + KIE-host allowlist.
+  - Deferred: `--max-credits` counts only finished clips (in-flight clips, re-sends, vision credits not counted; kie_watch has no cap).
+  - Hardening: `.gitignore` only covers `output/` and `out/` (children's media in another OUT folder could be committed);
+    no deletion of photos uploaded to KIE; `__proto__` / external-URL handling in `transition-test.html`.
+  - [ ] Owner decision: apply the fixes (not done yet).
 
 ## Current Focus
 - [x] 20.11.2026: lessons from the birthday video project saved in `docs/lessons-birthday-video.md`.
