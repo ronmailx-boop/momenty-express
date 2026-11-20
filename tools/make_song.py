@@ -12,6 +12,8 @@ OUT gets song1.mp3, song2.mp3, words1.json, words2.json (word timestamps, Hebrew
 KIE auth is injected by the session proxy. Cost: 12 credits (~$0.06) per call, 2 versions, ~20-40 s.
 """
 import argparse, json, os, subprocess, sys, time, urllib.request
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kie_compare
 
 API = "https://api.kie.ai"
 
@@ -66,7 +68,7 @@ def generate(a, out):
     items = (res.get("data") if isinstance(res, dict) else None) or (res.get("resultUrls") if isinstance(res, dict) else None) or []
     for i, it in enumerate(items[:2], 1):
         url = it.get("audio_url") if isinstance(it, dict) else it
-        urllib.request.urlretrieve(url, os.path.join(out, f"song{i}.mp3"))
+        kie_compare.download(url, os.path.join(out, f"song{i}.mp3"))
         print(f"song{i}.mp3", round(duration_of(os.path.join(out, f"song{i}.mp3")), 1), "s")
     print("ready in", round(time.time() - t0), "s")
 

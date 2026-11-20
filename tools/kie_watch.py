@@ -6,7 +6,7 @@ The first copy to succeed is kept (downloaded as t<from>-<model>.mp4); timings a
 
   KIE_SECONDS=5 python3 kie_watch.py STATE.json [HEDGE_AFTER=300]
 """
-import json, os, statistics, sys, time, urllib.request
+import json, os, statistics, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kie_compare as K
 
@@ -40,7 +40,12 @@ while True:
                 if c["state"] == "success" and not x.get("final"):
                     url = (json.loads(d.get("resultJson") or "{}").get("resultUrls") or [None])[0]
                     f = os.path.join(out, f"t{x['from']}-{x['model']}.mp4")
-                    urllib.request.urlretrieve(url, f)
+                    try:
+                        K.download(url, f)
+                    except K.UnsafeURL as e:  # no result URL, or not https on a KIE host: treat this copy as failed
+                        c["state"], c["error"] = "fail", str(e)
+                        print(f"T{x['from']} {e}", flush=True)
+                        continue
                     x["final"] = {"taskId": c["taskId"], "file": f, "ready_at": round(time.time() - t0), "hedged": c is not x}
                     print(f"T{x['from']} ready at {x['final']['ready_at']} s (copy wait {c['wait']} s{', re-sent copy' if c is not x else ''})", flush=True)
         if x.get("final"):

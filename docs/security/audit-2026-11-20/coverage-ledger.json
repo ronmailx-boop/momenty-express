@@ -1,0 +1,526 @@
+[
+ {
+  "coverage_id": "repository%23committed%20files::.gitignore%23.env%2Coutput%2F%2Cout%2F::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Obvious%20things",
+  "canonical_refs": {
+   "surface": "repository#committed files",
+   "boundary": ".gitignore#.env,output/,out/",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Obvious things"
+  },
+  "surface": "Committed repository contents and third-party uploads",
+  "boundary": ".gitignore and proxy-injected credential handling",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "Obvious things (secrets, data leakage)",
+  "starting_paths": [
+   ".gitignore",
+   "tools/kie_compare.py",
+   "tools/auto_plan.py",
+   "tools/make_song.py",
+   "docs",
+   "PROJECT_STATE.md"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Obvious things",
+  "selected_companion_blocks": [],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency and build-input attack classes",
+    "reason": "no package manifest, lockfile, CI or release config in the repository"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "no HTTP server or auth protocol implemented in source"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-tools",
+  "reviewed_paths": [
+   ".gitignore",
+   "PROJECT_STATE.md",
+   "docs",
+   "tools/auto_plan.py",
+   "tools/kie_compare.py",
+   "tools/make_song.py",
+   "tools/transition-test.html"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/kie_compare.py",
+     "tools/auto_plan.py",
+     "tools/make_song.py",
+     "docs",
+     "PROJECT_STATE.md",
+     "tools/transition-test.html"
+    ],
+    "invariant": "No hardcoded API keys, tokens, private keys or passwords in tracked files or git history; the KIE credential stays proxy-injected",
+    "method": "source",
+    "result": "A grep of all tracked files outside .claude/ for password/secret/api_key/token/Bearer/BEGIN/sk-/AKIA/ghp_ found only placeholder Authorization values: 'Bearer proxy-injected' (tools/kie_compare.py:20, tools/auto_plan.py:47) and 'Bearer x' (tools/make_song.py:22). The real KIE key is never in source. PROJECT_STATE.md:10 names a network secret saved on the environment but not its value. A search of git log -p across all refs found no private-key, AWS, GitHub-token or long-Bearer patterns.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     ".gitignore"
+    ],
+    "invariant": ".gitignore excludes secrets and generated outputs containing children's media; no .env, credentials or key files are committed",
+    "method": "source",
+    "result": ".gitignore covers __pycache__/, *.pyc, .env, output/, out/. git ls-files and the git history list no .env, *.pem, *.key, credentials.json, media files, state.json or vision-cache.json. The only binary file is tools/models/yunet.onnx, a public face-detector model. Tool outputs go to an operator-chosen OUT directory, which .gitignore does not always cover (see hardening).",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "docs",
+     "PROJECT_STATE.md"
+    ],
+    "invariant": "Committed docs/JSON do not leak children's photos, provider download URLs, or personal identifiers",
+    "method": "source",
+    "result": "The JSON files under docs/judge and docs/prompts hold verdict labels, metrics and prompt text: generic descriptions such as 'the boy', 'red toy car', with no names. A grep found no tempfile.aiquickdraw.com, redpandaai or downloadUrl URLs and no photo URLs. PROJECT_STATE.md links a private claude.ai artifact (KopYK45HGjQw4BdNKCEY79). Its access is governed by claude.ai sharing, not by the link.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/kie_compare.py",
+     "tools/auto_plan.py",
+     "tools/make_song.py",
+     "tools/transition-test.html"
+    ],
+    "invariant": "Obvious-things checklist: no eval/exec/shell, no debug endpoints, no CORS/cookie/redirect surface, TLS on API hosts",
+    "method": "source",
+    "result": "No eval/exec/os.system/shell=True. subprocess.run always uses argument lists. There is no server, so no debug/admin endpoints, CORS, cookies or redirects. API hosts are hardcoded https (api.kie.ai, kieai.redpandaai.co). The only security-relevant TODO-style text is none. Dependencies are unpinned (no manifest), which is out of scope per the excluded SUPPLY-CHAIN block.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "parent_hardening_notes": [
+   "tools/run_set.py:71-72 checks --max-credits only against credits of copies that have finished. Clips still running, re-sends issued in poll() and vision credits (AP.credits) are not counted, so a run can pass the cap by the cost of the clips in flight. Count reserved credits (seconds * CREDITS_PER_S) for every submitted copy and include vision credits.",
+   "tools/kie_watch.py:43 passes url=None to urlretrieve when resultUrls is empty, which crashes the watcher. Guard None as kie_compare.py does.",
+   "Children's photos and clips are written to an operator-chosen OUT directory, and .gitignore only covers output/ and out/. Document or enforce one of those directories (or add *.mp4, *.jpg, state.json, vision-cache.json patterns) so a run into another folder inside the repo is not committed by accident.",
+   "kie_compare.upload sends children's photos to a third-party host under the fixed uploadPath 'momenty-express-test' with no deletion step. Retention and access on the provider side are not controlled from source. Record this in the privacy documentation and delete uploads after use if the API allows."
+  ]
+ },
+ {
+  "coverage_id": "tools%2Fauto_plan.py%23vision::tools%2Fauto_plan.py%23make_plan::profile%2Fquick%2Fall-in-scope-subsystems::AI-AND-LLM.md%23Output%20and%20disclosure%20attack%20classes",
+  "canonical_refs": {
+   "surface": "tools/auto_plan.py#vision",
+   "boundary": "tools/auto_plan.py#make_plan",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "AI-AND-LLM.md#Output and disclosure attack classes"
+  },
+  "surface": "Vision-LLM chat answers parsed by auto_plan.vision",
+  "boundary": "Plan/prompt assembly and lint in auto_plan.py",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "LLM output handling",
+  "starting_paths": [
+   "tools/auto_plan.py",
+   "tools/judge.py",
+   "tools/run_set.py"
+  ],
+  "ordinary_attack_class_block": null,
+  "selected_companion_blocks": [
+   "AI-AND-LLM.md#Core discipline",
+   "AI-AND-LLM.md#Output and disclosure attack classes",
+   "AI-AND-LLM.md#Universal moves",
+   "AI-AND-LLM.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency and build-input attack classes",
+    "reason": "no package manifest, lockfile, CI or release config in the repository"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "no HTTP server or auth protocol implemented in source"
+   },
+   {
+    "block": "AI-AND-LLM.md#Tool and action attack classes",
+    "reason": "the LLM is given no tools; its answers are parsed as JSON only"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-tools",
+  "reviewed_paths": [
+   "tools/auto_plan.py",
+   "tools/judge.py",
+   "tools/run_set.py"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/auto_plan.py",
+     "tools/run_set.py"
+    ],
+    "invariant": "Vision-LLM JSON answers never reach a local executing sink (shell, file path, HTML, URL fetch) or grant authority",
+    "method": "source",
+    "result": "vision() (tools/auto_plan.py:56-80) parses the substring between the first '{' and the last '}' with json.loads, so there is no code evaluation. 'hide' is accepted only if it is in the code-built hides list (line 262), and HIDES[hide] is indexed only with validated keys. Other answer fields are used only for strategy selection in choose() or for string formatting into the Kling prompt (TEMPLATE.format at line 277, where the LLM values are arguments, not the format string). The prompt goes only back to the KIE createTask API (tools/run_set.py:79-84) and to plan.json/prompts.json in OUT. No LLM value becomes a file path, command argument, URL or HTML. A malformed answer causes at worst a KeyError/TypeError in the operator's own run.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/auto_plan.py",
+     "tools/judge.py"
+    ],
+    "invariant": "Assembled model context contains no credentials or other principals' data that model output could disclose",
+    "method": "source",
+    "result": "Context = fixed prompt text, prior LLM answers about the same photo set, and image URLs of the same family's photos (photo_url -> kie_compare.upload). judge.py:143-145 sends a frame grid of the operator's own clip. The Authorization header carries the placeholder 'proxy-injected'; the real key is added by the proxy and is never in the model input. Model output only goes back to the same provider. vision-cache.json is written and read only in the operator's OUT dir.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "parent_hardening_notes": [
+   "tools/run_set.py:71-72 checks --max-credits only against credits of copies that have finished. Clips still running, re-sends issued in poll() and vision credits (AP.credits) are not counted, so a run can pass the cap by the cost of the clips in flight. Count reserved credits (seconds * CREDITS_PER_S) for every submitted copy and include vision credits.",
+   "tools/kie_watch.py:43 passes url=None to urlretrieve when resultUrls is empty, which crashes the watcher. Guard None as kie_compare.py does.",
+   "Children's photos and clips are written to an operator-chosen OUT directory, and .gitignore only covers output/ and out/. Document or enforce one of those directories (or add *.mp4, *.jpg, state.json, vision-cache.json patterns) so a run into another folder inside the repo is not committed by accident.",
+   "kie_compare.upload sends children's photos to a third-party host under the fixed uploadPath 'momenty-express-test' with no deletion step. Retention and access on the provider side are not controlled from source. Record this in the privacy documentation and delete uploads after use if the API allows."
+  ]
+ },
+ {
+  "coverage_id": "tools%2Fdb_photos.py%23session%2Fphotos.json%2Bphotodata::tools%2Fdb_photos.py%23print%28args%29::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection",
+  "canonical_refs": {
+   "surface": "tools/db_photos.py#session/photos.json+photodata",
+   "boundary": "tools/db_photos.py#print(args)",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Injection"
+  },
+  "surface": "Exported Artifact DB JSON (session/photos.json, photodata/*.json) given to db_photos.py",
+  "boundary": "Printed run_set.py argument line and OUT file writes in db_photos.py",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "Injection (operator shell / file path)",
+  "starting_paths": [
+   "tools/db_photos.py",
+   "tools/run_set.py",
+   "tools/align_faces.py",
+   "tools/transition-test.html"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+  "selected_companion_blocks": [],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency and build-input attack classes",
+    "reason": "no package manifest, lockfile, CI or release config in the repository"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "no HTTP server or auth protocol implemented in source"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "candidate",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "PROJECT_STATE.md",
+   "tools/align_faces.py",
+   "tools/db_photos.py",
+   "tools/run_set.py",
+   "tools/transition-test.html"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "tools/db_photos.py"
+    ],
+    "invariant": "Output file paths written by db_photos.py must not be derived from DB-controlled values (no path traversal via id/k).",
+    "method": "source",
+    "result": "Covered: dst is os.path.join(out, f\"{i:02d}.jpg\") using the enumeration index only (db_photos.py:26); chunk id/k are used only as dict keys (lines 18, 21, 27). Malformed n/k only raise KeyError/StopIteration (crash, operator-local). No traversal.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "tools/db_photos.py",
+     "tools/transition-test.html",
+     "tools/run_set.py",
+     "tools/align_faces.py",
+     "PROJECT_STATE.md"
+    ],
+    "invariant": "Values from the shared Artifact DB (session/photos items[].subject.x/y) must be validated as numbers or shell-quoted before being printed into the run_set.py argument line that the operator pastes into a shell command.",
+    "method": "source",
+    "result": "Not enforced: db_photos.py:28-29 interpolates s['x'] and s['y'] verbatim into the argument string and line 32 prints them space-joined with no shlex.quote or numeric check. The page only writes numbers (transition-test.html:219), but the DB stores whatever any writer sets (savePhotos at :177 copies subject as-is; no schema). run_set.py/align_faces.py only float() the value after the shell has already parsed the line (run_set.py:52-54, align_faces.py:52-53). PROJECT_STATE.md:327 and :489 document the workflow as pasting the printed <args> into `python3 tools/run_set.py OUT <args> --max-credits ...` run in the operator's Bash session. Whether a lower-trust principal can write the DB, and whether the operator transcribes literally, are outside source.",
+    "artifact": null
+   },
+   {
+    "agent_id": "verifier-dbphotos",
+    "reviewed_paths": [
+     "tools/db_photos.py",
+     "tools/run_set.py",
+     "tools/align_faces.py",
+     "tools/transition-test.html",
+     "PROJECT_STATE.md"
+    ],
+    "invariant": "Phase 3/5 independent verification of tools/db_photos.py:unquoted-db-subject-in-printed-run_set-args",
+    "method": "source",
+    "result": "Independent re-read confirmed the trace (db_photos.py:28-29,32; PROJECT_STATE.md:327,489-490); decision needs_validation: DB write access and literal paste are outside source.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [
+   "tools/db_photos.py:unquoted-db-subject-in-printed-run_set-args"
+  ],
+  "unresolved": [],
+  "parent_hardening_notes": [
+   "tools/transition-test.html:289: a results doc with from='__proto__' makes (byT[r.from] = byT[r.from] || []).push throw, so renderResults fails for every viewer; key byT with a Map or Object.create(null) and coerce from with Number().",
+   "tools/transition-test.html:186,293-294,311: img/video src take arbitrary DB URLs, so a DB writer can make viewers' browsers fetch an external URL (IP/referrer leak) unless the claude.ai artifact CSP blocks it; restrict to the artifact asset-store origin or https: plus an allowlist.",
+   "tools/db_photos.py:22-27: chunk n/k come from the DB unchecked (mismatched n across chunks, non-integer k) and cause KeyError/StopIteration; validate k in range(n) and consistent n per id.",
+   "tools/transition-test.html:3: an external Google Fonts stylesheet loads on a page that holds children's photos; harmless for injection but tells a third party when the page is opened."
+  ],
+  "parent_final_decision": {
+   "tools/db_photos.py:unquoted-db-subject-in-printed-run_set-args": "needs_validation"
+  }
+ },
+ {
+  "coverage_id": "tools%2Fkie_compare.py%23req%28GET%20%2Fapi%2Fv1%2Fjobs%2FrecordInfo%29::tools%2Frun_set.py%23urllib.request.urlretrieve::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Chained%20vulnerabilities%20and%20trust%20boundaries",
+  "canonical_refs": {
+   "surface": "tools/kie_compare.py#req(GET /api/v1/jobs/recordInfo)",
+   "boundary": "tools/run_set.py#urllib.request.urlretrieve",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Chained vulnerabilities and trust boundaries"
+  },
+  "surface": "Provider task results (recordInfo resultJson.resultUrls, song URLs)",
+  "boundary": "urllib.request.urlretrieve and ffmpeg/OpenCV processing of downloaded media",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "Chained vulnerabilities and trust boundaries",
+  "starting_paths": [
+   "tools/run_set.py",
+   "tools/kie_compare.py",
+   "tools/kie_watch.py",
+   "tools/make_song.py",
+   "tools/judge.py"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Chained vulnerabilities and trust boundaries",
+  "selected_companion_blocks": [],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency and build-input attack classes",
+    "reason": "no package manifest, lockfile, CI or release config in the repository"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "no HTTP server or auth protocol implemented in source"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "candidate",
+  "agent_id": "hunter-tools",
+  "reviewed_paths": [
+   "tools/auto_plan.py",
+   "tools/judge.py",
+   "tools/kie_compare.py",
+   "tools/kie_watch.py",
+   "tools/make_song.py",
+   "tools/run_set.py"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/run_set.py",
+     "tools/kie_compare.py",
+     "tools/kie_watch.py",
+     "tools/make_song.py"
+    ],
+    "invariant": "Provider-supplied result URLs are restricted to https on the expected result host before urllib fetches them into the output directory",
+    "method": "source",
+    "result": "No control exists. resultJson.resultUrls[0] (and audio_url / resultUrls for songs) goes straight to urllib.request.urlretrieve in four places: tools/run_set.py:126-129, tools/kie_compare.py:127-132, tools/kie_watch.py:41-43 and tools/make_song.py:61-69. CPython's urlretrieve goes through urlopen's default handlers, which include file:, ftp:, data: and http(s) to any host. With a filename argument, a file: URL is copied from local disk.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/run_set.py",
+     "tools/judge.py",
+     "tools/auto_plan.py",
+     "tools/kie_compare.py"
+    ],
+    "invariant": "Data fetched from a provider URL is not re-sent to a third party unless it is the expected generated clip",
+    "method": "source",
+    "result": "In run_set the downloaded file (cp['file']) is decoded by judge.code_checks via cv2.VideoCapture (tools/judge.py:23). Its frames are put in a grid (judge.py:143) and uploaded to KIE through AP.vision -> photo_url -> kie_compare.upload (tools/auto_plan.py:29-34, 68; tools/kie_compare.py:37-50). They are also concatenated into OUT/video.mp4 (tools/run_set.py:186-203). Whether OpenCV decodes the copied file, and whether a provider response can carry such a URL, cannot be observed without execution or provider behavior.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-tools",
+    "reviewed_paths": [
+     "tools/run_set.py"
+    ],
+    "invariant": "ffmpeg concat list built from downloaded files cannot be steered by provider data",
+    "method": "source",
+    "result": "The concat list (tools/run_set.py:199-202) holds only paths built by the code under OUT/parts/NN.mp4, which are re-encoded with libx264 (line 186-188) before concat. Provider data never controls the path text. The downloaded file is passed as ffmpeg -i <local path> with content probing; demuxer-level behavior depends on the toolchain and was not executed.",
+    "artifact": null
+   },
+   {
+    "agent_id": "verifier-resulturl",
+    "reviewed_paths": [
+     "tools/run_set.py",
+     "tools/judge.py",
+     "tools/auto_plan.py",
+     "tools/kie_compare.py",
+     "tools/kie_watch.py",
+     "tools/make_song.py"
+    ],
+    "invariant": "Phase 3/5 independent verification of operator-local-read-via-provider-result-url",
+    "method": "source",
+    "result": "Independent re-read confirmed the urlretrieve sinks and the judge/upload chain; decision needs_validation: requires a malicious provider response and a sandboxed harness.",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [
+   "operator-local-read-via-provider-result-url"
+  ],
+  "unresolved": [],
+  "parent_hardening_notes": [
+   "tools/run_set.py:71-72 checks --max-credits only against credits of copies that have finished. Clips still running, re-sends issued in poll() and vision credits (AP.credits) are not counted, so a run can pass the cap by the cost of the clips in flight. Count reserved credits (seconds * CREDITS_PER_S) for every submitted copy and include vision credits.",
+   "tools/kie_watch.py:43 passes url=None to urlretrieve when resultUrls is empty, which crashes the watcher. Guard None as kie_compare.py does.",
+   "Children's photos and clips are written to an operator-chosen OUT directory, and .gitignore only covers output/ and out/. Document or enforce one of those directories (or add *.mp4, *.jpg, state.json, vision-cache.json patterns) so a run into another folder inside the repo is not committed by accident.",
+   "kie_compare.upload sends children's photos to a third-party host under the fixed uploadPath 'momenty-express-test' with no deletion step. Retention and access on the provider side are not controlled from source. Record this in the privacy documentation and delete uploads after use if the API allows."
+  ],
+  "parent_final_decision": {
+   "operator-local-read-via-provider-result-url": "needs_validation"
+  }
+ },
+ {
+  "coverage_id": "tools%2Frun_set.py%23Run.submit%2BRun.resend%2Bstate.json%20resume::tools%2Frun_set.py%23--max-credits%20cap::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Business%20logic",
+  "canonical_refs": {
+   "surface": "tools/run_set.py#Run.submit+Run.resend+state.json resume",
+   "boundary": "tools/run_set.py#--max-credits cap",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Business logic"
+  },
+  "surface": "Clip submission, re-send and resume-from-state flows that spend paid KIE credits",
+  "boundary": "--max-credits cap, re-send budget, state.json / vision-cache.json resume",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "Business logic (credit cap, resume, partial failure)",
+  "starting_paths": [
+   "tools/run_set.py",
+   "tools/kie_watch.py",
+   "tools/kie_compare.py",
+   "tools/auto_plan.py",
+   "tools/make_song.py"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Business logic",
+  "selected_companion_blocks": [
+   "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Core discipline",
+   "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Quota and scheduling attack classes",
+   "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Failure and recovery attack classes",
+   "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Universal moves",
+   "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "RESOURCE-EXHAUSTION-AND-AVAILABILITY.md#Computational amplification attack classes",
+    "reason": "operator-only local CLIs; no remote caller can drive computation"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "deferred",
+  "agent_id": null,
+  "reviewed_paths": [],
+  "local_checks": [],
+  "result_fingerprints": [],
+  "unresolved": [
+   "quick_profile_final_critic: critic-1 found no unit for the paid-credit cap, re-send budget and resume path; the quick profile allows no second hunter wave"
+  ]
+ },
+ {
+  "coverage_id": "tools%2Ftransition-test.html%23db.doc%28session%2Fphotos%29%2Bdb.collection%28results%2Cratings%29.onSnapshot::tools%2Ftransition-test.html%23el::profile%2Fquick%2Fall-in-scope-subsystems::ATTACK-CLASSES.md%23Injection",
+  "canonical_refs": {
+   "surface": "tools/transition-test.html#db.doc(session/photos)+db.collection(results,ratings).onSnapshot",
+   "boundary": "tools/transition-test.html#el",
+   "subsystem": "profile/quick/all-in-scope-subsystems",
+   "attack_class": "ATTACK-CLASSES.md#Injection"
+  },
+  "surface": "Artifact shared DB docs session/photos, results/*, ratings/* read by the page",
+  "boundary": "el() DOM builder (setAttribute + text nodes) in the Artifact page",
+  "subsystem": "All in-scope subsystems (quick profile)",
+  "attack_class": "Injection (DOM)",
+  "starting_paths": [
+   "tools/transition-test.html"
+  ],
+  "ordinary_attack_class_block": "ATTACK-CLASSES.md#Injection",
+  "selected_companion_blocks": [
+   "CLIENT-SIDE.md#Core discipline",
+   "CLIENT-SIDE.md#DOM and object-state attack classes",
+   "CLIENT-SIDE.md#Universal moves",
+   "CLIENT-SIDE.md#Validation rules"
+  ],
+  "excluded_blocks": [
+   {
+    "block": "SUPPLY-CHAIN-AND-RELEASE.md#Dependency and build-input attack classes",
+    "reason": "no package manifest, lockfile, CI or release config in the repository"
+   },
+   {
+    "block": "WEB-PROTOCOL-AND-AUTH.md#Core discipline",
+    "reason": "no HTTP server or auth protocol implemented in source"
+   },
+   {
+    "block": "CLIENT-SIDE.md#Service-worker and browser-storage attack classes",
+    "reason": "page registers no service worker and uses no browser storage"
+   }
+  ],
+  "prior_status": "none",
+  "attempts": [],
+  "wave": 1,
+  "status": "covered",
+  "agent_id": "hunter-client",
+  "reviewed_paths": [
+   "tools/transition-test.html"
+  ],
+  "local_checks": [
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "tools/transition-test.html"
+    ],
+    "invariant": "DB-sourced strings (session/photos items, results/*, ratings/*) must reach the DOM only as text nodes or non-executing attribute values; attribute names and event handlers must come from code.",
+    "method": "source",
+    "result": "Holds: el() (lines 164-172) uses createElement, setAttribute with code-chosen attribute names, and append() of strings (text nodes); the 'on' key is only passed from code literals. DB values reach text (r.label/r.model/r.error/facts/r.res, lines 308-313), img src (186, 212, 293-294) and video src (311). No innerHTML/outerHTML/document.write/eval/setTimeout-string/href or iframe sink exists in the file. img/video src with a javascript: URL does not execute. markPt x/y only reach style.left/top after numeric multiplication (208).",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "tools/transition-test.html"
+    ],
+    "invariant": "DB-controlled id/name attributes must not clobber globals or config used by security-relevant code.",
+    "method": "source",
+    "result": "Holds: the only DB-influenced id is textarea id 'note-' + r.key (305); the fixed hyphenated prefix cannot shadow claude, db, assets or any identifier the script reads, and the script keeps its state in closure variables, not window globals.",
+    "artifact": null
+   },
+   {
+    "agent_id": "hunter-client",
+    "reviewed_paths": [
+     "tools/transition-test.html"
+    ],
+    "invariant": "DB-controlled keys must not reach a recursive write that pollutes Object.prototype with a reachable gadget.",
+    "method": "source",
+    "result": "Holds: object spreads of DB data ({...x}, {...d.data()}, lines 331, 335-336) use CreateDataProperty and do not set prototypes; ratings[d.id] with d.id '__proto__' only changes the prototype of the local ratings object (no global pollution, no security gadget). byT[r.from] with r.from '__proto__' makes .push throw (line 289), so results rendering fails: a writer-caused render error, not injection (see hardening).",
+    "artifact": null
+   }
+  ],
+  "result_fingerprints": [],
+  "unresolved": [],
+  "parent_hardening_notes": [
+   "tools/transition-test.html:289: a results doc with from='__proto__' makes (byT[r.from] = byT[r.from] || []).push throw, so renderResults fails for every viewer; key byT with a Map or Object.create(null) and coerce from with Number().",
+   "tools/transition-test.html:186,293-294,311: img/video src take arbitrary DB URLs, so a DB writer can make viewers' browsers fetch an external URL (IP/referrer leak) unless the claude.ai artifact CSP blocks it; restrict to the artifact asset-store origin or https: plus an allowlist.",
+   "tools/db_photos.py:22-27: chunk n/k come from the DB unchecked (mismatched n across chunks, non-integer k) and cause KeyError/StopIteration; validate k in range(n) and consistent n per id.",
+   "tools/transition-test.html:3: an external Google Fonts stylesheet loads on a page that holds children's photos; harmless for injection but tells a third party when the page is opened."
+  ]
+ }
+]

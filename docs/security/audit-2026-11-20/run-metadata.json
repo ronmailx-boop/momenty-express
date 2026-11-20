@@ -1,0 +1,41 @@
+{
+ "run_id": "momenty-express-run-1",
+ "repo": "ronmailx-boop/momenty-express",
+ "target": "/home/user/momenty-express",
+ "source_ref": {
+  "commit": "fe8981e15f9f1f589f925275b7e8ec1abac381c5",
+  "dirty": false
+ },
+ "profile": "quick",
+ "scope_paths": [
+  "tools/",
+  "docs/",
+  ".gitignore",
+  "README.md",
+  "PROJECT_STATE.md",
+  "CLAUDE.md"
+ ],
+ "out_of_scope_paths": [
+  ".claude/skills/security-audit/ (third-party audit skill itself)",
+  "tools/models/yunet.onnx (binary model weights)"
+ ],
+ "budget": null,
+ "execution_policy": "sandboxed-source-and-local-only",
+ "target_execution": "none: an OS sandbox with read-only mounts and resource limits was not established in this container, so all checks are source-only",
+ "reconnaissance": "performed by the parent (repository is ~1,600 source lines); no reconnaissance agents launched",
+ "selected_companion_files": [
+  "CLIENT-SIDE.md",
+  "AI-AND-LLM.md"
+ ],
+ "prior_runs": [],
+ "shared_file_owners": {
+  "all shared run files": "parent"
+ },
+ "run_status": "complete",
+ "coverage_note": "quick profile: partial pass; 1 unit deferred (quick_profile_final_critic)",
+ "agents_spent": {
+  "hunters": 2,
+  "critics": 1,
+  "verifiers": 2
+ }
+}

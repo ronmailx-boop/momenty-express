@@ -8,10 +8,14 @@ re-run never submits (and pays for) the same clip twice.
   python3 kie_compare.py submit  STATE.json [--only MODEL] [--transitions 1,2,3]
   python3 kie_compare.py poll    STATE.json                              # until every task ends; downloads clips
 """
-import json, os, subprocess, sys, time, urllib.request, uuid
+import json, os, shutil, subprocess, sys, time, urllib.parse, urllib.request, uuid
 
 API = "https://api.kie.ai"
 UPLOAD = "https://kieai.redpandaai.co"  # KIE file upload host
+# hosts KIE returns result files from (tempfile.aiquickdraw.com, tempfile.redpandaai.co); add more with
+# KIE_EXTRA_RESULT_HOSTS=host1,host2 if KIE starts using another one
+RESULT_HOSTS = ("aiquickdraw.com", "redpandaai.co", "kie.ai") + tuple(
+    h.strip().lower() for h in os.environ.get("KIE_EXTRA_RESULT_HOSTS", "").split(",") if h.strip())
 NEG = ("blur, distort, low quality, camera shake, jittery motion, flicker, morphing face, crossfade, dissolve, "
        "double exposure, transparent overlay")
 
@@ -25,6 +29,21 @@ def req(method, path, body=None, raw=None, headers=None, host=API):
     r = urllib.request.Request(host + path, data=data, method=method, headers=h)
     with urllib.request.urlopen(r, timeout=120) as resp:
         return json.loads(resp.read())
+
+
+class UnsafeURL(ValueError):
+    """A result URL that is not https on a KIE result host."""
+
+
+def download(url, dst):
+    """Save a provider result file. Only https on a KIE result host: a broken or hostile answer must not make urllib
+    copy a local file (file://) into the output, or fetch from another host (security audit 20.11.2026)."""
+    u = urllib.parse.urlsplit(url or "")
+    host = (u.hostname or "").lower()
+    if u.scheme != "https" or not any(host == h or host.endswith("." + h) for h in RESULT_HOSTS):
+        raise UnsafeURL(f"refused result URL (only https on {', '.join(RESULT_HOSTS)}): {url!r}")
+    with urllib.request.urlopen(url, timeout=300) as r, open(dst, "wb") as f:
+        shutil.copyfileobj(r, f)
 
 
 def square(src, dst, size=1080):
@@ -129,7 +148,7 @@ def main():
                         if x["resultUrl"]:
                             x["file"] = os.path.join(out, f"t{x['from']}-{x['model']}.mp4")
                             try:
-                                urllib.request.urlretrieve(x["resultUrl"], x["file"])
+                                download(x["resultUrl"], x["file"])
                             except Exception as e:  # keep polling the rest; re-run to retry the download
                                 x["state"], x["downloadError"] = "downloadFailed", str(e)
                     print(x["from"], x["model"], x["state"], x.get("seconds"), "s", x.get("credits"), "cr", x.get("error") or "")

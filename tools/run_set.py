@@ -17,7 +17,7 @@ State is saved in OUT/state.json after every step, so a re-run resumes and never
   python3 run_set.py OUT photo1.jpg photo2.jpg@0.42,0.44 ... [--max-credits N]
   python3 run_set.py OUT --use-clips DIR photos...      # dry run: take clips t<n>.mp4 from DIR instead of Kling (no video cost)
 """
-import argparse, json, os, re, statistics, subprocess, sys, time, urllib.request
+import argparse, json, os, re, statistics, subprocess, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import align_faces, auto_plan as AP, judge as J, kie_compare as K
 
@@ -64,12 +64,22 @@ class Run:
         return files
 
     # 3 -------------------------------------------------------------------------------------------------------------
+    def committed(self):
+        """Credits the run has spent or is about to spend: finished copies at their real cost, copies still running
+        (first sends and re-sends) at their estimate, plus this session's vision calls. Counting only finished copies
+        let a run pass --max-credits by the cost of the clips in flight (security audit 20.11.2026)."""
+        total = AP.credits
+        for c in self.st["clips"].values():
+            for cp in c.get("copies", []):
+                done = cp.get("state") in ("success", "fail") and "credits" in cp
+                total += (cp["credits"] or 0) if done else c["seconds"] * CREDITS_PER_S
+        return total
+
     def submit(self, key, t, prompt, seconds):
         """Send one clip. Returns the task id, or None (refused: content filter, no credits...)."""
         if self.args.use_clips:
             return f"local-{key}"
-        spent = sum(c.get("credits", 0) for c in self.st["clips"].values())
-        if spent + seconds * CREDITS_PER_S > self.args.max_credits:
+        if self.committed() + seconds * CREDITS_PER_S > self.args.max_credits:
             log(f"{key}: not sent, the run would pass --max-credits {self.args.max_credits}")
             return None
         urls = self.st.setdefault("urls", {})
@@ -126,7 +136,9 @@ class Run:
                             url = (json.loads(d.get("resultJson") or "{}").get("resultUrls") or [None])[0]
                             cp["file"] = os.path.join(self.out, f"{k}.mp4")
                             try:
-                                urllib.request.urlretrieve(url, cp["file"])
+                                K.download(url, cp["file"])
+                            except K.UnsafeURL as e:     # no URL, or not https on a KIE host: never retry it
+                                cp.update(state="fail", error=str(e)); log(f"{k}: {e}")
                             except Exception as e:
                                 cp["state"] = None; log(f"{k}: download error {e}")
                 done = [cp for cp in c["copies"] if cp.get("state") == "success"]
