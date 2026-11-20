@@ -38,7 +38,11 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   of them the photo does not show (spins, turning away): the model invents it. The big action belongs to the child; adults stay roughly in
   place or leave the frame.
 
+- **Lessons from the real birthday video job (19-20.11.2026): `docs/lessons-birthday-video.md`** — measured costs per step,
+  photo prep and privacy, keeping the real face, occasion templates, personal song + Hebrew pronunciation fixes, Hebrew text, WhatsApp delivery.
+
 ## Current Focus
+- [x] 20.11.2026: lessons from the birthday video project saved in `docs/lessons-birthday-video.md`.
 - [x] New repo attached; test upload page published.
 - [x] Owner uploaded 4 photos (toddler at a shop window -> snow with two kids, the RED coat is the subject -> bike -> beach teen).
 - [x] Verified KIE params. Kling 4.0 Flash has NO last frame (dropped). Kling 4.0 keyframe = 28.5 cr/s at 720p (not 17). Upload host kieai.redpandaai.co (second network secret), results on tempfile.aiquickdraw.com (allowed host).
