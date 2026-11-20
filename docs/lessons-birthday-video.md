@@ -19,6 +19,37 @@ assembled in HyperFrames + FFmpeg. These are the parts that apply to Momenty Exp
 Rule for the product: show the price before any expensive step and keep a per-video cost ceiling.
 Kling 4.0 at 1080p must never run without an explicit price check.
 
+## Total cost per deliverable
+Conversion: KIE ~$0.005 per credit (1,080 credits ~ $5.40, see PROJECT_STATE), 3.19 ILS per USD.
+
+**56 s clip with the sung song**
+| Step | Credits |
+|---|---|
+| Instrumental music (Suno, 2 versions) | 12 |
+| Sharpen 9 photos | 36 |
+| Animate 5 photos (Kling 2.6, 5 s) | 315 |
+| Add vocals | 12 |
+| Vocals re-generated with niqqud (rejected by the owner) | 12 |
+| Pronunciation fix, 3 replace-section calls (one wasted, see above) | 15 |
+| **Total** | **402 credits ~ $2.01 ~ 6.4 ILS** (390 without the rejected run) |
+
+Animation is ~80% of the clip's cost.
+
+**11 s envelope greeting**
+| Step | Credits |
+|---|---|
+| Upscale the first frame | 4 |
+| 2 image edits (Nano Banana Pro) | ~36 |
+| Keyframe transition (Kling 4.0, 1080p, 8 s) | ~340 |
+| **Total** | **~380 credits ~ $1.90 ~ 6.1 ILS** |
+
+An 11 s greeting cost almost as much as the full minute clip, only because of Kling 4.0 at 1080p.
+
+**Voiceover (ElevenLabs, separate account)**: 3 takes = 786 EL credits; ElevenLabs reported $0.0524 per take = ~$0.16 (~0.5 ILS).
+A 4th take was still queued (concurrency limit) at the time of writing.
+
+**Whole project**: KIE 782 credits (982.64 -> 200.64) ~ $3.91 ~ 12.5 ILS, plus ElevenLabs ~0.5 ILS = **~13 ILS**.
+
 ## Photo preparation
 - Upscale every photo first (WhatsApp photos arrive ~640x852). Cheap, faithful.
 - Other people in a photo: crop to 9:16 around the subject first, blur only what is left (strong Gaussian + slight darkening).
