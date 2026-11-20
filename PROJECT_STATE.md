@@ -40,6 +40,10 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
 
 - **Lessons from the real birthday video job (19-20.11.2026): `docs/lessons-birthday-video.md`** — measured costs per step,
   photo prep and privacy, keeping the real face, occasion templates, personal song + Hebrew pronunciation fixes, Hebrew text, WhatsApp delivery.
+- [x] **Skill `security-audit` (Cloudflare, MIT) added 20.11.2026** in `.claude/skills/security-audit/` from
+  cloudflare/security-audit-skill @ c1c8a8c. No hooks, no settings, no allowed-tools; the only scripts are two
+  read-only Node validators (`validate-*.cjs`, read a JSON file and print errors) run by the agent in a full audit.
+  A zip for claude.ai upload was given to the owner. No audit has been run yet.
 
 ## Current Focus
 - [x] 20.11.2026: lessons from the birthday video project saved in `docs/lessons-birthday-video.md`.
