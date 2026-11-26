@@ -86,7 +86,12 @@ Source: the owner's research agent, from public pages / what the site exposes. N
   This corrects our earlier guess that Qwen writes the prompts: Qwen is an image editor there, Claude writes the text.
 - **Faces and safety:** **AWS Rekognition** (face + age matching between neighbouring photos) and **NudeNet running in the browser**
   before upload.
-- **Music:** Suno V6 (exact version active on the server unknown), also through KIE.
+- **Music (verified by the agent from their privacy policy of 22.11.2026 and the site's public code):**
+  - AI songs: **Suno (V6 family) through the KIE AI API**. **2 takes** per song, fitted to the video length; Hebrew / English /
+    Spanish; vocal or instrumental. Exact V6 version active on the server unknown.
+  - Lyrics: **Anthropic Claude** (directly or through KIE's proxy).
+  - Also: a built-in library of manually uploaded songs, and the customer can upload their own audio.
+  - **No voiceover / TTS** (no ElevenLabs).
 - Not visible from outside: which video model (Kling 3 / 4 / Seedance) is switched on right now.
 
 ### What this means for us
@@ -97,4 +102,7 @@ Source: the owner's research agent, from public pages / what the site exposes. N
   - **Seedance 2.0 Mini/Fast** for the opener / cheap clips; **Kling 4.0** as a quality check against Kling 3.0 Std.
   - **NudeNet in the browser** as a free pre-check before upload (saves KIE moderation failures). Disclose in the privacy policy.
   - Claude only for text (lyrics, prompts) fits our plan.
+  - Music = same as our plan (Suno via KIE, 2 versions, Claude lyrics). Ours to match: **fit the song length to the video**,
+    an instrumental option, a small built-in song library (rights cleared) as fallback, and customer upload (own rights).
+  - Possible edge over them: they have **no voiceover / TTS**; a short personal narration (ElevenLabs, Hebrew) could set us apart.
 - Open: price comparison KIE vs fal for Kling 3.0 / 4.0, Seedance 2.0, Seedream 5.0 Flash, Qwen Image 3.
