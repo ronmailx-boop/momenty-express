@@ -56,6 +56,7 @@ Built on the experience of Momenty (repo `ronmailx-boop/replica`, site momenty.v
   - [ ] Owner decision: apply the fixes (not done yet).
 
 ## Current Focus
+- [x] 27.11.2026: Hebrew motivation video "אבל קמתם" (59.5 s, 9:16) in code: `video/motivation-he/` (HyperFrames, ElevenLabs Nimrod voice eleven_v4, Suno V5 music via kie.ai). Render: `video/out/motivation-he.mp4` (not in git). Also: Russian dub of an owner video (ElevenLabs Alex Bell + demucs music stem), delivered as a file only.
 - [x] 20.11.2026: lessons from the birthday video project saved in `docs/lessons-birthday-video.md`.
 - [x] New repo attached; test upload page published.
 - [x] Owner uploaded 4 photos (toddler at a shop window -> snow with two kids, the RED coat is the subject -> bike -> beach teen).
